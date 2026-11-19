@@ -15,6 +15,14 @@
 		"frappe-gantt"
 	],
 	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/stepan-kuntso/gantt-a11y.git"
+	},
+	"homepage": "https://stepan-kuntso.github.io/gantt-a11y/site/",
+	"bugs": {
+		"url": "https://github.com/stepan-kuntso/gantt-a11y/issues"
+	},
 	"type": "module",
 	"main": "./src/index.js",
 	"types": "./src/index.d.ts",
@@ -60,6 +68,5 @@
 		"@playwright/test": "^1.65.1",
 		"dhtmlx-gantt": "10.0.3",
 		"frappe-gantt": "1.2.2"
-	},
-	"private": true
+	}
 }

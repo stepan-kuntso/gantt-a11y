@@ -1,10 +1,12 @@
 # Changelog
 
-The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow [Semantic Versioning](https://semver.org/). Nothing has been published yet.
+The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
-Version 0.1.0 in `package.json`, not released. The texts of the announcements are waiting for a check with VoiceOver and may still change.
+## [0.1.0] - 2026-11-19
+
+The first release, on npm as `gantt-a11y`. Checked by the author, a sighted developer: fully with VoiceOver in Safari 26.2 on macOS 26.2, partly with NVDA 2026.3.1 in Chrome 157 on Windows; not checked with JAWS or Firefox. No feedback yet from people who use a screen reader every day, so the texts of the announcements may still change.
 
 ### Tested
 
@@ -48,7 +50,7 @@ Version 0.1.0 in `package.json`, not released. The texts of the announcements ar
 - Adapter for frappe-gantt 1.2.2, with an accessible task list (listbox, Up/Down/Home/End); no task form, finish-to-start links only.
 - Ukrainian strings as a translation example (`gantt-a11y/locales/uk`).
 - TypeScript declarations for the public API.
-- Unit tests (`node:test`) and browser tests in Chromium and WebKit (Playwright) for both demos; a GitHub Actions workflow for them (not run yet).
+- Unit tests (`node:test`) and browser tests in Chromium and WebKit (Playwright) for both demos; a GitHub Actions workflow that runs them on every push to `main`.
 - Announcement design spec (`docs/ANNOUNCEMENTS.md`), manual test script with a screen reader (`TESTING.md`).
 - Accessibility tree tests for every step of `TESTING.md` (role, accessible name, level, expanded, selected, live region, order of focus and live region updates) and their log, `docs/accessibility-tree-log.md` (`npm run test:a11y-tree`).
 - An automated audit of Gantt pages (`audit/`, `npm run audit`), with results for the demos of this repository, with and without the extension. Profiles for public demos of four other libraries exist; their results are not published until confirmed by hand.

@@ -1,5 +1,7 @@
 # gantt-a11y
 
+[![Test workflow status on main](https://github.com/stepan-kuntso/gantt-a11y/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/stepan-kuntso/gantt-a11y/actions/workflows/test.yml)
+
 A Gantt chart shows which task waits for which, what overlaps and what a change broke, but a screen reader gets only a grid of names and dates, without the relations between tasks.
 
 - Ask about the focused task: what it depends on, what runs at the same time, where it is in the plan.
@@ -9,7 +11,7 @@ A Gantt chart shows which task waits for which, what overlaps and what a change 
 
 **Try it in two minutes:** open the live demo for [dhtmlx-gantt](https://stepan-kuntso.github.io/gantt-a11y/site/demo-dhtmlx.html) or [frappe-gantt](https://stepan-kuntso.github.io/gantt-a11y/site/demo-frappe.html) on the [project site](https://stepan-kuntso.github.io/gantt-a11y/site/), press Tab to enter the chart and Shift+D on a task. Locally, [examples/minimal.html](examples/minimal.html) is a complete page: run `npm install` and `npm run demo`, then open `http://localhost:8080/examples/minimal.html`.
 
-**Status:** experimental, version 0.1.0, for [DHTMLX Gantt](https://github.com/DHTMLX/gantt) Community Edition 10.0.3 (MIT), with an experimental adapter for frappe-gantt. Tested by the author, a sighted developer, with VoiceOver in Safari 26.2 on macOS Tahoe 26.2: all 103 manual steps matched on 2026-11-19. Not yet tested with NVDA or JAWS, or by people who use a screen reader every day: see [Feedback wanted](#feedback-wanted).
+**Status:** experimental, version 0.1.0, for [DHTMLX Gantt](https://github.com/DHTMLX/gantt) Community Edition 10.0.3 (MIT), with an experimental adapter for frappe-gantt. Checked by the author, a sighted developer: with VoiceOver in Safari 26.2 on macOS Tahoe 26.2, all 103 manual steps matched on 2026-11-19; with NVDA 2026.3.1 in Chrome 157 on Windows, a partial check. Not checked with JAWS or Firefox. No feedback yet from people who use a screen reader every day: see [Tested with](#tested-with) and [Feedback wanted](#feedback-wanted).
 
 ## Features
 
@@ -58,16 +60,23 @@ Why Shift and a letter: Gantt's own keys use arrows, Page Up/Down, Space, Enter,
 
 ## Requirements
 
-- `dhtmlx-gantt` 10.0.3 or a later 10.x (tested with 10.0.3 only).
-- The `keyboard_navigation` plugin enabled.
+- One of the two libraries, installed by your application (both are optional peer dependencies, so npm does not install either):
+  - `dhtmlx-gantt` 10.0.3 or a later 10.x (the tests run with 10.0.3 only), with the `keyboard_navigation` plugin enabled;
+  - or, for the experimental adapter, `frappe-gantt` 1.2.2 or a later 1.x (the tests run with 1.2.2 only).
 - A browser with ES modules and `Intl` (PluralRules, ListFormat, DateTimeFormat).
 
 ## Usage
 
-There is no npm package yet: copy or clone this repository and import `src/index.js` by its path. The public API is `enableGanttA11y`, `enableFrappeGanttA11y` (experimental), `createEngine` and the TypeScript types (`src/index.d.ts`); the Ukrainian strings are in `src/locales/uk.js`.
+```bash
+npm install gantt-a11y dhtmlx-gantt
+```
+
+The package is plain ES modules with TypeScript declarations and no build step. Its public API is `enableGanttA11y`, `enableFrappeGanttA11y` (experimental) and `createEngine`; the Ukrainian strings are `gantt-a11y/locales/uk`. In the browser, the bare name `gantt-a11y` needs a bundler or an import map.
+
+**Without npm:** copy or clone this repository and import `src/index.js` by its path (`./gantt-a11y/src/index.js`), as the complete page below does; the Ukrainian strings are in `src/locales/uk.js`.
 
 ```js
-import { enableGanttA11y } from "./gantt-a11y/src/index.js";
+import { enableGanttA11y } from "gantt-a11y";
 
 gantt.plugins({ keyboard_navigation: true });
 gantt.init("gantt_here");
@@ -180,7 +189,7 @@ The same engine runs on [frappe-gantt](https://github.com/frappe/gantt) 1.2.2 (M
 
 ```js
 import Gantt from "frappe-gantt";
-import { enableFrappeGanttA11y } from "./gantt-a11y/src/index.js";
+import { enableFrappeGanttA11y } from "gantt-a11y";
 
 const gantt = new Gantt("#chart", tasks, { on_date_change: () => a11y.refresh() });
 const a11y = enableFrappeGanttA11y(gantt, {
@@ -244,10 +253,10 @@ Manually, by the author, step by step while the features were built, and in one 
 
 ## Feedback wanted
 
-This project has been checked by its author, a sighted developer, with VoiceOver on a Mac. The most valuable feedback comes from:
+This project has been checked by its author, a sighted developer: fully with VoiceOver in Safari on a Mac, partly with NVDA in Chrome on Windows. No one who uses a screen reader every day has tried it yet. The most valuable feedback comes from:
 
 - **people who use a screen reader every day**, with any screen reader: whether the answers are useful, too long, in the wrong order, or missing something you need;
-- **anyone who has tried it with NVDA or JAWS** on Windows: nothing has been tested there yet.
+- **anyone who has tried it with NVDA or JAWS** on Windows: NVDA 2026.3.1 with Chrome 157 has had only a partial check by the author, and JAWS and Firefox have not been checked at all.
 
 Open an issue in this repository with the **Screen reader feedback** template: which screen reader and version, browser, operating system, what you pressed, what you heard, and what you expected. A short note is welcome too.
 
@@ -273,7 +282,7 @@ Known library behaviour seen by the tests: when the task form opens from the key
 
 ## What is in this repository
 
-**The library** is `src/`. Only it, with `docs/ADAPTERS.md`, `docs/ANNOUNCEMENTS.md`, the README, the changelog and the license, goes into the package (`files` in `package.json`; `npm pack --dry-run` lists them). `examples/minimal.html` and the two demos (`demo/index.html`, `demo/frappe.html`) show it in use.
+**The library** is `src/`, published on npm as `gantt-a11y`. Only it, with `docs/ADAPTERS.md`, `docs/ANNOUNCEMENTS.md`, the README, the changelog and the license, goes into the package (`files` in `package.json`; `npm pack --dry-run` lists them). `examples/minimal.html` and the two demos (`demo/index.html`, `demo/frappe.html`) show it in use.
 
 **Research and testing materials** stay in the repository and are **not part of the library or the package**. They exist to find out whether the extension helps, and to check it by hand:
 
@@ -287,7 +296,7 @@ Known library behaviour seen by the tests: when the task form opens from the key
 | `audit/` | An automated audit of public Gantt demos (keyboard and accessibility tree) |
 | `site/`, `scripts/site/`, `docs/site-check.md` | A static site about the project, generated |
 
-**Demo site.** `site/` is a static site (no build needed to serve it, no requests to other servers): what the project is and is not, both demos with a switch and the keys, how to try it with VoiceOver, NVDA and JAWS, the announcement specification, and the latest audit. `npm run site` regenerates it from `scripts/site/` and the documents, and runs an automated accessibility check of the pages (results in `docs/site-check.md` and on the site's "About" page). It can be published with GitHub Pages from the repository root (the site is then under `/site/`); it is not published.
+**Demo site.** `site/` is a static site (no build needed to serve it, no requests to other servers): what the project is and is not, both demos with a switch and the keys, how to try it with VoiceOver, NVDA and JAWS (with what has and has not been checked), the announcement specification, and the latest audit. `npm run site` regenerates it from `scripts/site/` and the documents, and runs an automated accessibility check of the pages (results in `docs/site-check.md` and on the site's "About" page). It is published with GitHub Pages from the repository root of `main`, at <https://stepan-kuntso.github.io/gantt-a11y/site/>.
 
 **User study.** [docs/study/](docs/study/) has twelve tasks for participants who use a screen reader ([tasks.md](docs/study/tasks.md)), what the same tasks need without the extension ([baseline.md](docs/study/baseline.md)), and a guide for the person running the session ([facilitator.md](docs/study/facilitator.md)). `demo/study.html` is the chart for it, with a switch for the extension; it collects nothing and loads nothing from the network.
 

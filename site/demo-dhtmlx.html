@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Demo: dhtmlx-gantt · gantt-a11y</title>
+	<link rel="stylesheet" href="style.css">
+	<link rel="stylesheet" href="vendor/dhtmlx-gantt/dhtmlxgantt.css">
+</head>
+<body>
+	<a class="skip" href="#main">Skip to content</a>
+	<header class="site-header">
+		<p class="brand"><a href="index.html">gantt-a11y</a></p>
+		<nav aria-label="Main">
+			<ul>
+			<li><a href="index.html">Home</a></li>
+			<li><a href="demo-dhtmlx.html" aria-current="page">Demo: dhtmlx-gantt</a></li>
+			<li><a href="demo-frappe.html">Demo: frappe-gantt</a></li>
+			<li><a href="screen-readers.html">Try with a screen reader</a></li>
+			<li><a href="spec.html">Announcements</a></li>
+			<li><a href="audit.html">Audit</a></li>
+			</ul>
+		</nav>
+	</header>
+	<main id="main" tabindex="-1" class="wide">
+<h1>Demo: dhtmlx-gantt</h1>
+<p class="lead">dhtmlx-gantt 10.0.3 Community Edition with its keyboard navigation, with and without gantt-a11y.</p>
+<div class="demo">
+	<section class="demo-chart" aria-labelledby="chart-title">
+		<h2 id="chart-title">The chart</h2>
+		<p>Press <kbd>Tab</kbd> to move into the chart, then the arrow keys. In the data, "Launch" depends on five tasks, "Go-live" is a milestone, "Budget approval" is read-only. Reload the page to restore the data.</p>
+		<div class="switch">
+			<button type="button" id="toggle" aria-pressed="true">gantt-a11y</button>
+			<span id="state">on: the chart speaks the extension's answers</span>
+		</div>
+		<div id="gantt_here" class="chart-box"></div>
+	</section>
+	<aside aria-labelledby="keys-title">
+		<h2 id="keys-title">Keys</h2>
+		<table class="keys">
+	<caption>Keys on a focused task row</caption>
+	<thead><tr><th scope="col">Keys</th><th scope="col">Command</th></tr></thead>
+	<tbody>
+	<tr><th scope="rowgroup" colspan="2">Reading</th></tr>
+	<tr><td><kbd>Shift</kbd>+<kbd>D</kbd></td><td>Dependencies</td></tr>
+	<tr><td><kbd>Shift</kbd>+<kbd>O</kbd></td><td>Same time</td></tr>
+	<tr><td><kbd>Shift</kbd>+<kbd>B</kbd></td><td>Ends before</td></tr>
+	<tr><td><kbd>Shift</kbd>+<kbd>A</kbd></td><td>Starts after</td></tr>
+	<tr><th scope="rowgroup" colspan="2">Orientation</th></tr>
+	<tr><td><kbd>Shift</kbd>+<kbd>W</kbd></td><td>Where am I</td></tr>
+	<tr><td><kbd>Shift</kbd>+<kbd>V</kbd></td><td>Overview of the chart</td></tr>
+	<tr><th scope="rowgroup" colspan="2">Moving focus</th></tr>
+	<tr><td><kbd>Shift</kbd>+<kbd>P</kbd></td><td>To what this depends on</td></tr>
+	<tr><td><kbd>Shift</kbd>+<kbd>S</kbd></td><td>To what depends on this</td></tr>
+	<tr><td><kbd>Shift</kbd>+<kbd>C</kbd></td><td>Next conflict</td></tr>
+	<tr><td><kbd>Shift</kbd>+<kbd>Z</kbd></td><td>Back to where the jumps started</td></tr>
+	<tr><th scope="rowgroup" colspan="2">Changing</th></tr>
+	<tr><td><kbd>Shift</kbd>+<kbd>J</kbd></td><td>Earlier</td></tr>
+	<tr><td><kbd>Shift</kbd>+<kbd>K</kbd></td><td>Later</td></tr>
+	<tr><td><kbd>Shift</kbd>+<kbd>I</kbd></td><td>Longer</td></tr>
+	<tr><td><kbd>Shift</kbd>+<kbd>M</kbd></td><td>Shorter</td></tr>
+	<tr><th scope="rowgroup" colspan="2">Links</th></tr>
+	<tr><td><kbd>Shift</kbd>+<kbd>L</kbd></td><td>Make a link</td></tr>
+	<tr><td><kbd>Shift</kbd>+<kbd>T</kbd></td><td>Link type</td></tr>
+	<tr><td><kbd>Shift</kbd>+<kbd>U</kbd></td><td>Remove link</td></tr>
+	<tr><th scope="rowgroup" colspan="2">Other</th></tr>
+	<tr><td><kbd>Shift</kbd>+<kbd>R</kbd></td><td>Repeat last</td></tr>
+	<tr><td><kbd>Shift</kbd>+<kbd>H</kbd></td><td>Help</td></tr>
+	</tbody>
+</table>
+		<p>Shift+J, K, I and M form a cross on a QWERTY keyboard: earlier, later, longer, shorter. The library's own keys still work: <kbd>Enter</kbd> opens the task form, <kbd>Control</kbd>+<kbd>Enter</kbd> adds a subtask.</p>
+	</aside>
+</div>
+<script src="vendor/dhtmlx-gantt/dhtmlxgantt.js"></script>
+<script type="module">
+		import { enableGanttA11y } from "./vendor/gantt-a11y/src/index.js";
+		gantt.plugins({ keyboard_navigation: true });
+		gantt.config.date_format = "%Y-%m-%d";
+		gantt.init("gantt_here");
+		gantt.parse({
+			data: [
+				{ id: 1, text: "Website redesign", type: "project", open: true },
+				{ id: 2, text: "Software design", start_date: "2026-06-01", duration: 4, parent: 1 },
+				{ id: 3, text: "Implementation", start_date: "2026-06-05", duration: 8, parent: 1 },
+				{ id: 4, text: "Testing", start_date: "2026-06-13", duration: 5, parent: 1, progress: 0.4 },
+				{ id: 5, text: "Documentation", start_date: "2026-06-05", duration: 10, parent: 1 },
+				{ id: 6, text: "Code review", start_date: "2026-06-08", duration: 5, parent: 1 },
+				{ id: 7, text: "Launch", start_date: "2026-06-18", duration: 1, parent: 1 },
+				{ id: 8, text: "Marketing prep &amp; PR", start_date: "2026-06-10", duration: 9, parent: 1 },
+				{ id: 9, text: "Retrospective", start_date: "2026-06-22", duration: 1, parent: 1 },
+				{ id: 10, text: "Go-live", type: "milestone", start_date: "2026-06-20", parent: 1 },
+				{ id: 11, text: "Budget approval", start_date: "2026-06-02", duration: 2, parent: 1, readonly: true }
+			],
+			links: [
+				{ id: 1, source: 2, target: 3, type: "0" }, { id: 2, source: 3, target: 4, type: "0" },
+				{ id: 3, source: 3, target: 5, type: "1" }, { id: 4, source: 3, target: 6, type: "2" },
+				{ id: 5, source: 7, target: 8, type: "3" }, { id: 6, source: 4, target: 7, type: "0" },
+				{ id: 7, source: 5, target: 7, type: "0" }, { id: 8, source: 6, target: 7, type: "0" },
+				{ id: 9, source: 11, target: 7, type: "0" }, { id: 10, source: 2, target: 7, type: "1" }
+			]
+		});
+		const enable = () => enableGanttA11y(gantt, { features: { rowLabel: true } });
+		let a11y = enable();
+		
+		const toggle = document.getElementById("toggle");
+		const state = document.getElementById("state");
+		function show() {
+			toggle.setAttribute("aria-pressed", a11y ? "true" : "false");
+			state.textContent = a11y ? "on: the chart speaks the extension's answers" : "off: the library on its own";
+		}
+		toggle.addEventListener("click", () => {
+			if (a11y) {
+				a11y.disable();
+				a11y = null;
+			} else {
+				a11y = enable();
+			}
+			show();
+		});
+		show();
+</script>
+	</main>
+	<footer>
+		<p>gantt-a11y is open source under the MIT licence. Not yet tested with people who use screen readers; no claim of WCAG conformance.</p>
+		<p>dhtmlx-gantt (MIT, XB Software) and frappe-gantt (MIT, Frappe Technologies) are separate projects. This project is not affiliated with or endorsed by XB Software (DHTMLX) or Frappe. <a href="about.html">About this site</a>.</p>
+	</footer>
+</body>
+</html>

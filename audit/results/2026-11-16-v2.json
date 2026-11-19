@@ -1,0 +1,794 @@
+{
+	"protocol": 2,
+	"date": "2026-11-16T22:44:37.670Z",
+	"browser": "Chromium 159.0.8154.6",
+	"profiles": [
+		{
+			"id": "demo-dhtmlx-extension",
+			"name": "dhtmlx-gantt demo with gantt-a11y",
+			"library": "dhtmlx-gantt",
+			"extension": true,
+			"url": "/demo/index.html",
+			"checks": [
+				{
+					"id": "focusRow",
+					"title": "Keyboard focus reaches a task row",
+					"result": "pass",
+					"evidence": "Tab ×3: focus on row “Website redesign. Project, 1 to 23 June, 10 tasks. 0 percent done.”",
+					"note": ""
+				},
+				{
+					"id": "taskName",
+					"title": "A task's name is available",
+					"result": "pass",
+					"evidence": "a) tree: row “Implementation. 5 to 13 June, 8 days. 0 percent done.”. b) focus: focus: row “Implementation. 5 to 13 June, 8 days. 0 percent done.”. c) command: no documented command",
+					"note": "",
+					"levels": {
+						"tree": {
+							"found": true,
+							"evidence": "row “Implementation. 5 to 13 June, 8 days. 0 percent done.”"
+						},
+						"focus": {
+							"found": true,
+							"evidence": "focus: row “Implementation. 5 to 13 June, 8 days. 0 percent done.”"
+						},
+						"command": {
+							"found": false,
+							"evidence": "no documented command"
+						}
+					}
+				},
+				{
+					"id": "taskDates",
+					"title": "A task's dates are available",
+					"result": "pass",
+					"evidence": "a) tree: “Implementation. 5 to 13 June, 8 days. 0 percent done.”. b) focus: focus: row “Implementation. 5 to 13 June, 8 days. 0 percent done.”. c) command: no documented command",
+					"note": "",
+					"levels": {
+						"tree": {
+							"found": true,
+							"evidence": "“Implementation. 5 to 13 June, 8 days. 0 percent done.”"
+						},
+						"focus": {
+							"found": true,
+							"evidence": "focus: row “Implementation. 5 to 13 June, 8 days. 0 percent done.”"
+						},
+						"command": {
+							"found": false,
+							"evidence": "no documented command"
+						}
+					}
+				},
+				{
+					"id": "dependencies",
+					"title": "Dependencies are available as text",
+					"result": "pass",
+					"evidence": "a) tree: link elements: image “Link Software design (end) Implementation (start)”; image “Link Implementation (end) Code review (end)”; image “Link Implementation (start) Documentation (start)”; image “Link Implementation (end) Testing (start)”; image “Link Launch (start) Marketing prep &amp; PR (end)”. b) focus: no. c) command: Shift+D: “Depends on: Software design. Required by 3. Documentation, start to start. Code review, finish to finish. Testing.”",
+					"note": "",
+					"levels": {
+						"tree": {
+							"found": true,
+							"evidence": "link elements: image “Link Software design (end) Implementation (start)”; image “Link Implementation (end) Code review (end)”; image “Link Implementation (start) Documentation (start)”; image “Link Implementation (end) Testing (start)”; image “Link Launch (start) Marketing prep &amp; PR (end)”"
+						},
+						"focus": {
+							"found": false
+						},
+						"command": {
+							"found": true,
+							"evidence": "Shift+D: “Depends on: Software design. Required by 3. Documentation, start to start. Code review, finish to finish. Testing.”"
+						}
+					}
+				},
+				{
+					"id": "dependencyNames",
+					"title": "Dependencies name the tasks",
+					"result": "pass",
+					"evidence": "In reachable dependency text: “Software design”, “Testing”, “Documentation”, “Code review”",
+					"note": ""
+				},
+				{
+					"id": "level",
+					"title": "Level in the hierarchy is available",
+					"result": "pass",
+					"evidence": "a) tree: row: level 2. b) focus: row holding focus: level 2. c) command: Shift+W: “Implementation. In Website redesign. Level 2, 2 of 10.”",
+					"note": "",
+					"levels": {
+						"tree": {
+							"found": true,
+							"evidence": "row: level 2"
+						},
+						"focus": {
+							"found": true,
+							"evidence": "row holding focus: level 2"
+						},
+						"command": {
+							"found": true,
+							"evidence": "Shift+W: “Implementation. In Website redesign. Level 2, 2 of 10.”"
+						}
+					}
+				},
+				{
+					"id": "position",
+					"title": "Position in the list is available",
+					"result": "pass",
+					"evidence": "a) tree: no. b) focus: no. c) command: Shift+W: “Implementation. In Website redesign. Level 2, 2 of 10.”",
+					"note": "Without explicit attributes a screen reader counts the rows in the DOM, which is right only while every row is rendered and none is filtered out.",
+					"levels": {
+						"tree": {
+							"found": false
+						},
+						"focus": {
+							"found": false
+						},
+						"command": {
+							"found": true,
+							"evidence": "Shift+W: “Implementation. In Website redesign. Level 2, 2 of 10.”"
+						}
+					}
+				},
+				{
+					"id": "liveRegion",
+					"title": "The page has a live region",
+					"result": "pass",
+					"evidence": "1: aria-live=polite",
+					"note": ""
+				},
+				{
+					"id": "keyboardHelp",
+					"title": "The page tells the user which keys exist",
+					"result": "pass",
+					"evidence": "Shift+H (documented command): “Reading, 1 of 6. Dependencies, Shift D key. Same time, Shift O key. Ends before, Shift B key. Starts after, Shift A key.”. text on the page outside the chart (written by the page's authors): “to enter the chart and move between tasks with the arrow keys.”",
+					"note": ""
+				},
+				{
+					"id": "formFocus",
+					"title": "Focus returns to the task after closing the form",
+					"result": "pass",
+					"evidence": "Enter opened “05 June 2026 - 13 June 2026 Implementation”; after Escape focus is back on the same task row (row “Cancelled. Nothing changed.”)",
+					"note": ""
+				},
+				{
+					"id": "changeDate",
+					"title": "Dates can be changed from the keyboard",
+					"result": "pass",
+					"evidence": "Steps: Alt+Shift+ArrowRight. 1 bar(s) moved.",
+					"note": "",
+					"sources": [
+						"gantt-a11y README.md, section Keys (this repository)"
+					]
+				},
+				{
+					"id": "changeDuration",
+					"title": "Duration can be changed from the keyboard",
+					"result": "pass",
+					"evidence": "Steps: Alt+Shift+ArrowUp. 1 bar(s) changed width.",
+					"note": "",
+					"sources": [
+						"gantt-a11y README.md, section Keys (this repository)"
+					]
+				},
+				{
+					"id": "createLink",
+					"title": "A link can be created from the keyboard",
+					"result": "pass",
+					"evidence": "Steps: Shift+L, ArrowDown, ArrowDown, ArrowDown, ArrowDown, ArrowDown, Shift+L. link elements 10 → 11.",
+					"note": "",
+					"sources": [
+						"gantt-a11y README.md, section Keys (this repository)"
+					]
+				},
+				{
+					"id": "editAnnounced",
+					"title": "The result of an edit reaches the user",
+					"result": "pass",
+					"evidence": "After the date edit: accessible name of the focused element changed: “Cancelled. Nothing changed.” → “Starts Saturday 6 June, ends Sunday 14 June. 3 conflicts. Largest: Testing, 1 day too early.”.",
+					"note": ""
+				},
+				{
+					"id": "focusBar",
+					"title": "Keyboard focus reaches a task bar",
+					"result": "fail",
+					"evidence": "Tab ×40 and ArrowRight never put focus on a bar; 0 of 8 bars have a tabindex",
+					"note": ""
+				}
+			],
+			"title": "gantt-a11y demo",
+			"inventory": {
+				"title": "gantt-a11y demo",
+				"rows": 11,
+				"bars": 8,
+				"links": 10,
+				"login": false
+			},
+			"finalUrl": "http://127.0.0.1:50228/demo/index.html",
+			"version": "10.0.3",
+			"status": "checked"
+		},
+		{
+			"id": "demo-dhtmlx-plain",
+			"name": "dhtmlx-gantt demo without the extension",
+			"library": "dhtmlx-gantt",
+			"extension": false,
+			"url": "/demo/index.html?a11y=off",
+			"checks": [
+				{
+					"id": "focusRow",
+					"title": "Keyboard focus reaches a task row",
+					"result": "pass",
+					"evidence": "Tab ×3: focus on row “Task: Website redesign Start date: 2026-06-01 End date: 2026-06-23”",
+					"note": ""
+				},
+				{
+					"id": "taskName",
+					"title": "A task's name is available",
+					"result": "pass",
+					"evidence": "a) tree: row “Task: Implementation Start date: 2026-06-05 End date: 2026-06-13”. b) focus: focus: row “Task: Implementation Start date: 2026-06-05 End date: 2026-06-13”. c) command: no documented command",
+					"note": "",
+					"levels": {
+						"tree": {
+							"found": true,
+							"evidence": "row “Task: Implementation Start date: 2026-06-05 End date: 2026-06-13”"
+						},
+						"focus": {
+							"found": true,
+							"evidence": "focus: row “Task: Implementation Start date: 2026-06-05 End date: 2026-06-13”"
+						},
+						"command": {
+							"found": false,
+							"evidence": "no documented command"
+						}
+					}
+				},
+				{
+					"id": "taskDates",
+					"title": "A task's dates are available",
+					"result": "pass",
+					"evidence": "a) tree: “Task: Implementation Start date: 2026-06-05 End date: 2026-06-13”. b) focus: focus: row “Task: Implementation Start date: 2026-06-05 End date: 2026-06-13”. c) command: no documented command",
+					"note": "",
+					"levels": {
+						"tree": {
+							"found": true,
+							"evidence": "“Task: Implementation Start date: 2026-06-05 End date: 2026-06-13”"
+						},
+						"focus": {
+							"found": true,
+							"evidence": "focus: row “Task: Implementation Start date: 2026-06-05 End date: 2026-06-13”"
+						},
+						"command": {
+							"found": false,
+							"evidence": "no documented command"
+						}
+					}
+				},
+				{
+					"id": "dependencies",
+					"title": "Dependencies are available as text",
+					"result": "present but not reachable",
+					"evidence": "a) tree: link elements: image “Link Software design (end) Implementation (start)”; image “Link Implementation (end) Code review (end)”; image “Link Implementation (start) Documentation (start)”; image “Link Implementation (end) Testing (start)”; image “Link Launch (start) Marketing prep &amp; PR (end)”. b) focus: no. c) command: no documented command",
+					"note": "",
+					"levels": {
+						"tree": {
+							"found": true,
+							"evidence": "link elements: image “Link Software design (end) Implementation (start)”; image “Link Implementation (end) Code review (end)”; image “Link Implementation (start) Documentation (start)”; image “Link Implementation (end) Testing (start)”; image “Link Launch (start) Marketing prep &amp; PR (end)”"
+						},
+						"focus": {
+							"found": false
+						},
+						"command": {
+							"found": false,
+							"evidence": "no documented command"
+						}
+					}
+				},
+				{
+					"id": "dependencyNames",
+					"title": "Dependencies name the tasks",
+					"result": "present but not reachable",
+					"evidence": "Only in the accessibility tree: “Software design”, “Testing”, “Documentation”, “Code review”",
+					"note": ""
+				},
+				{
+					"id": "level",
+					"title": "Level in the hierarchy is available",
+					"result": "pass",
+					"evidence": "a) tree: row: level 2. b) focus: row holding focus: level 2. c) command: no documented command",
+					"note": "",
+					"levels": {
+						"tree": {
+							"found": true,
+							"evidence": "row: level 2"
+						},
+						"focus": {
+							"found": true,
+							"evidence": "row holding focus: level 2"
+						},
+						"command": {
+							"found": false,
+							"evidence": "no documented command"
+						}
+					}
+				},
+				{
+					"id": "position",
+					"title": "Position in the list is available",
+					"result": "fail",
+					"evidence": "a) tree: no. b) focus: no. c) command: no documented command",
+					"note": "Without explicit attributes a screen reader counts the rows in the DOM, which is right only while every row is rendered and none is filtered out.",
+					"levels": {
+						"tree": {
+							"found": false
+						},
+						"focus": {
+							"found": false
+						},
+						"command": {
+							"found": false,
+							"evidence": "no documented command"
+						}
+					}
+				},
+				{
+					"id": "liveRegion",
+					"title": "The page has a live region",
+					"result": "fail",
+					"evidence": "No aria-live region or status/log/alert role on the page",
+					"note": ""
+				},
+				{
+					"id": "keyboardHelp",
+					"title": "The page tells the user which keys exist",
+					"result": "pass",
+					"evidence": "text on the page outside the chart (written by the page's authors): “to enter the chart and move between tasks with the arrow keys.”",
+					"note": "Only the page's own text: a product configured differently may have none."
+				},
+				{
+					"id": "formFocus",
+					"title": "Focus returns to the task after closing the form",
+					"result": "pass",
+					"evidence": "Enter opened “05 June 2026 - 13 June 2026 Implementation”; after Escape focus is back on the same task row (row “Task: Implementation Start date: 2026-06-05 End date: 2026-06-13”)",
+					"note": ""
+				},
+				{
+					"id": "changeDate",
+					"title": "Dates can be changed from the keyboard",
+					"result": "pass",
+					"evidence": "Steps: Enter, Tab to .gantt_cal_light .gantt_time_selects select, .gantt_cal_light .gantt_section_time select, type “6” in the list box (was “5”), Tab to [role=\"button\"][aria-label=\"Save\"], .gantt_save_btn_set, Enter. 1 bar(s) moved.",
+					"note": "",
+					"sources": [
+						"https://docs.dhtmlx.com/gantt/guides/keyboard-navigation/"
+					]
+				},
+				{
+					"id": "changeDuration",
+					"title": "Duration can be changed from the keyboard",
+					"result": "pass",
+					"evidence": "Steps: Enter, Tab to .gantt_duration_inc, Space, Tab to [role=\"button\"][aria-label=\"Save\"], .gantt_save_btn_set, Enter. 1 bar(s) changed width.",
+					"note": "",
+					"sources": [
+						"https://docs.dhtmlx.com/gantt/guides/keyboard-navigation/"
+					]
+				},
+				{
+					"id": "createLink",
+					"title": "A link can be created from the keyboard",
+					"result": "no documented keyboard path",
+					"evidence": "The documented shortcuts for task rows, task cells and the form do not include creating a link (links are created by dragging).",
+					"note": "",
+					"sources": [
+						"https://docs.dhtmlx.com/gantt/guides/keyboard-navigation/"
+					]
+				},
+				{
+					"id": "editAnnounced",
+					"title": "The result of an edit reaches the user",
+					"result": "pass",
+					"evidence": "After the date edit: accessible name of the focused element changed: “Task: Implementation Start date: 2026-06-05 End date: 2026-06-13” → “Task: Implementation Start date: 2026-06-06 End date: 2026-06-14”.",
+					"note": ""
+				},
+				{
+					"id": "focusBar",
+					"title": "Keyboard focus reaches a task bar",
+					"result": "fail",
+					"evidence": "Tab ×40 and ArrowRight never put focus on a bar; 0 of 8 bars have a tabindex",
+					"note": ""
+				}
+			],
+			"title": "gantt-a11y demo",
+			"inventory": {
+				"title": "gantt-a11y demo",
+				"rows": 11,
+				"bars": 8,
+				"links": 10,
+				"login": false
+			},
+			"finalUrl": "http://127.0.0.1:50228/demo/index.html?a11y=off",
+			"version": "10.0.3",
+			"status": "checked"
+		},
+		{
+			"id": "demo-frappe-extension",
+			"name": "frappe-gantt demo with gantt-a11y",
+			"library": "frappe-gantt",
+			"extension": true,
+			"url": "/demo/frappe.html",
+			"checks": [
+				{
+					"id": "focusRow",
+					"title": "Keyboard focus reaches a task row",
+					"result": "pass",
+					"evidence": "Tab ×3: focus on option “Software design. 1 to 4 June, 4 days. 100 percent done.”",
+					"note": ""
+				},
+				{
+					"id": "taskName",
+					"title": "A task's name is available",
+					"result": "pass",
+					"evidence": "a) tree: option “Testing. 13 to 17 June, 5 days. 40 percent done.”. b) focus: focus: option “Testing. 13 to 17 June, 5 days. 40 percent done.”. c) command: no documented command",
+					"note": "",
+					"levels": {
+						"tree": {
+							"found": true,
+							"evidence": "option “Testing. 13 to 17 June, 5 days. 40 percent done.”"
+						},
+						"focus": {
+							"found": true,
+							"evidence": "focus: option “Testing. 13 to 17 June, 5 days. 40 percent done.”"
+						},
+						"command": {
+							"found": false,
+							"evidence": "no documented command"
+						}
+					}
+				},
+				{
+					"id": "taskDates",
+					"title": "A task's dates are available",
+					"result": "pass",
+					"evidence": "a) tree: “Testing. 13 to 17 June, 5 days. 40 percent done.”. b) focus: focus: option “Testing. 13 to 17 June, 5 days. 40 percent done.”. c) command: no documented command",
+					"note": "",
+					"levels": {
+						"tree": {
+							"found": true,
+							"evidence": "“Testing. 13 to 17 June, 5 days. 40 percent done.”"
+						},
+						"focus": {
+							"found": true,
+							"evidence": "focus: option “Testing. 13 to 17 June, 5 days. 40 percent done.”"
+						},
+						"command": {
+							"found": false,
+							"evidence": "no documented command"
+						}
+					}
+				},
+				{
+					"id": "dependencies",
+					"title": "Dependencies are available as text",
+					"result": "pass",
+					"evidence": "a) tree: no. b) focus: no. c) command: Shift+D: “Depends on: Implementation. Required by: Launch.”",
+					"note": "",
+					"levels": {
+						"tree": {
+							"found": false
+						},
+						"focus": {
+							"found": false
+						},
+						"command": {
+							"found": true,
+							"evidence": "Shift+D: “Depends on: Implementation. Required by: Launch.”"
+						}
+					}
+				},
+				{
+					"id": "dependencyNames",
+					"title": "Dependencies name the tasks",
+					"result": "pass",
+					"evidence": "In reachable dependency text: “Implementation”, “Launch”",
+					"note": ""
+				},
+				{
+					"id": "level",
+					"title": "Level in the hierarchy is available",
+					"result": "not applicable",
+					"evidence": "A flat list of options has no levels.",
+					"note": ""
+				},
+				{
+					"id": "position",
+					"title": "Position in the list is available",
+					"result": "pass",
+					"evidence": "a) tree: no. b) focus: no. c) command: Shift+W: “Testing. Top level, 6 of 9.”",
+					"note": "Without explicit attributes a screen reader counts the rows in the DOM, which is right only while every row is rendered and none is filtered out.",
+					"levels": {
+						"tree": {
+							"found": false
+						},
+						"focus": {
+							"found": false
+						},
+						"command": {
+							"found": true,
+							"evidence": "Shift+W: “Testing. Top level, 6 of 9.”"
+						}
+					}
+				},
+				{
+					"id": "liveRegion",
+					"title": "The page has a live region",
+					"result": "pass",
+					"evidence": "1: aria-live=polite",
+					"note": ""
+				},
+				{
+					"id": "keyboardHelp",
+					"title": "The page tells the user which keys exist",
+					"result": "pass",
+					"evidence": "Shift+H (documented command): “Reading, 1 of 6. Dependencies, Shift D key. Same time, Shift O key. Ends before, Shift B key. Starts after, Shift A key.”. text on the page outside the chart (written by the page's authors): “. frappe-gantt has no keyboard navigation of its own, so the adapter adds the task list on the left: Tab into it, move with Up and Down.”",
+					"note": ""
+				},
+				{
+					"id": "formFocus",
+					"title": "Focus returns to the task after closing the form",
+					"result": "not applicable",
+					"evidence": "Enter on a task row opened no dialog.",
+					"note": ""
+				},
+				{
+					"id": "changeDate",
+					"title": "Dates can be changed from the keyboard",
+					"result": "pass",
+					"evidence": "Steps: Alt+Shift+ArrowRight. 1 bar(s) moved.",
+					"note": "",
+					"sources": [
+						"gantt-a11y README.md, section Keys (this repository)"
+					]
+				},
+				{
+					"id": "changeDuration",
+					"title": "Duration can be changed from the keyboard",
+					"result": "pass",
+					"evidence": "Steps: Alt+Shift+ArrowUp. 1 bar(s) changed width.",
+					"note": "",
+					"sources": [
+						"gantt-a11y README.md, section Keys (this repository)"
+					]
+				},
+				{
+					"id": "createLink",
+					"title": "A link can be created from the keyboard",
+					"result": "pass",
+					"evidence": "Steps: Shift+L, ArrowDown, ArrowDown, ArrowDown, Shift+L. link elements 7 → 8.",
+					"note": "",
+					"sources": [
+						"gantt-a11y README.md, section Keys (this repository)"
+					]
+				},
+				{
+					"id": "editAnnounced",
+					"title": "The result of an edit reaches the user",
+					"result": "pass",
+					"evidence": "After the date edit: live region: “Starts Sunday 14 June, ends Thursday 18 June. Conflict. Launch is now 1 day too early.”; accessible name of the focused element changed: “Testing. 13 to 17 June, 5 days. 40 percent done.” → “Testing. 14 to 18 June, 5 days. 40 percent done.”.",
+					"note": ""
+				},
+				{
+					"id": "focusBar",
+					"title": "Keyboard focus reaches a task bar",
+					"result": "fail",
+					"evidence": "Tab ×40 and ArrowRight never put focus on a bar; 0 of 9 bars have a tabindex",
+					"note": ""
+				}
+			],
+			"title": "gantt-a11y demo with frappe-gantt",
+			"inventory": {
+				"title": "gantt-a11y demo with frappe-gantt",
+				"rows": 9,
+				"bars": 9,
+				"links": 7,
+				"login": false
+			},
+			"finalUrl": "http://127.0.0.1:50228/demo/frappe.html",
+			"version": null,
+			"status": "checked"
+		},
+		{
+			"id": "demo-frappe-plain",
+			"name": "frappe-gantt demo without the extension",
+			"library": "frappe-gantt",
+			"extension": false,
+			"url": "/demo/frappe.html?a11y=off",
+			"checks": [
+				{
+					"id": "focusRow",
+					"title": "Keyboard focus reaches a task row",
+					"result": "fail",
+					"evidence": "Tab ×120 (and ArrowDown inside the chart) never put focus on a task row; last focus: body “gantt-a11y demo with frappe-gantt The same engine as the dh…”",
+					"note": ""
+				},
+				{
+					"id": "taskName",
+					"title": "A task's name is available",
+					"result": "fail",
+					"evidence": "a) tree: no. b) focus: focus never reached a task row. c) command: no documented command",
+					"note": "",
+					"levels": {
+						"tree": {
+							"found": false
+						},
+						"focus": {
+							"found": false,
+							"evidence": "focus never reached a task row"
+						},
+						"command": {
+							"found": false,
+							"evidence": "no documented command"
+						}
+					}
+				},
+				{
+					"id": "taskDates",
+					"title": "A task's dates are available",
+					"result": "fail",
+					"evidence": "a) tree: no. b) focus: focus never reached a task row. c) command: no documented command",
+					"note": "",
+					"levels": {
+						"tree": {
+							"found": false
+						},
+						"focus": {
+							"found": false,
+							"evidence": "focus never reached a task row"
+						},
+						"command": {
+							"found": false,
+							"evidence": "no documented command"
+						}
+					}
+				},
+				{
+					"id": "dependencies",
+					"title": "Dependencies are available as text",
+					"result": "fail",
+					"evidence": "a) tree: no. b) focus: focus never reached a task row. c) command: no documented command",
+					"note": "",
+					"levels": {
+						"tree": {
+							"found": false
+						},
+						"focus": {
+							"found": false,
+							"evidence": "focus never reached a task row"
+						},
+						"command": {
+							"found": false,
+							"evidence": "no documented command"
+						}
+					}
+				},
+				{
+					"id": "dependencyNames",
+					"title": "Dependencies name the tasks",
+					"result": "not applicable",
+					"evidence": "No dependency text found at any level.",
+					"note": ""
+				},
+				{
+					"id": "level",
+					"title": "Level in the hierarchy is available",
+					"result": "fail",
+					"evidence": "a) tree: no. b) focus: focus never reached a task row. c) command: no documented command",
+					"note": "",
+					"levels": {
+						"tree": {
+							"found": false
+						},
+						"focus": {
+							"found": false,
+							"evidence": "focus never reached a task row"
+						},
+						"command": {
+							"found": false,
+							"evidence": "no documented command"
+						}
+					}
+				},
+				{
+					"id": "position",
+					"title": "Position in the list is available",
+					"result": "fail",
+					"evidence": "a) tree: no. b) focus: focus never reached a task row. c) command: no documented command",
+					"note": "Without explicit attributes a screen reader counts the rows in the DOM, which is right only while every row is rendered and none is filtered out.",
+					"levels": {
+						"tree": {
+							"found": false
+						},
+						"focus": {
+							"found": false,
+							"evidence": "focus never reached a task row"
+						},
+						"command": {
+							"found": false,
+							"evidence": "no documented command"
+						}
+					}
+				},
+				{
+					"id": "liveRegion",
+					"title": "The page has a live region",
+					"result": "fail",
+					"evidence": "No aria-live region or status/log/alert role on the page",
+					"note": ""
+				},
+				{
+					"id": "keyboardHelp",
+					"title": "The page tells the user which keys exist",
+					"result": "pass",
+					"evidence": "text on the page outside the chart (written by the page's authors): “. frappe-gantt has no keyboard navigation of its own, so the adapter adds the task list on the left: Tab into it, move with Up and Down.”",
+					"note": "Only the page's own text: a product configured differently may have none."
+				},
+				{
+					"id": "formFocus",
+					"title": "Focus returns to the task after closing the form",
+					"result": "could not determine",
+					"evidence": "Focus never reached a task row.",
+					"note": ""
+				},
+				{
+					"id": "changeDate",
+					"title": "Dates can be changed from the keyboard",
+					"result": "no documented keyboard path",
+					"evidence": "frappe-gantt has no keyboard handling.",
+					"note": "",
+					"sources": [
+						"frappe-gantt 1.2.2: README and source in node_modules/frappe-gantt (no keyboard handling, no keydown listener)"
+					]
+				},
+				{
+					"id": "changeDuration",
+					"title": "Duration can be changed from the keyboard",
+					"result": "no documented keyboard path",
+					"evidence": "frappe-gantt has no keyboard handling.",
+					"note": "",
+					"sources": [
+						"frappe-gantt 1.2.2: README and source in node_modules/frappe-gantt (no keyboard handling, no keydown listener)"
+					]
+				},
+				{
+					"id": "createLink",
+					"title": "A link can be created from the keyboard",
+					"result": "no documented keyboard path",
+					"evidence": "frappe-gantt has no keyboard handling.",
+					"note": "",
+					"sources": [
+						"frappe-gantt 1.2.2: README and source in node_modules/frappe-gantt (no keyboard handling, no keydown listener)"
+					]
+				},
+				{
+					"id": "editAnnounced",
+					"title": "The result of an edit reaches the user",
+					"result": "no documented keyboard path",
+					"evidence": "No documented keyboard path for any edit.",
+					"note": ""
+				},
+				{
+					"id": "focusBar",
+					"title": "Keyboard focus reaches a task bar",
+					"result": "fail",
+					"evidence": "Tab ×40 and ArrowRight never put focus on a bar; 0 of 9 bars have a tabindex",
+					"note": ""
+				}
+			],
+			"title": "gantt-a11y demo with frappe-gantt",
+			"inventory": {
+				"title": "gantt-a11y demo with frappe-gantt",
+				"rows": 9,
+				"bars": 9,
+				"links": 7,
+				"login": false
+			},
+			"finalUrl": "http://127.0.0.1:50228/demo/frappe.html?a11y=off",
+			"version": null,
+			"status": "checked"
+		}
+	]
+}

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>gantt-a11y demo with frappe-gantt</title>
+	<link rel="stylesheet" href="../node_modules/frappe-gantt/dist/frappe-gantt.css">
+	<style>
+		html, body { margin: 0; padding: 0; font-family: system-ui, sans-serif; }
+		.intro { padding: 8px 16px; }
+		.intro p { margin: 4px 0; }
+		.layout { display: flex; gap: 12px; padding: 0 16px; }
+		.tasks { width: 220px; flex: none; }
+		.tasks [role="listbox"] { border: 1px solid #ccc; }
+		.tasks [role="option"] { padding: 4px 8px; height: 30px; line-height: 30px; box-sizing: border-box; }
+		.tasks [role="option"][aria-selected="true"] { background: #e8eefc; }
+		.tasks [role="option"]:focus { outline: 2px solid #2b5cd9; outline-offset: -2px; }
+		#chart { flex: 1; min-width: 0; overflow: auto; }
+	</style>
+</head>
+<body>
+	<div class="intro">
+		<h1 style="font-size:18px;margin:4px 0;">gantt-a11y demo with frappe-gantt</h1>
+		<p>The same engine as the dhtmlx demo, with an adapter for <a href="https://github.com/frappe/gantt">frappe-gantt</a>. frappe-gantt has no keyboard navigation of its own, so the adapter adds the task list on the left: Tab into it, move with Up and Down.</p>
+		<p>Keys as in the dhtmlx demo (Shift+H speaks them). Not available here: the task form (frappe-gantt has none), link types other than finish to start, and tasks inside tasks.</p>
+		<p>In the data: "Launch" depends on four tasks, "Budget approval" is read-only.</p>
+		<p><button type="button" id="toggle">Disable gantt-a11y</button> <span id="state">Enabled</span></p>
+	</div>
+	<div class="layout">
+		<div class="tasks" id="tasks"></div>
+		<div id="chart"></div>
+	</div>
+
+	<script type="module">
+		import Gantt from "../node_modules/frappe-gantt/dist/frappe-gantt.es.js";
+		import { enableFrappeGanttA11y } from "../src/index.js";
+
+		// frappe-gantt end dates are the last day of work, so the extension
+		// speaks the last day too (endDate: "lastDay").
+		const tasks = [
+			{ id: "design", name: "Software design", start: "2026-06-01", end: "2026-06-04", progress: 100 },
+			{ id: "budget", name: "Budget approval", start: "2026-06-02", end: "2026-06-03", progress: 0, readonly: true },
+			{ id: "build", name: "Implementation", start: "2026-06-05", end: "2026-06-12", progress: 50, dependencies: "design" },
+			{ id: "review", name: "Code review", start: "2026-06-08", end: "2026-06-12", progress: 0, dependencies: "design" },
+			{ id: "docs", name: "Documentation", start: "2026-06-05", end: "2026-06-14", progress: 0 },
+			{ id: "test", name: "Testing", start: "2026-06-13", end: "2026-06-17", progress: 40, dependencies: "build" },
+			{ id: "marketing", name: "Marketing", start: "2026-06-10", end: "2026-06-18", progress: 0 },
+			{ id: "launch", name: "Launch", start: "2026-06-18", end: "2026-06-18", progress: 0, dependencies: "test, docs, review, budget" },
+			{ id: "retro", name: "Retrospective", start: "2026-06-22", end: "2026-06-22", progress: 0 }
+		];
+
+		let a11y = null;
+		window.frappeGantt = new Gantt("#chart", tasks, {
+			view_mode: "Day",
+			popup: false,
+			on_date_change: () => a11y && a11y.refresh(),
+			on_progress_change: () => a11y && a11y.refresh()
+		});
+		window.frappeTasks = tasks;
+
+		const listContainer = document.getElementById("tasks");
+		const enable = () => enableFrappeGanttA11y(window.frappeGantt, {
+			tasks, listContainer, endDate: "lastDay", features: { rowLabel: true }
+		});
+		// ?a11y=off starts with the extension turned off (audit pages)
+		a11y = new URLSearchParams(location.search).get("a11y") === "off" ? null : enable();
+
+		const toggle = document.getElementById("toggle");
+		const state = document.getElementById("state");
+		if (!a11y) {
+			toggle.textContent = "Enable gantt-a11y";
+			state.textContent = "Disabled";
+		}
+		toggle.addEventListener("click", () => {
+			if (a11y) {
+				a11y.disable();
+				a11y = null;
+				toggle.textContent = "Enable gantt-a11y";
+				state.textContent = "Disabled";
+			} else {
+				a11y = enable();
+				toggle.textContent = "Disable gantt-a11y";
+				state.textContent = "Enabled";
+			}
+		});
+	</script>
+</body>
+</html>

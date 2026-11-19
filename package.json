@@ -1,0 +1,65 @@
+{
+	"name": "gantt-a11y",
+	"version": "0.1.0",
+	"description": "Screen reader support for Gantt charts: dependencies, overlaps, conflicts and keyboard edits spoken on demand. Adapters for dhtmlx-gantt and frappe-gantt.",
+	"keywords": [
+		"gantt",
+		"gantt-chart",
+		"accessibility",
+		"a11y",
+		"screen-reader",
+		"aria-live",
+		"keyboard",
+		"voiceover",
+		"dhtmlx-gantt",
+		"frappe-gantt"
+	],
+	"license": "MIT",
+	"type": "module",
+	"main": "./src/index.js",
+	"types": "./src/index.d.ts",
+	"exports": {
+		".": {
+			"types": "./src/index.d.ts",
+			"default": "./src/index.js"
+		},
+		"./locales/uk": {
+			"types": "./src/locales/uk.d.ts",
+			"default": "./src/locales/uk.js"
+		},
+		"./package.json": "./package.json"
+	},
+	"files": [
+		"src",
+		"docs/ADAPTERS.md",
+		"docs/ANNOUNCEMENTS.md",
+		"CHANGELOG.md"
+	],
+	"sideEffects": false,
+	"scripts": {
+		"test": "node --test",
+		"test:browser": "playwright test",
+		"test:a11y-tree": "playwright test test-browser/a11y-tree.spec.js && node scripts/a11y-tree-log.js",
+		"audit": "node audit/run.js",
+		"site": "node scripts/site/build.js && node scripts/site/check.js && node scripts/site/build.js",
+		"demo": "node scripts/demo-server.js"
+	},
+	"peerDependencies": {
+		"dhtmlx-gantt": "^10.0.3",
+		"frappe-gantt": "^1.2.2"
+	},
+	"peerDependenciesMeta": {
+		"dhtmlx-gantt": {
+			"optional": true
+		},
+		"frappe-gantt": {
+			"optional": true
+		}
+	},
+	"devDependencies": {
+		"@playwright/test": "^1.65.1",
+		"dhtmlx-gantt": "10.0.3",
+		"frappe-gantt": "1.2.2"
+	},
+	"private": true
+}

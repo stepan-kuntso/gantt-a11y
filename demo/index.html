@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>gantt-a11y demo</title>
+	<link rel="stylesheet" href="../node_modules/dhtmlx-gantt/codebase/dhtmlxgantt.css">
+	<script src="../node_modules/dhtmlx-gantt/codebase/dhtmlxgantt.js"></script>
+	<style>
+		html, body { margin: 0; padding: 0; height: 100%; font-family: system-ui, sans-serif; }
+		.intro { padding: 8px 16px; }
+		.intro p { margin: 4px 0; }
+		#gantt_here { width: 100%; height: 480px; }
+	</style>
+</head>
+<body>
+	<div class="intro">
+		<h1 style="font-size:18px;margin:4px 0;">gantt-a11y demo</h1>
+		<p>Press <kbd>Tab</kbd> to enter the chart and move between tasks with the arrow keys. <kbd>Shift</kbd>+<kbd>H</kbd> speaks all keys. Step-by-step checks: <a href="../TESTING.md">TESTING.md</a>.</p>
+		<p>Reading: <kbd>Shift</kbd>+<kbd>D</kbd> dependencies, <kbd>Shift</kbd>+<kbd>O</kbd> same time, <kbd>Shift</kbd>+<kbd>B</kbd> ends before, <kbd>Shift</kbd>+<kbd>A</kbd> starts after (press again for more).
+		Moving focus: <kbd>Shift</kbd>+<kbd>P</kbd> / <kbd>Shift</kbd>+<kbd>S</kbd>.
+		Changing: <kbd>Shift</kbd>+<kbd>J</kbd> earlier, <kbd>Shift</kbd>+<kbd>K</kbd> later, <kbd>Shift</kbd>+<kbd>I</kbd> longer, <kbd>Shift</kbd>+<kbd>M</kbd> shorter.
+		Links: <kbd>Shift</kbd>+<kbd>L</kbd> on one task, then on another; <kbd>Shift</kbd>+<kbd>T</kbd> type; <kbd>Shift</kbd>+<kbd>U</kbd> twice after a jump removes it.
+		<kbd>Shift</kbd>+<kbd>R</kbd> repeats. <kbd>Enter</kbd> opens the task form, <kbd>Ctrl</kbd>+<kbd>Enter</kbd> adds a subtask.</p>
+		<p>In the data: "Launch" depends on five tasks, "Go-live" is a milestone, "Budget approval" is read-only, "Testing" is 40 percent done.</p>
+		<p><button type="button" id="toggle">Disable gantt-a11y</button> <span id="state">Enabled</span></p>
+	</div>
+	<div id="gantt_here"></div>
+	<section id="debug" hidden aria-labelledby="debug-title" style="padding:8px 16px;">
+		<h2 id="debug-title" style="font-size:16px;">Event log (?debug=1)</h2>
+		<p>What the page did, with times in milliseconds: keys, focus, labels, the form, the live region. Nothing is sent anywhere. Select all and copy it.</p>
+		<p><button type="button" id="debug-clear">Clear the log</button></p>
+		<textarea id="debug-log" readonly rows="16" style="width:100%;font:12px ui-monospace,Menlo,monospace;" aria-label="Event log"></textarea>
+	</section>
+
+	<script type="module">
+		import { enableGanttA11y } from "../src/index.js";
+
+		// ?verbosity=brief|detailed and ?cells=1 (cell navigation mode) are used by
+		// demo/manual-test.html and the accessibility tree tests.
+		const params = new URLSearchParams(location.search);
+		const verbosity = params.get("verbosity") || "standard";
+
+		gantt.plugins({ keyboard_navigation: true });
+		gantt.config.date_format = "%Y-%m-%d";
+		gantt.config.keyboard_navigation_cells = params.get("cells") === "1";
+
+		gantt.init("gantt_here");
+		gantt.parse({
+			data: [
+				{ id: 1, text: "Website redesign", type: "project", open: true },
+				{ id: 2, text: "Software design", start_date: "2026-06-01", duration: 4, parent: 1 },
+				{ id: 3, text: "Implementation", start_date: "2026-06-05", duration: 8, parent: 1 },
+				{ id: 4, text: "Testing", start_date: "2026-06-13", duration: 5, parent: 1, progress: 0.4 },
+				{ id: 5, text: "Documentation", start_date: "2026-06-05", duration: 10, parent: 1 },
+				{ id: 6, text: "Code review", start_date: "2026-06-08", duration: 5, parent: 1 },
+				{ id: 7, text: "Launch", start_date: "2026-06-18", duration: 1, parent: 1 },
+				{ id: 8, text: "Marketing <b>prep</b> &amp; PR", start_date: "2026-06-10", duration: 9, parent: 1 },
+				{ id: 9, text: "Retrospective", start_date: "2026-06-22", duration: 1, parent: 1 },
+				{ id: 10, text: "Go-live", type: "milestone", start_date: "2026-06-20", parent: 1 },
+				{ id: 11, text: "Budget approval", start_date: "2026-06-02", duration: 2, parent: 1, readonly: true }
+			],
+			links: [
+				{ id: 1, source: 2, target: 3, type: "0" }, // finish to start
+				{ id: 2, source: 3, target: 4, type: "0" }, // finish to start
+				{ id: 3, source: 3, target: 5, type: "1" }, // start to start
+				{ id: 4, source: 3, target: 6, type: "2" }, // finish to finish
+				{ id: 5, source: 7, target: 8, type: "3" }, // start to finish
+				{ id: 6, source: 4, target: 7, type: "0" }, // finish to start
+				// Launch depends on five tasks, to try paging (Shift+D twice)
+				{ id: 7, source: 5, target: 7, type: "0" },
+				{ id: 8, source: 6, target: 7, type: "0" },
+				{ id: 9, source: 11, target: 7, type: "0" },
+				{ id: 10, source: 2, target: 7, type: "1" }
+			]
+		});
+
+		function enable() {
+			// rowLabel is off by default because the tooltip plugin shares its
+			// template; this demo has no tooltips, so it is turned on here.
+			return enableGanttA11y(gantt, { verbosity, features: { rowLabel: true } });
+		}
+
+		// ?a11y=off starts with the extension turned off (audit and study pages)
+		let a11y = params.get("a11y") === "off" ? null : enable();
+
+		// ?debug=1: a log of what happens around the chart, to compare with what is heard
+		if (params.get("debug") === "1") {
+			const section = document.getElementById("debug");
+			const out = document.getElementById("debug-log");
+			section.hidden = false;
+			let t0 = performance.now();
+			let count = 0;
+			const ids = new WeakMap();
+			const nodeId = (el) => {
+				if (!ids.has(el)) {
+					ids.set(el, ++count);
+				}
+				return ids.get(el);
+			};
+			const describe = (el) => {
+				if (!el || el === document.body) {
+					return "body";
+				}
+				const task = el.closest && el.closest("[data-task-id]");
+				return (el.getAttribute("role") || el.tagName.toLowerCase()) + " #" + nodeId(el)
+					+ (task ? " task " + task.getAttribute("data-task-id") : "")
+					+ " \"" + (el.getAttribute("aria-label") || el.getAttribute("title") || el.textContent || "").replace(/\s+/g, " ").trim().slice(0, 90) + "\"";
+			};
+			const log = (text) => {
+				out.value += String(Math.round(performance.now() - t0)).padStart(6) + "  " + text + "\n";
+			};
+			const inLog = (el) => el && el.closest && el.closest("#debug");
+			log("start; " + navigator.userAgent);
+			// which code actually runs (a browser cache can keep older modules)
+			Promise.all([import("../src/core/engine.js"), import("../src/adapters/dhtmlx/adapter.js"), import("../src/adapters/dhtmlx/focus-label.js")]).then(([engine, adapter, focus]) => {
+				const has = (fn, text) => (String(fn).includes(text) ? "current" : "OLD");
+				log("code: engine " + has(engine.createEngine, "labelFormResult") + ", adapter " + has(adapter.createDhtmlxAdapter, "snapshotOf")
+					+ ", focus-label " + has(focus.createFocusLabels, "fallback = true"));
+			});
+			document.addEventListener("keydown", (e) => {
+				if (!inLog(e.target)) {
+					log("key " + [e.ctrlKey && "Ctrl", e.altKey && "Alt", e.shiftKey && "Shift", e.metaKey && "Cmd", e.key].filter(Boolean).join("+"));
+				}
+			}, true);
+			document.addEventListener("click", (e) => !inLog(e.target) && log("click " + describe(e.target)), true);
+			document.addEventListener("focusin", (e) => !inLog(e.target) && log("focus " + describe(e.target)), true);
+			new MutationObserver((mutations) => {
+				for (const m of mutations) {
+					if (m.type === "attributes" && m.attributeName === "aria-label" && m.target === document.activeElement) {
+						log("label of the focused element changed: " + describe(m.target));
+					}
+					if (m.type === "attributes" && m.attributeName === "style" && m.target.classList && m.target.classList.contains("gantt_cal_light")) {
+						log("form " + (m.target.style.display === "none" ? "hidden" : "shown"));
+					}
+					for (const node of m.addedNodes) {
+						if (node.nodeType === 1 && node.parentElement && node.parentElement.closest("[data-gantt-a11y-live]")) {
+							log("live region: \"" + node.textContent.trim() + "\"");
+						}
+					}
+					for (const node of m.removedNodes) {
+						if (node.nodeType === 1 && node.contains && node.contains(document.activeElement) === false && ids.has(node) && node.getAttribute("role") === "row") {
+							log("removed " + describe(node));
+						}
+					}
+				}
+			}).observe(document.body, { subtree: true, childList: true, attributes: true, attributeFilter: ["aria-label", "style"] });
+			document.getElementById("debug-clear").addEventListener("click", () => {
+				out.value = "";
+				t0 = performance.now();
+				log("cleared");
+			});
+		}
+
+		const toggle = document.getElementById("toggle");
+		const state = document.getElementById("state");
+		if (!a11y) {
+			toggle.textContent = "Enable gantt-a11y";
+			state.textContent = "Disabled";
+		}
+		toggle.addEventListener("click", () => {
+			if (a11y) {
+				a11y.disable();
+				a11y = null;
+				toggle.textContent = "Enable gantt-a11y";
+				state.textContent = "Disabled";
+			} else {
+				a11y = enable();
+				toggle.textContent = "Disable gantt-a11y";
+				state.textContent = "Enabled";
+			}
+		});
+	</script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+node_modules/
+.DS_Store
+test-results/
+playwright-report/
+
+# Audit results for other libraries' public demos: not published until confirmed by hand
+audit/private/
+
+# Editor settings
+.idea/
+.vscode/

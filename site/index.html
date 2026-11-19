@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Home · gantt-a11y</title>
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+	<a class="skip" href="#main">Skip to content</a>
+	<header class="site-header">
+		<p class="brand"><a href="index.html">gantt-a11y</a></p>
+		<nav aria-label="Main">
+			<ul>
+			<li><a href="index.html" aria-current="page">Home</a></li>
+			<li><a href="demo-dhtmlx.html">Demo: dhtmlx-gantt</a></li>
+			<li><a href="demo-frappe.html">Demo: frappe-gantt</a></li>
+			<li><a href="screen-readers.html">Try with a screen reader</a></li>
+			<li><a href="spec.html">Announcements</a></li>
+			<li><a href="audit.html">Audit</a></li>
+			</ul>
+		</nav>
+	</header>
+	<main id="main" tabindex="-1">
+<h1>Gantt charts that a screen reader user can question</h1>
+<p class="lead">gantt-a11y adds keyboard commands and spoken answers to Gantt chart components, so that someone who cannot see the chart can ask what a task depends on, what runs at the same time, and what a change broke.</p>
+
+<div class="note">
+	<p><strong>Status.</strong> An open-source extension, tried so far only by its author with VoiceOver on a Mac. <strong>Testing with people who use screen readers every day is still ahead.</strong> Nothing here is a claim of conformance with WCAG or any other standard.</p>
+</div>
+
+<h2>The problem</h2>
+<p>A Gantt chart is a drawing: bars on a time scale and lines between them. A sighted user sees at a glance which task waits for which, what overlaps, and that a move pushed a task past its deadline. Components with keyboard navigation let a screen reader user move from row to row and hear a task's name and dates. The relations between tasks, the part a Gantt chart exists for, stay inside the drawing.</p>
+
+<h2>What it does</h2>
+<ul>
+	<li>Reads the dependencies of the focused task by name, and pages through long lists.</li>
+	<li>Moves focus along links to what a task depends on and what depends on it, and back again.</li>
+	<li>Answers questions about time: what runs at the same time and for how long, what ends before, what starts after.</li>
+	<li>Moves tasks and changes durations from the keyboard, and says the result first, including any link it broke.</li>
+	<li>Creates and removes links from the keyboard.</li>
+	<li>Says what happened after the task form is saved, cancelled or deleted.</li>
+	<li>Gives an overview of the chart, says where the focused task is, and goes from one conflict to the next.</li>
+	<li>Speaks its own list of keys, in groups.</li>
+</ul>
+<p>The commands live in a small engine that knows nothing about a particular library. Adapters connect it to <a href="demo-dhtmlx.html">dhtmlx-gantt</a> (Community Edition) and <a href="demo-frappe.html">frappe-gantt</a>, which has no keyboard support of its own.</p>
+
+<h2>Who it is for</h2>
+<ul>
+	<li><strong>Developers</strong> who ship a Gantt chart in their application and want it to be usable without sight, using only the library's public API.</li>
+	<li><strong>People who plan or follow projects</strong> with a screen reader, and the teams they work with.</li>
+	<li><strong>Library authors</strong> looking for a worked example of what a non-visual Gantt chart needs. The <a href="spec.html">announcement specification</a> and the <a href="audit.html">audit</a> are meant to be reusable.</li>
+</ul>
+
+<h2>What it does not do</h2>
+<ul>
+	<li>It does not make the drawing itself accessible: bars and lines stay pictures. The facts they show are made available as text on demand.</li>
+	<li>It does not replace the library's own keyboard navigation; it adds commands on top of it.</li>
+	<li>It has no dialogs: everything is spoken through the row label or a live region.</li>
+	<li>It has not been tested with NVDA or JAWS, on Windows, with keyboard layouts other than English, or with braille displays.</li>
+	<li>It is not a certification. The <a href="audit.html">automated audit</a> checks keyboard behaviour and what the browser exposes, not what a person can do.</li>
+</ul>
+
+<h2>Try it</h2>
+<p>The two demos have a switch to compare the chart with and without the extension. <a href="screen-readers.html">How to try with a screen reader</a> has the steps for VoiceOver, NVDA and JAWS.</p>
+
+	</main>
+	<footer>
+		<p>gantt-a11y is open source under the MIT licence. Not yet tested with people who use screen readers; no claim of WCAG conformance.</p>
+		<p>dhtmlx-gantt (MIT, XB Software) and frappe-gantt (MIT, Frappe Technologies) are separate projects. This project is not affiliated with or endorsed by XB Software (DHTMLX) or Frappe. <a href="about.html">About this site</a>.</p>
+	</footer>
+</body>
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>gantt-a11y test: tooltip plugin</title>
+	<link rel="stylesheet" href="../../node_modules/dhtmlx-gantt/codebase/dhtmlxgantt.css">
+	<script src="../../node_modules/dhtmlx-gantt/codebase/dhtmlxgantt.js"></script>
+</head>
+<body>
+	<div id="chart" style="width:100%;height:300px;"></div>
+	<script type="module">
+		import { enableGanttA11y } from "../../src/index.js";
+		// the tooltip plugin shows gantt.templates.tooltip_text on hover: the same
+		// template the library uses for each row's accessible name
+		gantt.plugins({ keyboard_navigation: true, tooltip: true });
+		gantt.config.date_format = "%Y-%m-%d";
+		gantt.config.tooltip_timeout = 0;
+		gantt.init("chart");
+		gantt.parse({
+			data: [
+				{ id: 1, text: "Design", start_date: "2026-06-01", duration: 4 },
+				{ id: 2, text: "Build", start_date: "2026-06-05", duration: 8 }
+			],
+			links: [{ id: 1, source: 1, target: 2, type: "0" }]
+		});
+		window.a11y = enableGanttA11y(gantt);
+	</script>
+</body>
+</html>

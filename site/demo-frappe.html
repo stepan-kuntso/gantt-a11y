@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Demo: frappe-gantt · gantt-a11y</title>
+	<link rel="stylesheet" href="style.css">
+	<link rel="stylesheet" href="vendor/frappe-gantt/frappe-gantt.css">
+</head>
+<body>
+	<a class="skip" href="#main">Skip to content</a>
+	<header class="site-header">
+		<p class="brand"><a href="index.html">gantt-a11y</a></p>
+		<nav aria-label="Main">
+			<ul>
+			<li><a href="index.html">Home</a></li>
+			<li><a href="demo-dhtmlx.html">Demo: dhtmlx-gantt</a></li>
+			<li><a href="demo-frappe.html" aria-current="page">Demo: frappe-gantt</a></li>
+			<li><a href="screen-readers.html">Try with a screen reader</a></li>
+			<li><a href="spec.html">Announcements</a></li>
+			<li><a href="audit.html">Audit</a></li>
+			</ul>
+		</nav>
+	</header>
+	<main id="main" tabindex="-1" class="wide">
+<h1>Demo: frappe-gantt</h1>
+<p class="lead">frappe-gantt 1.2.2 has no keyboard support of its own. With gantt-a11y, a task list next to the chart takes the focus and the same commands work on it.</p>
+<div class="demo">
+	<section class="demo-chart" aria-labelledby="chart-title">
+		<h2 id="chart-title">The chart</h2>
+		<p>Press <kbd>Tab</kbd> to move into the task list, then up and down. Not available here: the task form (frappe-gantt has none), link types other than finish to start, and tasks inside tasks. Reload the page to restore the data.</p>
+		<div class="switch">
+			<button type="button" id="toggle" aria-pressed="true">gantt-a11y</button>
+			<span id="state">on: the chart speaks the extension's answers</span>
+		</div>
+		<div class="frappe-layout">
+			<div class="tasks" id="tasks"></div>
+			<div id="chart"></div>
+		</div>
+	</section>
+	<aside aria-labelledby="keys-title">
+		<h2 id="keys-title">Keys</h2>
+		<table class="keys">
+	<caption>Keys on a focused task in the list</caption>
+	<thead><tr><th scope="col">Keys</th><th scope="col">Command</th></tr></thead>
+	<tbody>
+	<tr><th scope="rowgroup" colspan="2">Reading</th></tr>
+	<tr><td><kbd>Shift</kbd>+<kbd>D</kbd></td><td>Dependencies</td></tr>
+	<tr><td><kbd>Shift</kbd>+<kbd>O</kbd></td><td>Same time</td></tr>
+	<tr><td><kbd>Shift</kbd>+<kbd>B</kbd></td><td>Ends before</td></tr>
+	<tr><td><kbd>Shift</kbd>+<kbd>A</kbd></td><td>Starts after</td></tr>
+	<tr><th scope="rowgroup" colspan="2">Orientation</th></tr>
+	<tr><td><kbd>Shift</kbd>+<kbd>W</kbd></td><td>Where am I</td></tr>
+	<tr><td><kbd>Shift</kbd>+<kbd>V</kbd></td><td>Overview of the chart</td></tr>
+	<tr><th scope="rowgroup" colspan="2">Moving focus</th></tr>
+	<tr><td><kbd>Shift</kbd>+<kbd>P</kbd></td><td>To what this depends on</td></tr>
+	<tr><td><kbd>Shift</kbd>+<kbd>S</kbd></td><td>To what depends on this</td></tr>
+	<tr><td><kbd>Shift</kbd>+<kbd>C</kbd></td><td>Next conflict</td></tr>
+	<tr><td><kbd>Shift</kbd>+<kbd>Z</kbd></td><td>Back to where the jumps started</td></tr>
+	<tr><th scope="rowgroup" colspan="2">Changing</th></tr>
+	<tr><td><kbd>Shift</kbd>+<kbd>J</kbd></td><td>Earlier</td></tr>
+	<tr><td><kbd>Shift</kbd>+<kbd>K</kbd></td><td>Later</td></tr>
+	<tr><td><kbd>Shift</kbd>+<kbd>I</kbd></td><td>Longer</td></tr>
+	<tr><td><kbd>Shift</kbd>+<kbd>M</kbd></td><td>Shorter</td></tr>
+	<tr><th scope="rowgroup" colspan="2">Links</th></tr>
+	<tr><td><kbd>Shift</kbd>+<kbd>L</kbd></td><td>Make a link</td></tr>
+	<tr><td><kbd>Shift</kbd>+<kbd>T</kbd></td><td>Link type</td></tr>
+	<tr><td><kbd>Shift</kbd>+<kbd>U</kbd></td><td>Remove link</td></tr>
+	<tr><th scope="rowgroup" colspan="2">Other</th></tr>
+	<tr><td><kbd>Shift</kbd>+<kbd>R</kbd></td><td>Repeat last</td></tr>
+	<tr><td><kbd>Shift</kbd>+<kbd>H</kbd></td><td>Help</td></tr>
+	</tbody>
+</table>
+		<p>Shift+J, K, I and M form a cross on a QWERTY keyboard: earlier, later, longer, shorter. Without the extension the list is not there, and the chart cannot be reached from the keyboard.</p>
+	</aside>
+</div>
+<script type="module">
+		import Gantt from "./vendor/frappe-gantt/frappe-gantt.es.js";
+		import { enableFrappeGanttA11y } from "./vendor/gantt-a11y/src/index.js";
+		const tasks = [
+			{ id: "design", name: "Software design", start: "2026-06-01", end: "2026-06-04", progress: 100 },
+			{ id: "budget", name: "Budget approval", start: "2026-06-02", end: "2026-06-03", progress: 0, readonly: true },
+			{ id: "build", name: "Implementation", start: "2026-06-05", end: "2026-06-12", progress: 50, dependencies: "design" },
+			{ id: "review", name: "Code review", start: "2026-06-08", end: "2026-06-12", progress: 0, dependencies: "design" },
+			{ id: "docs", name: "Documentation", start: "2026-06-05", end: "2026-06-14", progress: 0 },
+			{ id: "test", name: "Testing", start: "2026-06-13", end: "2026-06-17", progress: 40, dependencies: "build" },
+			{ id: "marketing", name: "Marketing", start: "2026-06-10", end: "2026-06-18", progress: 0 },
+			{ id: "launch", name: "Launch", start: "2026-06-18", end: "2026-06-18", progress: 0, dependencies: "test, docs, review, budget" },
+			{ id: "retro", name: "Retrospective", start: "2026-06-22", end: "2026-06-22", progress: 0 }
+		];
+		let a11y = null;
+		const chart = new Gantt("#chart", tasks, {
+			view_mode: "Day", popup: false,
+			on_date_change: () => a11y && a11y.refresh(),
+			on_progress_change: () => a11y && a11y.refresh()
+		});
+		const enable = () => enableFrappeGanttA11y(chart, {
+			tasks, listContainer: document.getElementById("tasks"), endDate: "lastDay", features: { rowLabel: true }
+		});
+		a11y = enable();
+		
+		const toggle = document.getElementById("toggle");
+		const state = document.getElementById("state");
+		function show() {
+			toggle.setAttribute("aria-pressed", a11y ? "true" : "false");
+			state.textContent = a11y ? "on: the chart speaks the extension's answers" : "off: the library on its own";
+		}
+		toggle.addEventListener("click", () => {
+			if (a11y) {
+				a11y.disable();
+				a11y = null;
+			} else {
+				a11y = enable();
+			}
+			show();
+		});
+		show();
+</script>
+	</main>
+	<footer>
+		<p>gantt-a11y is open source under the MIT licence. Not yet tested with people who use screen readers; no claim of WCAG conformance.</p>
+		<p>dhtmlx-gantt (MIT, XB Software) and frappe-gantt (MIT, Frappe Technologies) are separate projects. This project is not affiliated with or endorsed by XB Software (DHTMLX) or Frappe. <a href="about.html">About this site</a>.</p>
+	</footer>
+</body>
+</html>

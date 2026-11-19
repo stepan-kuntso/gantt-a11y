@@ -1,0 +1,478 @@
+{
+	"date": "2026-11-16T22:09:26.038Z",
+	"browser": "Chromium 159.0.8154.6",
+	"profiles": [
+		{
+			"id": "demo-dhtmlx-extension",
+			"name": "dhtmlx-gantt demo with gantt-a11y",
+			"library": "dhtmlx-gantt",
+			"extension": true,
+			"url": "/demo/index.html",
+			"checks": [
+				{
+					"id": "focusRow",
+					"title": "Keyboard focus reaches a task row",
+					"result": "pass",
+					"evidence": "Tab ×3: focus on row “Website redesign. Project, 1 to 23 June, 10 tasks. 0 percent done.”",
+					"note": ""
+				},
+				{
+					"id": "taskName",
+					"title": "A task has an accessible name",
+					"result": "pass",
+					"evidence": "focused element: row “Website redesign. Project, 1 to 23 June, 10 tasks. 0 percent done.”",
+					"note": ""
+				},
+				{
+					"id": "taskDates",
+					"title": "The name includes dates",
+					"result": "pass",
+					"evidence": "“Website redesign. Project, 1 to 23 June, 10 tasks. 0 percent done.”",
+					"note": ""
+				},
+				{
+					"id": "level",
+					"title": "Level in the hierarchy is exposed",
+					"result": "pass",
+					"evidence": "row: level 1 in the accessibility tree",
+					"note": ""
+				},
+				{
+					"id": "position",
+					"title": "Position in the list is exposed",
+					"result": "fail",
+					"evidence": "No explicit position: aria-posinset null, aria-setsize null, aria-rowindex null, aria-rowcount null",
+					"note": "Without them a screen reader counts the rows in the DOM, which is wrong when rows are virtualised or filtered."
+				},
+				{
+					"id": "dependencies",
+					"title": "Dependencies are available as text",
+					"result": "pass",
+					"evidence": "Link elements: image “Link Software design (end) Implementation (start)”; image “Link Implementation (end) Code review (end)”; image “Link Implementation (start) Documentation (start)”; image “Link Implementation (end) Testing (start)”; image “Link Launch (start) Marketing prep &amp; PR (end)”. Shift+D: live region “Depends on: Software design. Required by 3. Documentation, start to start. Code r…",
+					"note": ""
+				},
+				{
+					"id": "dependencyNames",
+					"title": "Dependencies name the tasks",
+					"result": "pass",
+					"evidence": "Task names found: “Software design”, “Implementation”, “Testing”, “Documentation”",
+					"note": ""
+				},
+				{
+					"id": "liveRegion",
+					"title": "The page has a live region",
+					"result": "pass",
+					"evidence": "1: aria-live=polite",
+					"note": ""
+				},
+				{
+					"id": "formFocus",
+					"title": "Focus returns to the task after closing the form",
+					"result": "pass",
+					"evidence": "Enter opened “05 June 2026 - 13 June 2026 Implementation”; after Escape focus is back on the same task row (row “Cancelled. Nothing changed.”)",
+					"note": ""
+				},
+				{
+					"id": "liveAfterEdit",
+					"title": "A keyboard edit puts text in a live region",
+					"result": "fail",
+					"evidence": "Alt+Shift+ArrowRight: no new text in a live region (focused row: “Starts Saturday 6 June, ends Sunday 14 June. 3 conflicts. Largest: Testing, 1 day too early.”)",
+					"note": "The result may be spoken another way, e.g. in the row label; this check looks only at live regions."
+				},
+				{
+					"id": "changeDate",
+					"title": "Dates can be changed from the keyboard",
+					"result": "pass",
+					"evidence": "Alt+Shift+ArrowRight on task 3: 1 bar(s) moved, e.g. x 741 → 811",
+					"note": ""
+				},
+				{
+					"id": "changeDuration",
+					"title": "Duration can be changed from the keyboard",
+					"result": "pass",
+					"evidence": "Alt+Shift+ArrowUp: 1 bar(s) changed width, e.g. 560 → 630 px",
+					"note": ""
+				},
+				{
+					"id": "createLink",
+					"title": "A link can be created from the keyboard",
+					"result": "pass",
+					"evidence": "Shift+L, ArrowDown, ArrowDown, ArrowDown, ArrowDown, ArrowDown, Shift+L: link elements 10 → 11; live region “Linked. This depends on Implementation. Conflict. 5 days too early for Implementation.”",
+					"note": ""
+				},
+				{
+					"id": "focusBar",
+					"title": "Keyboard focus reaches a task bar",
+					"result": "fail",
+					"evidence": "Tab ×40 and ArrowRight never put focus on a bar; 0 of 8 bars have a tabindex",
+					"note": ""
+				}
+			],
+			"title": "gantt-a11y demo",
+			"inventory": {
+				"title": "gantt-a11y demo",
+				"rows": 11,
+				"bars": 8,
+				"links": 10,
+				"login": false
+			},
+			"finalUrl": "http://127.0.0.1:59619/demo/index.html",
+			"version": "10.0.3",
+			"status": "checked"
+		},
+		{
+			"id": "demo-dhtmlx-plain",
+			"name": "dhtmlx-gantt demo without the extension",
+			"library": "dhtmlx-gantt",
+			"extension": false,
+			"url": "/demo/index.html?a11y=off",
+			"checks": [
+				{
+					"id": "focusRow",
+					"title": "Keyboard focus reaches a task row",
+					"result": "pass",
+					"evidence": "Tab ×3: focus on row “Task: Website redesign Start date: 2026-06-01 End date: 2026-06-23”",
+					"note": ""
+				},
+				{
+					"id": "taskName",
+					"title": "A task has an accessible name",
+					"result": "pass",
+					"evidence": "focused element: row “Task: Website redesign Start date: 2026-06-01 End date: 2026-06-23”",
+					"note": ""
+				},
+				{
+					"id": "taskDates",
+					"title": "The name includes dates",
+					"result": "pass",
+					"evidence": "“Task: Website redesign Start date: 2026-06-01 End date: 2026-06-23”",
+					"note": ""
+				},
+				{
+					"id": "level",
+					"title": "Level in the hierarchy is exposed",
+					"result": "pass",
+					"evidence": "row: level 1 in the accessibility tree",
+					"note": ""
+				},
+				{
+					"id": "position",
+					"title": "Position in the list is exposed",
+					"result": "fail",
+					"evidence": "No explicit position: aria-posinset null, aria-setsize null, aria-rowindex null, aria-rowcount null",
+					"note": "Without them a screen reader counts the rows in the DOM, which is wrong when rows are virtualised or filtered."
+				},
+				{
+					"id": "dependencies",
+					"title": "Dependencies are available as text",
+					"result": "pass",
+					"evidence": "Link elements: image “Link Software design (end) Implementation (start)”; image “Link Implementation (end) Code review (end)”; image “Link Implementation (start) Documentation (start)”; image “Link Implementation (end) Testing (start)”; image “Link Launch (start) Marketing prep &amp; PR (end)”",
+					"note": ""
+				},
+				{
+					"id": "dependencyNames",
+					"title": "Dependencies name the tasks",
+					"result": "pass",
+					"evidence": "Task names found: “Software design”, “Implementation”, “Testing”, “Documentation”",
+					"note": ""
+				},
+				{
+					"id": "liveRegion",
+					"title": "The page has a live region",
+					"result": "fail",
+					"evidence": "No aria-live region or status/log/alert role on the page",
+					"note": ""
+				},
+				{
+					"id": "formFocus",
+					"title": "Focus returns to the task after closing the form",
+					"result": "pass",
+					"evidence": "Enter opened “05 June 2026 - 13 June 2026 Implementation”; after Escape focus is back on the same task row (row “Task: Implementation Start date: 2026-06-05 End date: 2026-06-13”)",
+					"note": ""
+				},
+				{
+					"id": "liveAfterEdit",
+					"title": "A keyboard edit puts text in a live region",
+					"result": "fail",
+					"evidence": "No keyboard command for this.",
+					"note": "The keyboard_navigation plugin's documented shortcuts move focus, open the form, add, delete and indent tasks; none changes a date or duration or creates a link."
+				},
+				{
+					"id": "changeDate",
+					"title": "Dates can be changed from the keyboard",
+					"result": "fail",
+					"evidence": "No keyboard command for this.",
+					"note": "The keyboard_navigation plugin's documented shortcuts move focus, open the form, add, delete and indent tasks; none changes a date or duration or creates a link."
+				},
+				{
+					"id": "changeDuration",
+					"title": "Duration can be changed from the keyboard",
+					"result": "fail",
+					"evidence": "No keyboard command for this.",
+					"note": "The keyboard_navigation plugin's documented shortcuts move focus, open the form, add, delete and indent tasks; none changes a date or duration or creates a link."
+				},
+				{
+					"id": "createLink",
+					"title": "A link can be created from the keyboard",
+					"result": "fail",
+					"evidence": "No keyboard command for this.",
+					"note": "The keyboard_navigation plugin's documented shortcuts move focus, open the form, add, delete and indent tasks; none changes a date or duration or creates a link."
+				},
+				{
+					"id": "focusBar",
+					"title": "Keyboard focus reaches a task bar",
+					"result": "fail",
+					"evidence": "Tab ×40 and ArrowRight never put focus on a bar; 0 of 8 bars have a tabindex",
+					"note": ""
+				}
+			],
+			"title": "gantt-a11y demo",
+			"inventory": {
+				"title": "gantt-a11y demo",
+				"rows": 11,
+				"bars": 8,
+				"links": 10,
+				"login": false
+			},
+			"finalUrl": "http://127.0.0.1:59619/demo/index.html?a11y=off",
+			"version": "10.0.3",
+			"status": "checked"
+		},
+		{
+			"id": "demo-frappe-extension",
+			"name": "frappe-gantt demo with gantt-a11y",
+			"library": "frappe-gantt",
+			"extension": true,
+			"url": "/demo/frappe.html",
+			"checks": [
+				{
+					"id": "focusRow",
+					"title": "Keyboard focus reaches a task row",
+					"result": "pass",
+					"evidence": "Tab ×3: focus on option “Software design. 1 to 4 June, 4 days. 100 percent done.”",
+					"note": ""
+				},
+				{
+					"id": "taskName",
+					"title": "A task has an accessible name",
+					"result": "pass",
+					"evidence": "focused element: option “Software design. 1 to 4 June, 4 days. 100 percent done.”",
+					"note": ""
+				},
+				{
+					"id": "taskDates",
+					"title": "The name includes dates",
+					"result": "pass",
+					"evidence": "“Software design. 1 to 4 June, 4 days. 100 percent done.”",
+					"note": ""
+				},
+				{
+					"id": "level",
+					"title": "Level in the hierarchy is exposed",
+					"result": "not applicable",
+					"evidence": "option: no level in the accessibility tree",
+					"note": "A flat list of options has no levels."
+				},
+				{
+					"id": "position",
+					"title": "Position in the list is exposed",
+					"result": "fail",
+					"evidence": "No explicit position: aria-posinset null, aria-setsize null, aria-rowindex null, aria-rowcount null",
+					"note": "Without them a screen reader counts the rows in the DOM, which is wrong when rows are virtualised or filtered."
+				},
+				{
+					"id": "dependencies",
+					"title": "Dependencies are available as text",
+					"result": "pass",
+					"evidence": "7 link elements, none with an accessible name (or hidden from the accessibility tree). Shift+D: live region “Depends on: Implementation. Required by: Launch.”",
+					"note": ""
+				},
+				{
+					"id": "dependencyNames",
+					"title": "Dependencies name the tasks",
+					"result": "pass",
+					"evidence": "Task names found: “Implementation”, “Launch”",
+					"note": ""
+				},
+				{
+					"id": "liveRegion",
+					"title": "The page has a live region",
+					"result": "pass",
+					"evidence": "1: aria-live=polite",
+					"note": ""
+				},
+				{
+					"id": "formFocus",
+					"title": "Focus returns to the task after closing the form",
+					"result": "not applicable",
+					"evidence": "Enter on a task row opened no dialog.",
+					"note": ""
+				},
+				{
+					"id": "liveAfterEdit",
+					"title": "A keyboard edit puts text in a live region",
+					"result": "pass",
+					"evidence": "Alt+Shift+ArrowRight: live region “Starts Sunday 14 June, ends Thursday 18 June. Conflict. Launch is now 1 day too early.”",
+					"note": ""
+				},
+				{
+					"id": "changeDate",
+					"title": "Dates can be changed from the keyboard",
+					"result": "pass",
+					"evidence": "Alt+Shift+ArrowRight on task test: 1 bar(s) moved, e.g. x 2137 → 2182",
+					"note": ""
+				},
+				{
+					"id": "changeDuration",
+					"title": "Duration can be changed from the keyboard",
+					"result": "pass",
+					"evidence": "Alt+Shift+ArrowUp: 1 bar(s) changed width, e.g. 228 → 273 px",
+					"note": ""
+				},
+				{
+					"id": "createLink",
+					"title": "A link can be created from the keyboard",
+					"result": "pass",
+					"evidence": "Shift+L, ArrowDown, ArrowDown, ArrowDown, Shift+L: link elements 7 → 8; live region “Linked. This depends on Testing.”",
+					"note": ""
+				},
+				{
+					"id": "focusBar",
+					"title": "Keyboard focus reaches a task bar",
+					"result": "fail",
+					"evidence": "Tab ×40 and ArrowRight never put focus on a bar; 0 of 9 bars have a tabindex",
+					"note": ""
+				}
+			],
+			"title": "gantt-a11y demo with frappe-gantt",
+			"inventory": {
+				"title": "gantt-a11y demo with frappe-gantt",
+				"rows": 9,
+				"bars": 9,
+				"links": 7,
+				"login": false
+			},
+			"finalUrl": "http://127.0.0.1:59619/demo/frappe.html",
+			"version": null,
+			"status": "checked"
+		},
+		{
+			"id": "demo-frappe-plain",
+			"name": "frappe-gantt demo without the extension",
+			"library": "frappe-gantt",
+			"extension": false,
+			"url": "/demo/frappe.html?a11y=off",
+			"checks": [
+				{
+					"id": "focusRow",
+					"title": "Keyboard focus reaches a task row",
+					"result": "fail",
+					"evidence": "Tab ×120 (and ArrowDown inside the chart) never put focus on a task row; last focus: body “gantt-a11y demo with frappe-gantt The same engine as the dh…”",
+					"note": ""
+				},
+				{
+					"id": "taskName",
+					"title": "A task has an accessible name",
+					"result": "fail",
+					"evidence": "first task row in the DOM (focus never reached one): group with an empty accessible name",
+					"note": ""
+				},
+				{
+					"id": "taskDates",
+					"title": "The name includes dates",
+					"result": "fail",
+					"evidence": "No accessible name, so no dates.",
+					"note": ""
+				},
+				{
+					"id": "level",
+					"title": "Level in the hierarchy is exposed",
+					"result": "fail",
+					"evidence": "group: no level in the accessibility tree",
+					"note": ""
+				},
+				{
+					"id": "position",
+					"title": "Position in the list is exposed",
+					"result": "fail",
+					"evidence": "No explicit position: aria-posinset null, aria-setsize null, aria-rowindex null, aria-rowcount null",
+					"note": "Without them a screen reader counts the rows in the DOM, which is wrong when rows are virtualised or filtered."
+				},
+				{
+					"id": "dependencies",
+					"title": "Dependencies are available as text",
+					"result": "fail",
+					"evidence": "7 link elements, none with an accessible name (or hidden from the accessibility tree)",
+					"note": ""
+				},
+				{
+					"id": "dependencyNames",
+					"title": "Dependencies name the tasks",
+					"result": "not applicable",
+					"evidence": "No accessible dependency text to look at.",
+					"note": ""
+				},
+				{
+					"id": "liveRegion",
+					"title": "The page has a live region",
+					"result": "fail",
+					"evidence": "No aria-live region or status/log/alert role on the page",
+					"note": ""
+				},
+				{
+					"id": "formFocus",
+					"title": "Focus returns to the task after closing the form",
+					"result": "could not determine",
+					"evidence": "Focus never reached a task row.",
+					"note": ""
+				},
+				{
+					"id": "liveAfterEdit",
+					"title": "A keyboard edit puts text in a live region",
+					"result": "fail",
+					"evidence": "No keyboard command for this.",
+					"note": "frappe-gantt has no keyboard handling (no keydown listener in its code)."
+				},
+				{
+					"id": "changeDate",
+					"title": "Dates can be changed from the keyboard",
+					"result": "fail",
+					"evidence": "No keyboard command for this.",
+					"note": "frappe-gantt has no keyboard handling (no keydown listener in its code)."
+				},
+				{
+					"id": "changeDuration",
+					"title": "Duration can be changed from the keyboard",
+					"result": "fail",
+					"evidence": "No keyboard command for this.",
+					"note": "frappe-gantt has no keyboard handling (no keydown listener in its code)."
+				},
+				{
+					"id": "createLink",
+					"title": "A link can be created from the keyboard",
+					"result": "fail",
+					"evidence": "No keyboard command for this.",
+					"note": "frappe-gantt has no keyboard handling (no keydown listener in its code)."
+				},
+				{
+					"id": "focusBar",
+					"title": "Keyboard focus reaches a task bar",
+					"result": "fail",
+					"evidence": "Tab ×40 and ArrowRight never put focus on a bar; 0 of 9 bars have a tabindex",
+					"note": ""
+				}
+			],
+			"title": "gantt-a11y demo with frappe-gantt",
+			"inventory": {
+				"title": "gantt-a11y demo with frappe-gantt",
+				"rows": 9,
+				"bars": 9,
+				"links": 7,
+				"login": false
+			},
+			"finalUrl": "http://127.0.0.1:59619/demo/frappe.html?a11y=off",
+			"version": null,
+			"status": "checked"
+		}
+	]
+}

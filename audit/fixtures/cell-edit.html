@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Audit fixture: cell editing</title>
+<style>
+	body { font-family: system-ui, sans-serif; }
+	[role="gridcell"]:focus { outline: 3px solid #1a4fb4; }
+	#bars { position: relative; height: 90px; border: 1px solid #ccc; margin-top: 8px; }
+	.bar { position: absolute; height: 20px; background: #6a8de0; }
+</style>
+</head>
+<body>
+<!-- A test page for the audit tool: a tree grid with cell navigation and cell
+     editing (Enter or F2 starts, F2 finishes, Escape cancels). Not a result. -->
+<h1>Fixture: cell editing</h1>
+<div id="chart">
+	<div role="treegrid" aria-label="Tasks" id="grid">
+		<div role="row"><span role="columnheader">Name</span><span role="columnheader">Start</span><span role="columnheader">Duration</span></div>
+	</div>
+	<div id="bars"></div>
+</div>
+<script>
+	const tasks = [
+		{ id: 1, name: "Plan", start: new Date(2026, 5, 1), days: 3 },
+		{ id: 2, name: "Build", start: new Date(2026, 5, 4), days: 5 },
+		{ id: 3, name: "Ship", start: new Date(2026, 5, 9), days: 1 }
+	];
+	const grid = document.getElementById("grid");
+	const fmt = (d) => `${d.getMonth() + 1}/${d.getDate()}/${d.getFullYear()}`;
+	let active = { r: 0, c: 0 };
+	let editor = null;
+	function render() {
+		grid.querySelectorAll('[role="row"][data-id]').forEach((r) => r.remove());
+		tasks.forEach((t, r) => {
+			const row = document.createElement("div");
+			row.setAttribute("role", "row");
+			row.setAttribute("aria-level", "1");
+			row.dataset.id = t.id;
+			[t.name, fmt(t.start), t.days + " days"].forEach((text, c) => {
+				const cell = document.createElement("span");
+				cell.setAttribute("role", "gridcell");
+				cell.tabIndex = r === active.r && c === active.c ? 0 : -1;
+				cell.textContent = text;
+				cell.style.marginRight = "12px";
+				row.appendChild(cell);
+			});
+			grid.appendChild(row);
+		});
+		const bars = document.getElementById("bars");
+		bars.innerHTML = "";
+		tasks.forEach((t, i) => {
+			const b = document.createElement("div");
+			b.className = "bar";
+			b.style.left = ((t.start - new Date(2026, 5, 1)) / 86400000) * 20 + "px";
+			b.style.width = t.days * 20 + "px";
+			b.style.top = i * 28 + "px";
+			bars.appendChild(b);
+		});
+	}
+	const cellAt = (r, c) => grid.querySelectorAll('[role="row"][data-id]')[r].querySelectorAll('[role="gridcell"]')[c];
+	function focusCell() {
+		render();
+		cellAt(active.r, active.c).focus();
+	}
+	grid.addEventListener("keydown", (e) => {
+		if (editor) {
+			if (e.key === "F2" || (e.key === "Enter" && e.ctrlKey)) {
+				const t = tasks[active.r];
+				if (active.c === 1) {
+					const d = new Date(editor.value);
+					if (!isNaN(d)) t.start = d;
+				} else if (active.c === 2) {
+					t.days = parseInt(editor.value, 10) || t.days;
+				}
+				editor = null;
+				focusCell();
+				e.preventDefault();
+			} else if (e.key === "Escape") {
+				editor = null;
+				focusCell();
+			}
+			return;
+		}
+		if (e.key === "ArrowDown") active.r = Math.min(tasks.length - 1, active.r + 1);
+		else if (e.key === "ArrowUp") active.r = Math.max(0, active.r - 1);
+		else if (e.key === "ArrowRight") active.c = Math.min(2, active.c + 1);
+		else if (e.key === "ArrowLeft") active.c = Math.max(0, active.c - 1);
+		else if ((e.key === "F2" || e.key === "Enter") && active.c > 0) {
+			const cell = cellAt(active.r, active.c);
+			editor = document.createElement("input");
+			editor.value = active.c === 1 ? fmt(tasks[active.r].start) : tasks[active.r].days + " days";
+			editor.setAttribute("aria-label", active.c === 1 ? "Start" : "Duration");
+			cell.textContent = "";
+			cell.appendChild(editor);
+			editor.focus();
+			e.preventDefault();
+			return;
+		} else return;
+		e.preventDefault();
+		focusCell();
+	});
+	render();
+</script>
+</body>
+</html>

@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>gantt-a11y manual test</title>
+	<style>
+		:root {
+			--bg: #ffffff;
+			--fg: #1b1b1f;
+			--muted: #5b5d66;
+			--line: #d5d7de;
+			--panel: #f6f7f9;
+			--accent: #2453c7;
+			--ok: #1d7a3a;
+			--bad: #b3261e;
+			--focus: #2453c7;
+		}
+		@media (prefers-color-scheme: dark) {
+			:root {
+				--bg: #16171a;
+				--fg: #ececf1;
+				--muted: #a3a6b1;
+				--line: #3a3c44;
+				--panel: #1f2024;
+				--accent: #8fb0ff;
+				--ok: #6fd28e;
+				--bad: #ff8a80;
+				--focus: #8fb0ff;
+			}
+		}
+		* { box-sizing: border-box; }
+		html, body { margin: 0; height: 100%; }
+		body { background: var(--bg); color: var(--fg); font: 15px/1.45 system-ui, sans-serif; display: flex; flex-direction: column; }
+		header { padding: 8px 16px; border-bottom: 1px solid var(--line); }
+		header h1 { font-size: 17px; margin: 0; }
+		header p { margin: 2px 0 0; color: var(--muted); font-size: 13px; }
+		main { flex: 1; display: flex; min-height: 0; }
+		#chart-wrap { flex: 1 1 60%; min-width: 0; display: flex; flex-direction: column; border-right: 1px solid var(--line); }
+		#chart { flex: 1; width: 100%; border: 0; background: #fff; }
+		#panel { flex: 0 0 min(560px, 42%); overflow: auto; padding: 14px 18px 24px; background: var(--panel); }
+		#panel h2 { font-size: 15px; margin: 0 0 4px; color: var(--muted); font-weight: 600; }
+		.group { display: inline-block; font-size: 12px; padding: 1px 8px; border-radius: 10px; border: 1px solid var(--line); color: var(--muted); }
+		.do { font-size: 18px; margin: 10px 0 6px; }
+		.start { color: var(--muted); margin: 0 0 10px; }
+		.channel { color: var(--muted); font-size: 13px; margin: 14px 0 4px; }
+		.expected { font-size: 26px; line-height: 1.35; font-weight: 600; margin: 0 0 12px; padding: 10px 12px; background: var(--bg); border: 1px solid var(--line); border-radius: 6px; }
+		.tree { font-size: 13px; color: var(--muted); margin: 0 0 14px; }
+		.tree strong { color: var(--fg); }
+		fieldset { border: 1px solid var(--line); border-radius: 6px; margin: 0 0 12px; padding: 8px 12px 10px; }
+		legend { padding: 0 4px; font-weight: 600; }
+		fieldset label { margin-right: 14px; white-space: nowrap; }
+		textarea, input[type="text"] { width: 100%; font: inherit; color: var(--fg); background: var(--bg); border: 1px solid var(--line); border-radius: 4px; padding: 6px 8px; }
+		textarea { min-height: 64px; resize: vertical; }
+		.field { margin: 0 0 12px; }
+		.field > label { display: block; font-weight: 600; margin-bottom: 4px; }
+		.buttons { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 12px; }
+		button { font: inherit; padding: 7px 14px; border-radius: 6px; border: 1px solid var(--line); background: var(--bg); color: var(--fg); cursor: pointer; }
+		button.primary { background: var(--ok); border-color: var(--ok); color: #fff; }
+		button.danger { border-color: var(--bad); color: var(--bad); }
+		@media (prefers-color-scheme: dark) { button.primary { color: #0d2615; } }
+		:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+		.progress { display: flex; align-items: center; gap: 10px; margin: 0 0 8px; }
+		progress { flex: 1; height: 8px; }
+		.answered { font-size: 13px; color: var(--muted); margin: 0 0 10px; }
+		.error { color: var(--bad); font-weight: 600; }
+		details { margin: 14px 0 0; }
+		summary { cursor: pointer; font-weight: 600; }
+		#report-area { display: none; margin-top: 12px; }
+		#report { min-height: 280px; font: 12px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace; }
+		.hint { font-size: 13px; color: var(--muted); }
+		.visually-hidden { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+		@media (max-width: 900px) {
+			main { flex-direction: column; }
+			#chart-wrap { flex: 0 0 60vh; border-right: 0; border-bottom: 1px solid var(--line); }
+			#panel { flex: 1 1 auto; }
+		}
+	</style>
+</head>
+<body>
+	<header>
+		<h1>gantt-a11y manual test</h1>
+		<p>Each step loads the chart in the state it needs and puts focus on the starting task. Press the keys, compare what VoiceOver says with the large text, then press <kbd>F6</kbd> (<kbd>Fn</kbd>+<kbd>F6</kbd> on some Mac keyboards) to jump to the answer buttons; <kbd>F6</kbd> again goes back to the chart. After each answer, focus returns to the chart for the next step. Nothing is sent anywhere; progress is kept in this browser.</p>
+	</header>
+	<main>
+		<div id="chart-wrap">
+			<iframe id="chart" title="Gantt chart under test"></iframe>
+		</div>
+		<section id="panel" aria-labelledby="step-title">
+			<div class="progress">
+				<h2 id="step-title">Step <span id="step-n">1</span> of <span id="step-m">1</span></h2>
+				<progress id="bar" max="1" value="0" aria-label="Progress"></progress>
+			</div>
+			<p class="answered" id="answered"></p>
+			<p><span class="group" id="group"></span> <span id="section"></span>, <span id="step-id"></span></p>
+
+			<p class="do" id="do"></p>
+			<p class="start" id="start"></p>
+
+			<p class="channel" id="channel"></p>
+			<p class="expected" id="expected" lang="en"></p>
+			<p class="tree" id="tree"></p>
+			<p class="error" id="error" hidden></p>
+
+			<fieldset id="clarity">
+				<legend>By ear</legend>
+				<label><input type="radio" name="clarity" value="clear"> Clear</label>
+				<label><input type="radio" name="clarity" value="too many words"> Too many words</label>
+				<label><input type="radio" name="clarity" value="confusing"> Confusing</label>
+			</fieldset>
+			<div class="field">
+				<label for="heard">What I heard, if it did not match</label>
+				<textarea id="heard"></textarea>
+			</div>
+			<div class="buttons">
+				<button type="button" class="primary" id="btn-match">Matched</button>
+				<button type="button" class="danger" id="btn-mismatch">Did not match</button>
+				<button type="button" id="btn-skip">Skip</button>
+			</div>
+			<div class="buttons">
+				<button type="button" id="btn-chart">Back to the chart</button>
+				<button type="button" id="btn-again">Reload this step</button>
+				<button type="button" id="btn-back">Previous step</button>
+				<button type="button" id="btn-report">Show report</button>
+			</div>
+
+			<details id="setup">
+				<summary>About this run (goes into the report)</summary>
+				<div class="field">
+					<label for="env-sr">Screen reader and version</label>
+					<input type="text" id="env-sr" placeholder="VoiceOver, macOS 26.2">
+				</div>
+				<div class="field">
+					<label for="env-os">macOS version</label>
+					<input type="text" id="env-os" placeholder="26.2">
+					<p class="hint">Browsers do not report the real macOS version, so it is typed here.</p>
+				</div>
+				<div class="field">
+					<label for="env-rate">Speech rate and voice</label>
+					<input type="text" id="env-rate" placeholder="rate 50, Samantha">
+				</div>
+				<div class="buttons">
+					<button type="button" class="danger" id="btn-restart">Start over (clears all answers)</button>
+				</div>
+			</details>
+
+			<div id="report-area">
+				<div class="field">
+					<label for="report">Report (Markdown): select all and copy</label>
+					<textarea id="report" readonly></textarea>
+				</div>
+				<div class="buttons">
+					<button type="button" id="btn-hide-report">Hide report</button>
+				</div>
+			</div>
+		</section>
+	</main>
+
+	<script type="module">
+		import { steps, stepUrl, prepare, focusTarget } from "./manual-steps.js";
+		import { treeStatus } from "./manual-steps-status.js";
+
+		const STORAGE_KEY = "gantt-a11y-manual-test-v1";
+		const $ = (id) => document.getElementById(id);
+		const chart = $("chart");
+
+		// ---- order: what the tree tests could not confirm first, then by priority ----
+		const GROUPS = [
+			{ key: "first", name: "Check first: the tree tests differed or could not tell" },
+			{ key: "new", name: "New, not heard yet" },
+			{ key: 1, name: "Order matters: results in the row label, after the form, jumps" },
+			{ key: 2, name: "Answers in the live region" },
+			{ key: 3, name: "Row labels and turning it off" }
+		];
+		function statusOf(item) {
+			return (treeStatus.steps && treeStatus.steps[item.id]) || {};
+		}
+		function groupOf(item) {
+			const status = statusOf(item);
+			const results = Object.values(status).filter(Boolean);
+			const differed = !results.length || results.some((r) => !r.match || (r.notes && r.notes.length));
+			if (differed || item.cannotCheck) {
+				return "first";
+			}
+			return item.isNew ? "new" : item.priority;
+		}
+		const ordered = GROUPS.flatMap((group) => steps.filter((item) => groupOf(item) === group.key).map((item) => ({ item, group })));
+
+		// ---- state: in memory, mirrored to localStorage when it is available ----
+		function load() {
+			try {
+				const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
+				if (saved && saved.answers) {
+					return saved;
+				}
+			} catch (error) {
+				// private mode or blocked storage: keep it in memory only
+			}
+			return { index: 0, answers: {}, env: {}, startedAt: new Date().toISOString() };
+		}
+		const state = load();
+		function save() {
+			try {
+				localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+			} catch (error) {
+				// in memory only
+			}
+		}
+
+		// ---- the chart ----
+		let loading = 0;
+		function loadChart(item) {
+			const run = ++loading;
+			$("error").hidden = true;
+			return new Promise((resolve, reject) => {
+				chart.onload = async () => {
+					if (run !== loading) {
+						return;
+					}
+					try {
+						// F6 in the chart jumps to the answer buttons (Tab may stay inside the frame)
+						chart.contentWindow.document.addEventListener("keydown", (event) => {
+							if (event.key === "F6") {
+								event.preventDefault();
+								event.stopPropagation();
+								$("btn-match").focus();
+							}
+						}, true);
+						chart.focus();
+						await prepare(chart.contentWindow, item);
+						resolve();
+					} catch (error) {
+						reject(error);
+					}
+				};
+				const url = new URL(stepUrl(item).replace(/^demo\//, ""), location.href);
+				chart.contentWindow.location.replace(url.href);
+			});
+		}
+
+		function plainName(win, item, id) {
+			try {
+				if (item.page.includes("frappe")) {
+					const task = win.frappeTasks.find((t) => t.id === id);
+					return task ? task.name : String(id);
+				}
+				// an inert document: nothing in the task text runs or loads
+				return new DOMParser().parseFromString(String(win.gantt.getTask(id).text), "text/html").body.textContent;
+			} catch (error) {
+				return String(id);
+			}
+		}
+
+		// ---- rendering a step ----
+		const CHANNEL = {
+			label: "Expected first, as the row label (before anything else about the row):",
+			live: "Expected after the row is read (from the live region):",
+			none: "Expected:",
+			library: "Expected (the library's own row label, not this extension):"
+		};
+		const BROWSER = { chromium: "Chromium", webkit: "WebKit" };
+
+		function treeText(item) {
+			const status = statusOf(item);
+			const parts = [];
+			for (const browser of Object.keys(BROWSER)) {
+				const r = status[browser];
+				if (!r) {
+					parts.push(`${BROWSER[browser]}: not run`);
+				} else if (r.match) {
+					parts.push(`${BROWSER[browser]}: matched${r.notes.length ? " (test stepped in: " + r.notes.join(" ") + ")" : ""}`);
+				} else {
+					parts.push(`${BROWSER[browser]}: differed: ${r.problems.join("; ")}`);
+				}
+			}
+			let text = "<strong>Accessibility tree tests" + (treeStatus.date ? " (" + treeStatus.date + ")" : "") + ":</strong> " + escape(parts.join(". ")) + ".";
+			if (item.cannotCheck) {
+				text += " <strong>They could not tell:</strong> " + escape(item.cannotCheck) + ".";
+			}
+			if (item.source === "recorded") {
+				text += " The expected text was recorded from the extension, not designed in advance.";
+			}
+			return text;
+		}
+
+		function escape(text) {
+			return String(text).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;" })[c]);
+		}
+
+		function keysHtml(text) {
+			return escape(text).replace(/\b((?:(?:Alt|Shift|Control|Option)\+)+(?:[A-Z]|Left|Right|Up|Down|Enter)|Enter|Escape|Space|Tab)\b/g, "<kbd>$1</kbd>");
+		}
+
+		function answeredCount() {
+			return ordered.filter(({ item }) => state.answers[item.id]).length;
+		}
+
+		async function show(index) {
+			state.index = Math.max(0, Math.min(index, ordered.length - 1));
+			save();
+			const { item, group } = ordered[state.index];
+			$("step-n").textContent = state.index + 1;
+			$("step-m").textContent = ordered.length;
+			$("bar").max = ordered.length;
+			$("bar").value = answeredCount();
+			$("answered").textContent = `${answeredCount()} of ${ordered.length} answered.`;
+			$("group").textContent = group.name;
+			$("section").textContent = item.section;
+			$("step-id").textContent = "TESTING.md " + item.id;
+			$("do").innerHTML = keysHtml(item.do);
+			$("channel").textContent = item.expect.whileOpen ? "Expected while the form is open (from the live region):" : CHANNEL[item.expect.channel];
+			$("expected").textContent = item.expect.text;
+			$("tree").innerHTML = treeText(item);
+
+			const previous = state.answers[item.id];
+			$("heard").value = previous ? previous.heard : "";
+			for (const radio of document.querySelectorAll('input[name="clarity"]')) {
+				radio.checked = !!previous && previous.clarity === radio.value;
+			}
+			$("start").textContent = "Loading the chart…";
+			try {
+				await loadChart(item);
+				const target = typeof item.focus === "object" ? item.focus.id : item.focus;
+				const name = plainName(chart.contentWindow, item, target);
+				const where = typeof item.focus === "object" ? `the “${item.focus.column}” cell of “${name}”` : `“${name}”`;
+				$("start").textContent = `Focus is on ${where}.` + (item.page.includes("frappe") ? " (frappe-gantt demo)" : "") + (item.params.verbosity ? ` Level: ${item.params.verbosity}.` : "") + (item.params.cells ? " Cell navigation mode." : "");
+			} catch (error) {
+				$("start").textContent = "";
+				$("error").textContent = "Could not prepare this step: " + error.message + ". Use “Reload this step”.";
+				$("error").hidden = false;
+			}
+		}
+
+		function answer(result) {
+			const { item } = ordered[state.index];
+			const checked = document.querySelector('input[name="clarity"]:checked');
+			state.answers[item.id] = {
+				result,
+				heard: $("heard").value.trim(),
+				clarity: checked ? checked.value : "",
+				at: new Date().toISOString()
+			};
+			save();
+			if (state.index < ordered.length - 1) {
+				show(state.index + 1);
+			} else {
+				save();
+				$("bar").value = answeredCount();
+				$("answered").textContent = `${answeredCount()} of ${ordered.length} answered. That was the last step.`;
+				showReport();
+			}
+		}
+
+		// ---- the report ----
+		function md(text) {
+			return String(text || "").replace(/\s+/g, " ").replace(/\|/g, "\\|").trim();
+		}
+		function buildReport() {
+			const env = state.env || {};
+			const counts = { matched: 0, "did not match": 0, skipped: 0 };
+			const clarity = { clear: 0, "too many words": 0, confusing: 0 };
+			for (const { item } of ordered) {
+				const a = state.answers[item.id];
+				if (a) {
+					counts[a.result]++;
+					if (a.clarity) {
+						clarity[a.clarity]++;
+					}
+				}
+			}
+			const lines = [];
+			lines.push("# gantt-a11y manual test with a screen reader");
+			lines.push("");
+			lines.push(`- Date: ${new Date().toISOString().slice(0, 10)} (started ${String(state.startedAt).slice(0, 10)})`);
+			lines.push(`- Screen reader: ${env.sr || "(not given)"}`);
+			lines.push(`- macOS: ${env.os || "(not given)"}`);
+			lines.push(`- Speech: ${env.rate || "(not given)"}`);
+			lines.push(`- Browser (user agent): ${navigator.userAgent}`);
+			lines.push(`- Accessibility tree tests used for the order: ${treeStatus.date || "none"}${treeStatus.versions ? " (Chromium " + treeStatus.versions.chromium + ", WebKit " + treeStatus.versions.webkit + ")" : ""}`);
+			lines.push("");
+			lines.push(`**${ordered.length} steps: ${counts.matched} matched, ${counts["did not match"]} did not match, ${counts.skipped} skipped, ${ordered.length - answeredCount()} not done.** By ear: ${clarity.clear} clear, ${clarity["too many words"]} too many words, ${clarity.confusing} confusing.`);
+			lines.push("");
+			const problems = ordered.filter(({ item }) => {
+				const a = state.answers[item.id];
+				return a && (a.result === "did not match" || (a.clarity && a.clarity !== "clear"));
+			});
+			if (problems.length) {
+				lines.push("## Did not match, or not clear by ear");
+				lines.push("");
+				for (const { item } of problems) {
+					const a = state.answers[item.id];
+					lines.push(`### ${item.id} ${item.section}`);
+					lines.push("");
+					lines.push(`- Action: ${item.do}`);
+					lines.push(`- Expected: “${md(item.expect.text)}”`);
+					lines.push(`- Result: ${a.result}${a.clarity ? ", by ear: " + a.clarity : ""}`);
+					if (a.heard) {
+						lines.push(`- Heard: “${md(a.heard)}”`);
+					}
+					lines.push("");
+				}
+			}
+			lines.push("## All steps");
+			lines.push("");
+			lines.push("| # | Section | Result | By ear | Heard | Expected |");
+			lines.push("|---|---|---|---|---|---|");
+			for (const { item } of ordered) {
+				const a = state.answers[item.id];
+				lines.push(`| ${item.id} | ${md(item.section)} | ${a ? a.result : "not done"} | ${a ? a.clarity || "" : ""} | ${a ? md(a.heard) : ""} | ${md(item.expect.text)} |`);
+			}
+			lines.push("");
+			return lines.join("\n");
+		}
+		function showReport() {
+			$("report").value = buildReport();
+			$("report-area").style.display = "block";
+			$("report").focus();
+			$("report").select();
+		}
+
+		// ---- controls ----
+		$("btn-match").addEventListener("click", () => answer("matched"));
+		$("btn-mismatch").addEventListener("click", () => answer("did not match"));
+		$("btn-skip").addEventListener("click", () => answer("skipped"));
+		$("btn-again").addEventListener("click", () => show(state.index));
+		async function backToChart() {
+			const { item } = ordered[state.index];
+			chart.focus();
+			try {
+				await focusTarget(chart.contentWindow, item);
+			} catch (error) {
+				show(state.index);
+			}
+		}
+		$("btn-chart").addEventListener("click", backToChart);
+		document.addEventListener("keydown", (event) => {
+			if (event.key === "F6") {
+				event.preventDefault();
+				backToChart();
+			}
+		});
+		$("btn-back").addEventListener("click", () => show(state.index - 1));
+		$("btn-report").addEventListener("click", showReport);
+		$("btn-hide-report").addEventListener("click", () => {
+			$("report-area").style.display = "none";
+			$("btn-report").focus();
+		});
+		$("btn-restart").addEventListener("click", () => {
+			if (!confirm("Clear all answers and start from step 1?")) {
+				return;
+			}
+			state.answers = {};
+			state.startedAt = new Date().toISOString();
+			save();
+			show(0);
+		});
+		for (const key of ["sr", "os", "rate"]) {
+			const input = $("env-" + key);
+			input.value = (state.env && state.env[key]) || "";
+			input.addEventListener("input", () => {
+				state.env = state.env || {};
+				state.env[key] = input.value;
+				save();
+			});
+		}
+
+		show(state.index);
+		window.manualTest = { ordered, state, buildReport };
+	</script>
+</body>
+</html>

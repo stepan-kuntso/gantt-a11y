@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Audit fixture: edit dialog</title>
+<style>
+	body { font-family: system-ui, sans-serif; }
+	[role="row"]:focus { outline: 3px solid #1a4fb4; }
+	#bars { position: relative; height: 90px; border: 1px solid #ccc; margin-top: 8px; }
+	.bar { position: absolute; height: 20px; background: #6a8de0; }
+	[role="dialog"] { border: 2px solid #333; padding: 12px; margin-top: 8px; }
+</style>
+</head>
+<body>
+<!-- A test page for the audit tool: rows with arrow keys, Ctrl+F2 opens an
+     edit dialog, Enter saves, Escape cancels. Not a result. -->
+<h1>Fixture: edit dialog</h1>
+<div id="chart">
+	<div role="treegrid" aria-label="Tasks" id="grid"></div>
+	<div id="bars"></div>
+</div>
+<div id="dialog-host"></div>
+<script>
+	const tasks = [
+		{ id: 1, name: "Plan", start: new Date(2025, 3, 2), days: 3 },
+		{ id: 2, name: "Build", start: new Date(2025, 3, 5), days: 5 },
+		{ id: 3, name: "Ship", start: new Date(2025, 3, 10), days: 1 }
+	];
+	const fmt = (d) => `${d.getMonth() + 1}/${d.getDate()}/${d.getFullYear()}`;
+	const grid = document.getElementById("grid");
+	let active = 0;
+	function render() {
+		grid.innerHTML = "";
+		tasks.forEach((t, i) => {
+			const row = document.createElement("div");
+			row.setAttribute("role", "row");
+			row.dataset.id = t.id;
+			row.tabIndex = i === active ? 0 : -1;
+			row.setAttribute("aria-selected", String(i === active));
+			row.innerHTML = `<span role="gridcell">${t.name}</span> <span role="gridcell">${fmt(t.start)}</span> <span role="gridcell">${t.days} days</span>`;
+			grid.appendChild(row);
+		});
+		const bars = document.getElementById("bars");
+		bars.innerHTML = "";
+		tasks.forEach((t, i) => {
+			const b = document.createElement("div");
+			b.className = "bar";
+			b.style.left = ((t.start - new Date(2025, 3, 1)) / 86400000) * 20 + "px";
+			b.style.width = t.days * 20 + "px";
+			b.style.top = i * 28 + "px";
+			bars.appendChild(b);
+		});
+	}
+	const focusRow = () => { render(); grid.children[active].focus(); };
+	grid.addEventListener("keydown", (e) => {
+		if (e.key === "ArrowDown") active = Math.min(tasks.length - 1, active + 1);
+		else if (e.key === "ArrowUp") active = Math.max(0, active - 1);
+		else if (e.key === "F2" && e.ctrlKey) { openDialog(); e.preventDefault(); return; }
+		else return;
+		e.preventDefault();
+		focusRow();
+	});
+	function openDialog() {
+		const t = tasks[active];
+		const host = document.getElementById("dialog-host");
+		host.innerHTML = `<div role="dialog" aria-modal="true" aria-label="Edit task">
+			<div><label for="f-name">Task Name</label> <input id="f-name" value="${t.name}"></div>
+			<div><label for="f-start">Start Date</label> <input id="f-start" value="${fmt(t.start)}"></div>
+			<div><label for="f-dur">Duration</label> <input id="f-dur" value="${t.days} days"></div>
+		</div>`;
+		const dialog = host.firstElementChild;
+		dialog.addEventListener("keydown", (e) => {
+			if (e.key === "Enter") {
+				const d = new Date(document.getElementById("f-start").value);
+				if (!isNaN(d)) t.start = d;
+				t.days = parseInt(document.getElementById("f-dur").value, 10) || t.days;
+				host.innerHTML = "";
+				focusRow();
+			} else if (e.key === "Escape") {
+				host.innerHTML = "";
+				focusRow();
+			}
+		});
+		document.getElementById("f-name").focus();
+	}
+	render();
+</script>
+</body>
+</html>

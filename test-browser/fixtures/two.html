@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>gantt-a11y test: two charts</title>
+	<link rel="stylesheet" href="../../node_modules/dhtmlx-gantt/codebase/dhtmlxgantt.css">
+	<script src="../../node_modules/dhtmlx-gantt/codebase/dhtmlxgantt.js"></script>
+</head>
+<body>
+	<div id="one" style="width:100%;height:220px;"></div>
+	<div id="two" style="width:100%;height:220px;"></div>
+	<script type="module">
+		import { enableGanttA11y } from "../../src/index.js";
+		function chart(container, names) {
+			const g = Gantt.getGanttInstance();
+			g.plugins({ keyboard_navigation: true });
+			g.config.date_format = "%Y-%m-%d";
+			g.init(container);
+			g.parse({
+				data: [
+					{ id: 1, text: names[0], start_date: "2026-06-01", duration: 4 },
+					{ id: 2, text: names[1], start_date: "2026-06-05", duration: 8 }
+				],
+				links: [{ id: 1, source: 1, target: 2, type: "0" }]
+			});
+			return g;
+		}
+		window.g1 = chart("one", ["Alpha design", "Alpha build"]);
+		window.g2 = chart("two", ["Beta design", "Beta build"]);
+		window.a1 = enableGanttA11y(window.g1);
+		window.a2 = enableGanttA11y(window.g2, { shortcuts: { dependencies: "shift+y" } });
+	</script>
+</body>
+</html>

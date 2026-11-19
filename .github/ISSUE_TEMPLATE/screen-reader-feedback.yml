@@ -1,0 +1,52 @@
+name: Screen reader feedback
+description: What you pressed, what your screen reader said, and what you expected.
+title: "[Screen reader] "
+labels: ["screen reader feedback"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you. This project has been checked only by a sighted developer with VoiceOver, so reports from people who use a screen reader every day, and from NVDA or JAWS, help the most. Short answers are fine.
+  - type: input
+    id: screen-reader
+    attributes:
+      label: Screen reader and version
+      placeholder: "NVDA 2025.3, JAWS 2026, VoiceOver on macOS 26.2"
+    validations:
+      required: true
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and version
+      placeholder: "Firefox 140, Chrome 142, Safari 26.2"
+    validations:
+      required: true
+  - type: input
+    id: os
+    attributes:
+      label: Operating system
+      placeholder: "Windows 11, macOS 26.2"
+    validations:
+      required: true
+  - type: textarea
+    id: pressed
+    attributes:
+      label: What you pressed
+      description: The keys, in order, and on which task or page (for example, the dhtmlx-gantt demo).
+      placeholder: "On \"Launch\", Shift+P twice, then arrow up"
+    validations:
+      required: true
+  - type: textarea
+    id: heard
+    attributes:
+      label: What you heard
+      description: As close to the words as you can, including what came first.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected
+      description: What you wanted to hear or happen instead. If the answer was right but not useful, say so.
+    validations:
+      required: true

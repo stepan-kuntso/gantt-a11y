@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Listen: gantt-a11y announcement variants</title>
+<style>
+	:root {
+		--bg: #fbfaf7; --fg: #1d1c1a; --muted: #5b5852; --line: #d9d5cc; --card: #ffffff;
+		--accent: #0b5cad; --accent-fg: #ffffff; --chosen: #e7f1e4; --chosen-line: #2f6b2a; --warn: #8a3b00;
+	}
+	@media (prefers-color-scheme: dark) {
+		:root {
+			--bg: #171614; --fg: #ece9e2; --muted: #a8a399; --line: #3a3833; --card: #1f1e1b;
+			--accent: #8ec1ff; --accent-fg: #10151c; --chosen: #20301f; --chosen-line: #86c97f; --warn: #ffb074;
+		}
+	}
+	* { box-sizing: border-box; }
+	html { font-size: 100%; scroll-padding-top: 4rem; }
+	body {
+		margin: 0; background: var(--bg); color: var(--fg);
+		font: 1rem/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+	}
+	.wrap { max-width: 58rem; margin: 0 auto; padding: 1rem 1.25rem 4rem; }
+	h1 { font-size: 1.6rem; line-height: 1.2; margin: 1rem 0 .5rem; }
+	h2 { font-size: 1.3rem; margin: 2.5rem 0 .5rem; padding-top: 1rem; border-top: 2px solid var(--line); }
+	h3 { font-size: 1.08rem; margin: 1.75rem 0 .25rem; }
+	p { margin: .5rem 0; max-width: 46rem; }
+	a { color: var(--accent); }
+	.muted { color: var(--muted); }
+	.skip { position: absolute; left: -999rem; }
+	.skip:focus { position: static; display: inline-block; margin: .5rem 0; }
+	nav ul { padding-left: 1.2rem; columns: 2 16rem; margin: .25rem 0; }
+	fieldset { border: 1px solid var(--line); border-radius: .5rem; margin: .75rem 0; padding: .5rem .9rem .8rem; background: var(--card); }
+	legend { font-weight: 600; padding: 0 .3rem; }
+	label { margin-right: 1.1rem; white-space: nowrap; display: inline-block; padding: .2rem 0; }
+	select, input[type="number"] { font: inherit; padding: .2rem .3rem; }
+	button {
+		font: inherit; font-weight: 600; color: var(--accent-fg); background: var(--accent);
+		border: 2px solid var(--accent); border-radius: .4rem; padding: .3rem .7rem; cursor: pointer; min-height: 2.25rem;
+	}
+	button.secondary { background: transparent; color: var(--accent); }
+	button:focus-visible, a:focus-visible, select:focus-visible, input:focus-visible, [tabindex]:focus-visible {
+		outline: 3px solid var(--fg); outline-offset: 2px;
+	}
+	ul.variants { list-style: none; padding: 0; margin: .5rem 0; }
+	ul.variants > li {
+		display: grid; grid-template-columns: 7.5rem 1fr; gap: .25rem .9rem; align-items: start;
+		padding: .6rem .7rem; margin: .4rem 0; background: var(--card); border: 1px solid var(--line); border-radius: .5rem;
+	}
+	ul.variants > li.chosen { background: var(--chosen); border-color: var(--chosen-line); }
+	@media (max-width: 34rem) { ul.variants > li { grid-template-columns: 1fr; } }
+	.say { font-size: 1.05rem; margin: 0; }
+	.meta { margin: .15rem 0 0; font-size: .9rem; color: var(--muted); }
+	.meta strong { color: var(--fg); font-weight: 600; }
+	.tag { font-size: .8rem; font-weight: 700; color: var(--chosen-line); text-transform: uppercase; letter-spacing: .03em; }
+	.over { color: var(--warn); font-weight: 600; }
+	#lastbox { position: sticky; top: 0; z-index: 2; background: var(--bg); border-bottom: 1px solid var(--line); padding: .5rem 0; }
+	#last { font-weight: 600; }
+	.row-demo {
+		border: 2px solid var(--line); border-radius: .4rem; padding: .5rem .7rem; margin: .5rem 0; background: var(--card);
+	}
+	.row-demo [role="row"] { padding: .35rem .4rem; border-radius: .25rem; }
+	.row-demo [role="row"]:focus { background: var(--chosen); }
+	.row-demo [role="gridcell"] { display: inline-block; margin-right: 1rem; }
+	ol.log { font-size: .9rem; color: var(--muted); padding-left: 1.4rem; max-height: 12rem; overflow: auto; }
+	.sr-only {
+		position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden;
+		clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+	}
+	kbd { font: inherit; border: 1px solid var(--line); border-bottom-width: 2px; border-radius: .25rem; padding: 0 .3rem; background: var(--card); }
+</style>
+</head>
+<body>
+<div class="wrap">
+<a class="skip" href="#alternatives">Skip to the variants</a>
+
+<header>
+	<h1>Listen: gantt-a11y announcement variants</h1>
+	<p>Each Play button puts the text beside it into an ARIA live region, the same way the extension does. Turn on a screen reader, press a button, and compare what you hear. The texts and the letters match <a href="ANNOUNCEMENTS.md">ANNOUNCEMENTS.md</a>.</p>
+	<p class="muted">This page has no connection to the Gantt library and loads nothing from the network. Times are estimates at 170 words per minute, not measurements. To stop speech, use your screen reader's own key (Control in VoiceOver, NVDA and JAWS).</p>
+</header>
+
+<div id="lastbox">
+	<p style="margin:0"><span class="muted">Last sent (<span id="lastmode">polite</span>):</span> <span id="last">nothing yet</span></p>
+</div>
+
+<nav aria-label="On this page">
+	<h2 id="contents" style="border:0;margin-top:1rem;padding-top:0">On this page</h2>
+	<ul>
+		<li><a href="#settings">Settings and repeat</a></li>
+		<li><a href="#alternatives">Variants of the main announcements</a></li>
+		<li><a href="#sim-burst">Simulation: many key presses</a></li>
+		<li><a href="#sim-focus">Simulation: result and row label together</a></li>
+		<li><a href="#levels">Verbosity levels</a></li>
+		<li><a href="#edge">Edge cases D1 to D13</a></li>
+		<li><a href="#probes">Pronunciation probes</a></li>
+		<li><a href="#logh">Log</a></li>
+	</ul>
+</nav>
+
+<main>
+
+<section aria-labelledby="settings">
+	<h2 id="settings">Settings and repeat</h2>
+	<fieldset>
+		<legend>Live region</legend>
+		<label><input type="radio" name="mode" value="polite" checked> Polite</label>
+		<label><input type="radio" name="mode" value="assertive"> Assertive</label>
+		<p class="meta">The specification uses polite for everything. Assertive is here so you can hear whether your screen reader treats it differently.</p>
+	</fieldset>
+	<fieldset>
+		<legend>Wait before speaking</legend>
+		<label for="delay">Delay after pressing Play</label>
+		<select id="delay">
+			<option value="100" selected>0.1 second (extension default)</option>
+			<option value="350">0.35 second</option>
+			<option value="600">0.6 second (after a focus change)</option>
+			<option value="1500">1.5 seconds</option>
+		</select>
+		<p class="meta">With VoiceOver the button's own name may be re-read after you press it. A longer delay lets that finish first.</p>
+	</fieldset>
+	<p>
+		<button type="button" id="repeat">Repeat last announcement</button>
+		<button type="button" id="clear" class="secondary">Clear live regions</button>
+	</p>
+</section>
+
+<section aria-labelledby="alternatives">
+	<h2 id="alternatives">Variants of the main announcements</h2>
+	<p>Section 4 of the specification. The chosen variant is marked "chosen".</p>
+<h3 id="alt-row">Task row label</h3>
+<p>Focus lands on the task Testing: an ordinary task, 13 to 17 June 2026, 5 days, 40% complete. This text is the row&#x27;s accessible name (the library builds it from gantt.templates.tooltip_text), not a live-region message.</p>
+<ul class="variants">
+<li><div><button type="button" data-say="Testing. Start date: 13 June 2026. End date: 17 June 2026.">Play A<span class="sr-only">, Task row label</span></button></div><div><p class="say">Testing. Start date: 13 June 2026. End date: 17 June 2026.</p><p class="meta"><span>about 7 s</span>. <strong>First:</strong> Name, then every value behind its full field label (today&#x27;s demo template). <strong>Suits:</strong> Newcomers: each value is labelled with the same words as the form. <strong>Risk:</strong> Longest. The year and the words &quot;date&quot; repeat on every row; no duration or progress.</p></div></li>
+<li class="chosen"><div><button type="button" data-say="Testing. 13 to 17 June, 5 days. 40 percent done.">Play B<span class="sr-only">, Task row label</span></button> <span class="tag">chosen</span></div><div><p class="say">Testing. 13 to 17 June, 5 days. 40 percent done.</p><p class="meta"><span>about 5 s</span>. <strong>First:</strong> Name, then the time span as one phrase, then duration, then progress. <strong>Suits:</strong> Regular users who move through many rows. <strong>Risk:</strong> &quot;13 to 17 June&quot; has no field label; relies on the range reading as start and end.</p></div></li>
+<li><div><button type="button" data-say="Testing. Start 13 June. End 17 June. 5 days. 40 percent done.">Play C<span class="sr-only">, Task row label</span></button></div><div><p class="say">Testing. Start 13 June. End 17 June. 5 days. 40 percent done.</p><p class="meta"><span>about 6 s</span>. <strong>First:</strong> Name, then short labelled fields, one sentence per field. <strong>Suits:</strong> Newcomers and braille readers: one field per sentence, each with a label. <strong>Risk:</strong> Five sentence pauses per row make fast row-by-row scanning slower.</p></div></li>
+</ul>
+<h3 id="alt-deps">Dependencies on demand (Shift+D)</h3>
+<p>Focus is on Implementation. It depends on Software design (finish to start). Three tasks depend on it: Testing (finish to start), Documentation (start to start), Code review (finish to finish).</p>
+<ul class="variants">
+<li><div><button type="button" data-say="Depends on: Software design (finish to start). Required by: Testing (finish to start), Documentation (start to start), Code review (finish to finish).">Play A<span class="sr-only">, Dependencies on demand (Shift+D)</span></button></div><div><p class="say">Depends on: Software design (finish to start). Required by: Testing (finish to start), Documentation (start to start), Code review (finish to finish).</p><p class="meta"><span class="over">about 9.5 s</span>. <strong>First:</strong> Direction, then every name with its link type in brackets (today&#x27;s text). <strong>Suits:</strong> Users trained in project management who want every link type every time. <strong>Risk:</strong> Longest. Brackets are not spoken reliably, so a type can attach to the wrong name; the default type is repeated.</p></div></li>
+<li class="chosen"><div><button type="button" data-say="Depends on: Software design. Required by 3. Testing. Documentation, start to start. Code review, finish to finish.">Play B<span class="sr-only">, Dependencies on demand (Shift+D)</span></button> <span class="tag">chosen</span></div><div><p class="say">Depends on: Software design. Required by 3. Testing. Documentation, start to start. Code review, finish to finish.</p><p class="meta"><span class="over">about 8.5 s</span>. <strong>First:</strong> Direction and count, then names; a link type only when it is not the default finish to start. <strong>Suits:</strong> Regular users; anyone listening for one specific name. <strong>Risk:</strong> Silence about the type has to be learned as meaning finish to start. &quot;Start to start&quot; is still jargon.</p></div></li>
+<li><div><button type="button" data-say="Starts after Software design ends. 3 tasks wait for this. Testing starts after this ends. Documentation starts after this starts. Code review ends after this ends.">Play C<span class="sr-only">, Dependencies on demand (Shift+D)</span></button></div><div><p class="say">Starts after Software design ends. 3 tasks wait for this. Testing starts after this ends. Documentation starts after this starts. Code review ends after this ends.</p><p class="meta"><span class="over">about 11 s</span>. <strong>First:</strong> The scheduling rule itself in plain words, one sentence per link. <strong>Suits:</strong> Newcomers and people without project-management training. <strong>Risk:</strong> Longest to hear in full. &quot;Starts after it starts&quot; is exact but easy to mishear at speed.</p></div></li>
+</ul>
+<h3 id="alt-save">Result of saving the task form</h3>
+<p>The user changed the duration of Testing from 5 to 8 days and pressed Save. The form closes and focus returns to the row. Today the result is spoken in place of the row label; on the fallback route it follows the row label.</p>
+<ul class="variants">
+<li><div><button type="button" data-say="Saved Testing. Duration: 5 days to 8 days. Ends 20 June 2026.">Play A<span class="sr-only">, Result of saving the task form</span></button></div><div><p class="say">Saved Testing. Duration: 5 days to 8 days. Ends 20 June 2026.</p><p class="meta"><span>about 6.5 s</span>. <strong>First:</strong> Confirmation with the task name, then old value to new value (today&#x27;s text). <strong>Suits:</strong> Newcomers who want the full sentence. <strong>Risk:</strong> &quot;5 days to 8 days&quot; sounds like a range. The name is spoken twice whenever the row label is also read.</p></div></li>
+<li class="chosen"><div><button type="button" data-say="Saved. Duration 8 days, was 5. Ends 20 June.">Play B<span class="sr-only">, Result of saving the task form</span></button> <span class="tag">chosen</span></div><div><p class="say">Saved. Duration 8 days, was 5. Ends 20 June.</p><p class="meta"><span>about 4.5 s</span>. <strong>First:</strong> Confirmation word, then the new value, then the old one. <strong>Suits:</strong> Everyone; the first word already answers &quot;did it work&quot;. <strong>Risk:</strong> No task name: when the result replaces the row label, nothing identifies the task.</p></div></li>
+<li><div><button type="button" data-say="Saved, 1 change: duration.">Play C<span class="sr-only">, Result of saving the task form</span></button></div><div><p class="say">Saved, 1 change: duration.</p><p class="meta"><span>about 2 s</span>. <strong>First:</strong> Confirmation and which field changed; values are left to the row label, which must follow. <strong>Suits:</strong> Experienced users; braille readers (fits a 40-cell line). <strong>Risk:</strong> The user must read the row to get the new value; a wrong value typed by mistake is not echoed.</p></div></li>
+</ul>
+<h3 id="alt-conflict">Link conflict after a change</h3>
+<p>Testing depends on Implementation (finish to start). Implementation ends 12 June. The user moved Testing two days earlier, to 11 June.</p>
+<ul class="variants">
+<li><div><button type="button" data-say="Warning: Testing now starts before Implementation ends.">Play A<span class="sr-only">, Link conflict after a change</span></button></div><div><p class="say">Warning: Testing now starts before Implementation ends.</p><p class="meta"><span>about 3 s</span>. <strong>First:</strong> A warning word, then both task names and the broken rule (today&#x27;s text). <strong>Suits:</strong> Newcomers: a full sentence with both names. <strong>Risk:</strong> Does not say by how much. &quot;Warning&quot; doubles with the &quot;Alert&quot; prefix some screen readers add to alerts.</p></div></li>
+<li class="chosen"><div><button type="button" data-say="Conflict. 2 days too early for Implementation.">Play B<span class="sr-only">, Link conflict after a change</span></button> <span class="tag">chosen</span></div><div><p class="say">Conflict. 2 days too early for Implementation.</p><p class="meta"><span>about 3.5 s</span>. <strong>First:</strong> Category word, then the size of the problem, then the other task. <strong>Suits:</strong> Everyone; tells how many key presses fix it, and is short enough to follow a move result. <strong>Risk:</strong> Does not say which rule is broken (start or end); &quot;too early&quot; leaves the subject implicit.</p></div></li>
+<li><div><button type="button" data-say="Conflict. 2 days too early: must not start before Implementation ends.">Play C<span class="sr-only">, Link conflict after a change</span></button></div><div><p class="say">Conflict. 2 days too early: must not start before Implementation ends.</p><p class="meta"><span>about 5 s</span>. <strong>First:</strong> Category word, size, then the rule in plain words with the other task. <strong>Suits:</strong> Newcomers; anyone who asks for the conflict on demand. <strong>Risk:</strong> Too long to append to a move result without passing 8 seconds.</p></div></li>
+<li><div><button type="button" data-say="Conflict with Implementation. Earliest start 13 June.">Play D<span class="sr-only">, Link conflict after a change</span></button></div><div><p class="say">Conflict with Implementation. Earliest start 13 June.</p><p class="meta"><span>about 3.5 s</span>. <strong>First:</strong> Category word, the other task, then the date that fixes it. <strong>Suits:</strong> Users who think in dates and go straight to the fix. <strong>Risk:</strong> Hides the rule and the size; &quot;earliest start&quot; becomes &quot;earliest end&quot; for two of the four link types.</p></div></li>
+</ul>
+<h3 id="alt-concurrent">Tasks at the same time (Shift+O)</h3>
+<p>Focus is on Testing, 13 to 17 June. Marketing prep &amp; PR runs 10 to 18 June; Documentation runs 5 to 14 June.</p>
+<ul class="variants">
+<li><div><button type="button" data-say="2 tasks at the same time: Documentation, Marketing prep &amp; PR.">Play A<span class="sr-only">, Tasks at the same time (Shift+O)</span></button></div><div><p class="say">2 tasks at the same time: Documentation, Marketing prep &amp; PR.</p><p class="meta"><span>about 4.5 s</span>. <strong>First:</strong> Count, then names in start order (today&#x27;s text). <strong>Suits:</strong> Quick check of who else is active. <strong>Risk:</strong> Says nothing about how much they overlap; a one-day and a full overlap sound the same.</p></div></li>
+<li class="chosen"><div><button type="button" data-say="2 tasks at the same time. Marketing prep &amp; PR, the whole time. Documentation, first 2 days.">Play B<span class="sr-only">, Tasks at the same time (Shift+O)</span></button> <span class="tag">chosen</span></div><div><p class="say">2 tasks at the same time. Marketing prep &amp; PR, the whole time. Documentation, first 2 days.</p><p class="meta"><span>about 7.5 s</span>. <strong>First:</strong> Count, then names with the extent of overlap, largest overlap first. <strong>Suits:</strong> Everyone; answers &quot;how much&quot; without date arithmetic. <strong>Risk:</strong> &quot;First 2 days&quot; is relative to the focused task, which has to be understood once.</p></div></li>
+<li><div><button type="button" data-say="2 tasks at the same time. Documentation, 5 to 14 June. Marketing prep &amp; PR, 10 to 18 June.">Play C<span class="sr-only">, Tasks at the same time (Shift+O)</span></button></div><div><p class="say">2 tasks at the same time. Documentation, 5 to 14 June. Marketing prep &amp; PR, 10 to 18 June.</p><p class="meta"><span class="over">about 8.5 s</span>. <strong>First:</strong> Count, then names with their own dates. <strong>Suits:</strong> Users who want raw dates and will compare them themselves. <strong>Risk:</strong> The listener has to compute the overlap in their head while the next item is already being spoken.</p></div></li>
+</ul>
+<h3 id="alt-move">Moving a task with the keyboard (Alt+Shift+Right)</h3>
+<p>The user moves Testing one day later: from 13 to 17 June to 14 to 18 June.</p>
+<ul class="variants">
+<li><div><button type="button" data-say="Testing moved to 14 June 2026, ends 18 June 2026.">Play A<span class="sr-only">, Moving a task with the keyboard (Alt+Shift+Right)</span></button></div><div><p class="say">Testing moved to 14 June 2026, ends 18 June 2026.</p><p class="meta"><span>about 5.5 s</span>. <strong>First:</strong> Task name, the verb, then start and end with the year (today&#x27;s text). <strong>Suits:</strong> Newcomers; a complete sentence. <strong>Risk:</strong> Name and year repeat on every key press; four words pass before the first new fact.</p></div></li>
+<li class="chosen"><div><button type="button" data-say="Starts Sunday 14 June, ends Thursday 18 June.">Play B<span class="sr-only">, Moving a task with the keyboard (Alt+Shift+Right)</span></button> <span class="tag">chosen</span></div><div><p class="say">Starts Sunday 14 June, ends Thursday 18 June.</p><p class="meta"><span>about 3.5 s</span>. <strong>First:</strong> The new start with its weekday, then the new end. <strong>Suits:</strong> Everyone; the weekday exposes a move onto a weekend. <strong>Risk:</strong> Does not say how far the task moved.</p></div></li>
+<li><div><button type="button" data-say="1 day later. 14 to 18 June.">Play C<span class="sr-only">, Moving a task with the keyboard (Alt+Shift+Right)</span></button></div><div><p class="say">1 day later. 14 to 18 June.</p><p class="meta"><span>about 3.5 s</span>. <strong>First:</strong> The size and direction of the move, then the new span. <strong>Suits:</strong> Experienced users; the shortest form. <strong>Risk:</strong> No weekday; &quot;14 to 18 June&quot; unlabelled.</p></div></li>
+</ul>
+<h3 id="alt-jump">Go to predecessor (Shift+P) when there are several</h3>
+<p>Launch depends on five tasks. The user presses Shift+P a second time; focus moves to the second of them and the screen reader reads that row.</p>
+<ul class="variants">
+<li><div><button type="button" data-say="Predecessor 2 of 5, finish to start.">Play A<span class="sr-only">, Go to predecessor (Shift+P) when there are several</span></button></div><div><p class="say">Predecessor 2 of 5, finish to start.</p><p class="meta"><span>about 3 s</span>. <strong>First:</strong> The relation as a noun, position, then link type (today&#x27;s text). <strong>Suits:</strong> Users who know the term predecessor. <strong>Risk:</strong> Does not say whose predecessor; after a few jumps the starting task is forgotten.</p></div></li>
+<li class="chosen"><div><button type="button" data-say="2 of 5. Launch depends on this.">Play B<span class="sr-only">, Go to predecessor (Shift+P) when there are several</span></button> <span class="tag">chosen</span></div><div><p class="say">2 of 5. Launch depends on this.</p><p class="meta"><span>about 3.5 s</span>. <strong>First:</strong> Position, then the relation as a sentence that names the task the user started from. <strong>Suits:</strong> Everyone; no jargon, and the origin is restated. <strong>Risk:</strong> The link type is left out unless it is unusual.</p></div></li>
+<li><div><button type="button" data-say="Predecessor 2 of 5 of Launch.">Play C<span class="sr-only">, Go to predecessor (Shift+P) when there are several</span></button></div><div><p class="say">Predecessor 2 of 5 of Launch.</p><p class="meta"><span>about 2.5 s</span>. <strong>First:</strong> The relation as a noun, position, then the origin. <strong>Suits:</strong> Users who chose project-management wording. <strong>Risk:</strong> &quot;Of 5 of Launch&quot; is awkward to hear.</p></div></li>
+</ul>
+</section>
+
+<section aria-labelledby="sim-burst">
+	<h2 id="sim-burst">Simulation: many key presses (case D9)</h2>
+	<p>The task Testing starts on Saturday 13 June and lasts 5 days. The buttons below act like the move keys. Choose a strategy, then press "10 presses" and listen to what arrives.</p>
+	<fieldset>
+		<legend>Strategy</legend>
+		<label><input type="radio" name="burst" value="summary" checked> Summary after a pause (chosen)</label>
+		<label><input type="radio" name="burst" value="every"> Every press in full</label>
+		<label><input type="radio" name="burst" value="tick"> Short tick per press, then summary</label>
+		<label><input type="radio" name="burst" value="current"> Today's text, last one wins</label>
+	</fieldset>
+	<fieldset>
+		<legend>Quiet time before the summary</legend>
+		<label for="quiet">Pause</label>
+		<select id="quiet">
+			<option value="200">0.2 second</option>
+			<option value="350" selected>0.35 second (proposed)</option>
+			<option value="600">0.6 second (today)</option>
+			<option value="1000">1 second</option>
+		</select>
+	</fieldset>
+	<p>
+		<button type="button" id="mv-earlier">One day earlier</button>
+		<button type="button" id="mv-later">One day later</button>
+		<button type="button" id="mv-10">10 presses later, fast</button>
+		<button type="button" id="mv-reset" class="secondary">Reset to 13 June</button>
+	</p>
+	<p>Testing now: <span id="mv-state">Saturday 13 June to Wednesday 17 June</span>. <span class="muted">Implementation ends 12 June, so any start before 13 June is a conflict.</span></p>
+</section>
+
+<section aria-labelledby="sim-focus">
+	<h2 id="sim-focus">Simulation: result and row label together (rule P23, cases D8 and D9)</h2>
+	<p>In the real chart, closing the task form moves focus back to the row. The result can reach you in three ways: through the live region, which competes with the screen reader's reading of the row; in place of the row's label; or in front of the row's label. "Save and close" below moves focus to the Testing row in the small grid and delivers the chosen text by the chosen route. Listen for the order, for anything that gets lost, and for whether you still know which task you are on.</p>
+	<fieldset>
+		<legend>Delivery route</legend>
+		<label><input type="radio" name="route" value="live" checked> Live region after focus moves</label><br>
+		<label><input type="radio" name="route" value="instead"> In place of the row label (today's code for save and move)</label><br>
+		<label><input type="radio" name="route" value="before"> Before the row label (today's code for jumps)</label>
+	</fieldset>
+	<fieldset>
+		<legend>Result text</legend>
+		<label><input type="radio" name="savetext" value="Saved Testing. Duration: 5 days to 8 days. Ends 20 June 2026."> A: with the task name (today)</label><br>
+		<label><input type="radio" name="savetext" value="Saved. Duration 8 days, was 5. Ends 20 June." checked> B: without the name (chosen)</label><br>
+		<label><input type="radio" name="savetext" value="Saved, 1 change: duration."> C: field name only</label><br>
+		<label><input type="radio" name="savetext" value=""> Nothing (row label alone)</label>
+	</fieldset>
+	<fieldset>
+		<legend>Delay, live region route only</legend>
+		<label for="fdelay">Delay after focus moves</label>
+		<select id="fdelay">
+			<option value="0">none</option>
+			<option value="150">0.15 second</option>
+			<option value="500" selected>0.5 second (today)</option>
+			<option value="1000">1 second</option>
+			<option value="2000">2 seconds</option>
+		</select>
+	</fieldset>
+	<p><button type="button" id="save-close">Save and close</button> <button type="button" id="jump" class="secondary">Jump to predecessor</button></p>
+	<div class="row-demo">
+		<div role="treegrid" aria-label="Demo chart" id="grid">
+			<div role="row" aria-level="2" tabindex="-1" id="row-impl" aria-label="Implementation. 5 to 12 June, 8 days. 100 percent done.">
+				<span role="gridcell">Implementation</span><span role="gridcell">5 to 12 June</span><span role="gridcell">8 days</span>
+			</div>
+			<div role="row" aria-level="2" tabindex="0" id="row-test" aria-label="Testing. 13 to 20 June, 8 days. 40 percent done.">
+				<span role="gridcell">Testing</span><span role="gridcell">13 to 20 June</span><span role="gridcell">8 days</span>
+			</div>
+		</div>
+	</div>
+	<p class="meta">"Jump to predecessor" moves focus to the Implementation row with the text "Testing depends on this." by the same route.</p>
+	<h3 id="sim-keys">Moving the task from the row itself</h3>
+	<p>Put focus on the Testing row above (Tab to the grid, Up and Down arrows move between the two rows) and press <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>Right</kbd> or <kbd>Left</kbd>, once and then many times quickly. Each press redraws the row and focuses it again, as the library does, with the result as the row's label. Listen for whether each new result cuts off the one before it. The label goes back to normal when focus leaves the row.</p>
+	<fieldset>
+		<legend>Text on each press</legend>
+		<label><input type="radio" name="keytext" value="total" checked> Running total (proposed)</label>
+		<label><input type="radio" name="keytext" value="plain"> New dates only</label>
+		<label><input type="radio" name="keytext" value="current"> Today's text</label>
+	</fieldset>
+</section>
+
+<section aria-labelledby="levels">
+	<h2 id="levels">Verbosity levels</h2>
+	<p>Section 5 of the specification: the same situations at the Brief, Standard and Detailed levels.</p>
+<h3>Row label</h3>
+<ul class="variants">
+<li><div><button type="button" data-say="Testing. 13 June, 5 days.">Play Brief<span class="sr-only">, Row label</span></button></div><div><p class="say">Testing. 13 June, 5 days.</p><p class="meta"><span>about 3 s</span></p></div></li>
+<li class="chosen"><div><button type="button" data-say="Testing. 13 to 17 June, 5 days. 40 percent done.">Play Standard<span class="sr-only">, Row label</span></button> <span class="tag">default</span></div><div><p class="say">Testing. 13 to 17 June, 5 days. 40 percent done.</p><p class="meta"><span>about 5 s</span></p></div></li>
+<li><div><button type="button" data-say="Testing. Start 13 June. End 17 June. 5 days. 40 percent done.">Play Detailed<span class="sr-only">, Row label</span></button></div><div><p class="say">Testing. Start 13 June. End 17 June. 5 days. 40 percent done.</p><p class="meta"><span>about 6 s</span></p></div></li>
+</ul>
+<h3>Save</h3>
+<ul class="variants">
+<li><div><button type="button" data-say="Saved, 1 change: duration.">Play Brief<span class="sr-only">, Save</span></button></div><div><p class="say">Saved, 1 change: duration.</p><p class="meta"><span>about 2 s</span></p></div></li>
+<li class="chosen"><div><button type="button" data-say="Saved. Duration 8 days, was 5. Ends 20 June.">Play Standard<span class="sr-only">, Save</span></button> <span class="tag">default</span></div><div><p class="say">Saved. Duration 8 days, was 5. Ends 20 June.</p><p class="meta"><span>about 4.5 s</span></p></div></li>
+<li><div><button type="button" data-say="Saved. Duration 8 days, was 5 days. End 20 June, was 17 June.">Play Detailed<span class="sr-only">, Save</span></button></div><div><p class="say">Saved. Duration 8 days, was 5 days. End 20 June, was 17 June.</p><p class="meta"><span>about 6 s</span></p></div></li>
+</ul>
+<h3>Move</h3>
+<ul class="variants">
+<li><div><button type="button" data-say="14 to 18 June.">Play Brief<span class="sr-only">, Move</span></button></div><div><p class="say">14 to 18 June.</p><p class="meta"><span>about 2 s</span></p></div></li>
+<li class="chosen"><div><button type="button" data-say="Starts Sunday 14 June, ends Thursday 18 June.">Play Standard<span class="sr-only">, Move</span></button> <span class="tag">default</span></div><div><p class="say">Starts Sunday 14 June, ends Thursday 18 June.</p><p class="meta"><span>about 3.5 s</span></p></div></li>
+<li><div><button type="button" data-say="1 day later. Starts Sunday 14 June, ends Thursday 18 June.">Play Detailed<span class="sr-only">, Move</span></button></div><div><p class="say">1 day later. Starts Sunday 14 June, ends Thursday 18 June.</p><p class="meta"><span>about 5 s</span></p></div></li>
+</ul>
+<h3>Conflict after a change</h3>
+<ul class="variants">
+<li><div><button type="button" data-say="Conflict, Implementation.">Play Brief<span class="sr-only">, Conflict after a change</span></button></div><div><p class="say">Conflict, Implementation.</p><p class="meta"><span>about 1.5 s</span></p></div></li>
+<li class="chosen"><div><button type="button" data-say="Conflict. 2 days too early for Implementation.">Play Standard<span class="sr-only">, Conflict after a change</span></button> <span class="tag">default</span></div><div><p class="say">Conflict. 2 days too early for Implementation.</p><p class="meta"><span>about 3.5 s</span></p></div></li>
+<li><div><button type="button" data-say="Conflict. 2 days too early: must not start before Implementation ends. Earliest start 13 June.">Play Detailed<span class="sr-only">, Conflict after a change</span></button></div><div><p class="say">Conflict. 2 days too early: must not start before Implementation ends. Earliest start 13 June.</p><p class="meta"><span>about 6.5 s</span></p></div></li>
+</ul>
+<h3>Errors</h3>
+<ul class="variants">
+<li><div><button type="button" data-say="Read-only.">Play Brief<span class="sr-only">, Errors</span></button></div><div><p class="say">Read-only.</p><p class="meta"><span>about 1 s</span></p></div></li>
+<li class="chosen"><div><button type="button" data-say="Read-only. Not changed.">Play Standard<span class="sr-only">, Errors</span></button> <span class="tag">default</span></div><div><p class="say">Read-only. Not changed.</p><p class="meta"><span>about 2 s</span></p></div></li>
+<li><div><button type="button" data-say="Read-only. Not changed. Ask the project owner to unlock it.">Play Detailed<span class="sr-only">, Errors</span></button></div><div><p class="say">Read-only. Not changed. Ask the project owner to unlock it.</p><p class="meta"><span>about 5 s</span></p></div></li>
+</ul>
+</section>
+
+<section aria-labelledby="edge">
+	<h2 id="edge">Edge cases D1 to D13</h2>
+	<p>Section 6 of the specification. Some entries are marked "what not to do" or "for comparison": they are there to be heard, not to be used.</p>
+<h3 id="d1">D1. Deep nesting</h3>
+<ul class="variants">
+<li class="chosen"><div><button type="button" data-say="Rate limiting. 13 to 17 June, 5 days. 40 percent done.">Play<span class="sr-only">, D1, Row label, no ancestors (chosen)</span></button></div><div><p class="say">Rate limiting. 13 to 17 June, 5 days. 40 percent done.</p><p class="meta"><strong>Row label, no ancestors (chosen)</strong>, <span>about 5.5 s</span></p></div></li>
+<li><div><button type="button" data-say="Rate limiting. In Backend. 13 to 17 June, 5 days. 40 percent done.">Play<span class="sr-only">, D1, Row label with parent (Detailed)</span></button></div><div><p class="say">Rate limiting. In Backend. 13 to 17 June, 5 days. 40 percent done.</p><p class="meta"><strong>Row label with parent (Detailed)</strong>, <span>about 6.5 s</span></p></div></li>
+<li class="chosen"><div><button type="button" data-say="In Backend, in API, in Release 2, in Website redesign. Level 5.">Play<span class="sr-only">, D1, Where am I, nearest first (chosen)</span></button></div><div><p class="say">In Backend, in API, in Release 2, in Website redesign. Level 5.</p><p class="meta"><strong>Where am I, nearest first (chosen)</strong>, <span>about 5.5 s</span></p></div></li>
+<li><div><button type="button" data-say="Website redesign, Release 2, API, Backend. Level 5.">Play<span class="sr-only">, D1, Where am I, root first</span></button></div><div><p class="say">Website redesign, Release 2, API, Backend. Level 5.</p><p class="meta"><strong>Where am I, root first</strong>, <span>about 4 s</span></p></div></li>
+</ul>
+<h3 id="d2">D2. Many dependencies</h3>
+<ul class="variants">
+<li><div><button type="button" data-say="Depends on: Software design.">Play<span class="sr-only">, D2, 1 predecessor</span></button></div><div><p class="say">Depends on: Software design.</p><p class="meta"><strong>1 predecessor</strong>, <span>about 2 s</span></p></div></li>
+<li><div><button type="button" data-say="Depends on 3: Software design, Budget approval, Code review.">Play<span class="sr-only">, D2, 3 predecessors</span></button></div><div><p class="say">Depends on 3: Software design, Budget approval, Code review.</p><p class="meta"><strong>3 predecessors</strong>, <span>about 4 s</span></p></div></li>
+<li><div><button type="button" data-say="Depends on 8. First 3: Implementation, Budget approval, Code review.">Play<span class="sr-only">, D2, 8 predecessors, first page</span></button></div><div><p class="say">Depends on 8. First 3: Implementation, Budget approval, Code review.</p><p class="meta"><strong>8 predecessors, first page</strong>, <span>about 5 s</span></p></div></li>
+<li><div><button type="button" data-say="Press again for the next 3.">Play<span class="sr-only">, D2, The hint that follows while hints are on</span></button></div><div><p class="say">Press again for the next 3.</p><p class="meta"><strong>The hint that follows while hints are on</strong>, <span>about 2.5 s</span></p></div></li>
+<li><div><button type="button" data-say="4 to 6 of 8: Documentation, Legal review, Translation.">Play<span class="sr-only">, D2, 8 predecessors, second page</span></button></div><div><p class="say">4 to 6 of 8: Documentation, Legal review, Translation.</p><p class="meta"><strong>8 predecessors, second page</strong>, <span>about 4 s</span></p></div></li>
+<li><div><button type="button" data-say="7 and 8 of 8: Hosting contract, Security audit. End of list.">Play<span class="sr-only">, D2, 8 predecessors, last page</span></button></div><div><p class="say">7 and 8 of 8: Hosting contract, Security audit. End of list.</p><p class="meta"><strong>8 predecessors, last page</strong>, <span>about 5.5 s</span></p></div></li>
+<li><div><button type="button" data-say="Depends on 25. Last to end: Security audit, 12 June. 1 in conflict: Legal review.">Play<span class="sr-only">, D2, 25 predecessors</span></button></div><div><p class="say">Depends on 25. Last to end: Security audit, 12 June. 1 in conflict: Legal review.</p><p class="meta"><strong>25 predecessors</strong>, <span>about 7.5 s</span></p></div></li>
+<li><div><button type="button" data-say="Depends on 25: Software design, Budget approval, Code review, Documentation, Legal review, Translation, Hosting contract, Security audit, Content plan, Design system, Analytics setup, Payment provider, Privacy review, Load testing, Staging setup, Domain transfer, Email templates, Search index, Image pipeline, Redirect map, Cookie banner, Error pages, Backup plan, Monitoring, Release notes.">Play<span class="sr-only">, D2, 25, list read in one go (what not to do)</span></button></div><div><p class="say">Depends on 25: Software design, Budget approval, Code review, Documentation, Legal review, Translation, Hosting contract, Security audit, Content plan, Design system, Analytics setup, Payment provider, Privacy review, Load testing, Staging setup, Domain transfer, Email templates, Search index, Image pipeline, Redirect map, Cookie banner, Error pages, Backup plan, Monitoring, Release notes.</p><p class="meta"><strong>25, list read in one go (what not to do)</strong>, <span class="over">about 23.5 s</span></p></div></li>
+</ul>
+<h3 id="d3">D3. Many columns</h3>
+<ul class="variants">
+<li><div><button type="button" data-say="Testing. 13 to 17 June, 5 days. 40 percent done.">Play<span class="sr-only">, D3, Row label stays the same for 4, 10 or 20 columns</span></button></div><div><p class="say">Testing. 13 to 17 June, 5 days. 40 percent done.</p><p class="meta"><strong>Row label stays the same for 4, 10 or 20 columns</strong>, <span>about 5 s</span></p></div></li>
+<li><div><button type="button" data-say="Anna Kowalska">Play<span class="sr-only">, D3, Cell mode, headers exposed by markup</span></button></div><div><p class="say">Anna Kowalska</p><p class="meta"><strong>Cell mode, headers exposed by markup</strong>, <span>about 0.5 s</span></p></div></li>
+<li><div><button type="button" data-say="Anna Kowalska, Owner">Play<span class="sr-only">, D3, Cell mode, no header markup: value then column</span></button></div><div><p class="say">Anna Kowalska, Owner</p><p class="meta"><strong>Cell mode, no header markup: value then column</strong>, <span>about 1.5 s</span></p></div></li>
+<li><div><button type="button" data-say="Details, 1 of 3. Owner Anna Kowalska. Priority high. Status in review. Budget 12,000 euros.">Play<span class="sr-only">, D3, Row details on demand, first group</span></button></div><div><p class="say">Details, 1 of 3. Owner Anna Kowalska. Priority high. Status in review. Budget 12,000 euros.</p><p class="meta"><strong>Row details on demand, first group</strong>, <span>about 8 s</span></p></div></li>
+</ul>
+<h3 id="d4">D4. Long names, HTML, emoji, codes</h3>
+<ul class="variants">
+<li><div><button type="button" data-say="Migrate customer accounts from the legacy billing system to the new platform including invoices. 13 to 17 June, 5 days.">Play<span class="sr-only">, D4, Long name in its own row label, uncut</span></button></div><div><p class="say">Migrate customer accounts from the legacy billing system to the new platform including invoices. 13 to 17 June, 5 days.</p><p class="meta"><strong>Long name in its own row label, uncut</strong>, <span>about 8 s</span></p></div></li>
+<li><div><button type="button" data-say="Depends on 2: Migrate customer accounts from the legacy, Budget approval.">Play<span class="sr-only">, D4, Same name inside a list, cut after 6 words</span></button></div><div><p class="say">Depends on 2: Migrate customer accounts from the legacy, Budget approval.</p><p class="meta"><strong>Same name inside a list, cut after 6 words</strong>, <span>about 4.5 s</span></p></div></li>
+<li><div><button type="button" data-say="Marketing prep &amp; PR. 10 to 18 June, 9 days.">Play<span class="sr-only">, D4, HTML and entity in the source, spoken as plain text</span></button></div><div><p class="say">Marketing prep &amp; PR. 10 to 18 June, 9 days.</p><p class="meta"><strong>HTML and entity in the source, spoken as plain text</strong>, <span>about 4.5 s</span></p></div></li>
+<li><div><button type="button" data-say="🚀 Launch. 18 June, 1 day.">Play<span class="sr-only">, D4, Emoji left in place</span></button></div><div><p class="say">🚀 Launch. 18 June, 1 day.</p><p class="meta"><strong>Emoji left in place</strong>, <span>about 3 s</span></p></div></li>
+<li><div><button type="button" data-say="Depends on 2: Launch, Testing.">Play<span class="sr-only">, D4, Leading emoji dropped inside lists</span></button></div><div><p class="say">Depends on 2: Launch, Testing.</p><p class="meta"><strong>Leading emoji dropped inside lists</strong>, <span>about 2.5 s</span></p></div></li>
+<li><div><button type="button" data-say="PRJ-1423 Fix login. 13 to 17 June, 5 days.">Play<span class="sr-only">, D4, Code first, as written</span></button></div><div><p class="say">PRJ-1423 Fix login. 13 to 17 June, 5 days.</p><p class="meta"><strong>Code first, as written</strong>, <span>about 5.5 s</span></p></div></li>
+<li><div><button type="button" data-say="Fix login, PRJ-1423. 13 to 17 June, 5 days.">Play<span class="sr-only">, D4, Code moved to the end (setting)</span></button></div><div><p class="say">Fix login, PRJ-1423. 13 to 17 June, 5 days.</p><p class="meta"><strong>Code moved to the end (setting)</strong>, <span>about 6 s</span></p></div></li>
+<li><div><button type="button" data-say="Depends on 2: Testing in Backend, Testing in Mobile app.">Play<span class="sr-only">, D4, Two tasks with the same name</span></button></div><div><p class="say">Depends on 2: Testing in Backend, Testing in Mobile app.</p><p class="meta"><strong>Two tasks with the same name</strong>, <span>about 4.5 s</span></p></div></li>
+</ul>
+<h3 id="d5">D5. Special kinds of task</h3>
+<ul class="variants">
+<li><div><button type="button" data-say="Translation. Not scheduled.">Play<span class="sr-only">, D5, No dates</span></button></div><div><p class="say">Translation. Not scheduled.</p><p class="meta"><strong>No dates</strong>, <span>about 2 s</span></p></div></li>
+<li><div><button type="button" data-say="Sign-off. 20 June, no duration.">Play<span class="sr-only">, D5, Zero duration, ordinary task</span></button></div><div><p class="say">Sign-off. 20 June, no duration.</p><p class="meta"><strong>Zero duration, ordinary task</strong>, <span>about 3 s</span></p></div></li>
+<li><div><button type="button" data-say="Go-live. Milestone, 20 June.">Play<span class="sr-only">, D5, Milestone</span></button></div><div><p class="say">Go-live. Milestone, 20 June.</p><p class="meta"><strong>Milestone</strong>, <span>about 3 s</span></p></div></li>
+<li><div><button type="button" data-say="Website redesign. Project, 1 to 22 June, 10 tasks. 35 percent done.">Play<span class="sr-only">, D5, Project (summary) task</span></button></div><div><p class="say">Website redesign. Project, 1 to 22 June, 10 tasks. 35 percent done.</p><p class="meta"><strong>Project (summary) task</strong>, <span>about 6.5 s</span></p></div></li>
+<li><div><button type="button" data-say="Website redesign. Project, 1 to 22 June, 10 tasks. 35 percent done. 2 conflicts inside.">Play<span class="sr-only">, D5, Collapsed parent, conflicts inside</span></button></div><div><p class="say">Website redesign. Project, 1 to 22 June, 10 tasks. 35 percent done. 2 conflicts inside.</p><p class="meta"><strong>Collapsed parent, conflicts inside</strong>, <span>about 8 s</span></p></div></li>
+</ul>
+<h3 id="d6">D6. Tasks at the same time</h3>
+<ul class="variants">
+<li><div><button type="button" data-say="No tasks at the same time.">Play<span class="sr-only">, D6, None</span></button></div><div><p class="say">No tasks at the same time.</p><p class="meta"><strong>None</strong>, <span>about 2.5 s</span></p></div></li>
+<li><div><button type="button" data-say="1 task at the same time: Documentation, first 2 days.">Play<span class="sr-only">, D6, One, partial</span></button></div><div><p class="say">1 task at the same time: Documentation, first 2 days.</p><p class="meta"><strong>One, partial</strong>, <span>about 4.5 s</span></p></div></li>
+<li class="chosen"><div><button type="button" data-say="2 tasks at the same time. Marketing prep &amp; PR, the whole time. Documentation, first 2 days.">Play<span class="sr-only">, D6, Two, full and partial (chosen)</span></button></div><div><p class="say">2 tasks at the same time. Marketing prep &amp; PR, the whole time. Documentation, first 2 days.</p><p class="meta"><strong>Two, full and partial (chosen)</strong>, <span>about 7.5 s</span></p></div></li>
+<li><div><button type="button" data-say="2 tasks at the same time. Code review, 2 days in the middle. Launch, last day.">Play<span class="sr-only">, D6, Overlap in the middle and at the end</span></button></div><div><p class="say">2 tasks at the same time. Code review, 2 days in the middle. Launch, last day.</p><p class="meta"><strong>Overlap in the middle and at the end</strong>, <span>about 7 s</span></p></div></li>
+<li><div><button type="button" data-say="1 at the same time: milestone Go-live, on 15 June.">Play<span class="sr-only">, D6, Milestone inside</span></button></div><div><p class="say">1 at the same time: milestone Go-live, on 15 June.</p><p class="meta"><strong>Milestone inside</strong>, <span>about 4.5 s</span></p></div></li>
+<li><div><button type="button" data-say="12 tasks at the same time. 3 the whole time: Marketing prep &amp; PR, Hosting contract, Translation. 9 partly.">Play<span class="sr-only">, D6, Twelve</span></button></div><div><p class="say">12 tasks at the same time. 3 the whole time: Marketing prep &amp; PR, Hosting contract, Translation. 9 partly.</p><p class="meta"><strong>Twelve</strong>, <span class="over">about 8.5 s</span></p></div></li>
+<li><div><button type="button" data-say="Partly, 1 to 3 of 9: Documentation, first 2 days. Code review, 2 days in the middle. Launch, last day.">Play<span class="sr-only">, D6, Twelve, second press</span></button></div><div><p class="say">Partly, 1 to 3 of 9: Documentation, first 2 days. Code review, 2 days in the middle. Launch, last day.</p><p class="meta"><strong>Twelve, second press</strong>, <span class="over">about 9.5 s</span></p></div></li>
+</ul>
+<h3 id="d7">D7. Link conflicts</h3>
+<ul class="variants">
+<li class="chosen"><div><button type="button" data-say="Conflict. 2 days too early for Implementation.">Play<span class="sr-only">, D7, After a change, any link type (chosen)</span></button></div><div><p class="say">Conflict. 2 days too early for Implementation.</p><p class="meta"><strong>After a change, any link type (chosen)</strong>, <span>about 3.5 s</span></p></div></li>
+<li><div><button type="button" data-say="Starts Thursday 11 June, ends Monday 15 June. Conflict. 2 days too early for Implementation.">Play<span class="sr-only">, D7, Move result and conflict in one message</span></button></div><div><p class="say">Starts Thursday 11 June, ends Monday 15 June. Conflict. 2 days too early for Implementation.</p><p class="meta"><strong>Move result and conflict in one message</strong>, <span>about 6.5 s</span></p></div></li>
+<li><div><button type="button" data-say="Conflict. Testing is now 3 days too early.">Play<span class="sr-only">, D7, On another task</span></button></div><div><p class="say">Conflict. Testing is now 3 days too early.</p><p class="meta"><strong>On another task</strong>, <span>about 3.5 s</span></p></div></li>
+<li><div><button type="button" data-say="3 conflicts. Largest: Testing, 4 days too early.">Play<span class="sr-only">, D7, Several</span></button></div><div><p class="say">3 conflicts. Largest: Testing, 4 days too early.</p><p class="meta"><strong>Several</strong>, <span>about 4 s</span></p></div></li>
+<li><div><button type="button" data-say="Starts Saturday 13 June, ends Wednesday 17 June. Conflict resolved.">Play<span class="sr-only">, D7, Resolved</span></button></div><div><p class="say">Starts Saturday 13 June, ends Wednesday 17 June. Conflict resolved.</p><p class="meta"><strong>Resolved</strong>, <span>about 4.5 s</span></p></div></li>
+<li><div><button type="button" data-say="Conflict. 2 days too early: must not start before Implementation ends.">Play<span class="sr-only">, D7, On demand: finish to start</span></button></div><div><p class="say">Conflict. 2 days too early: must not start before Implementation ends.</p><p class="meta"><strong>On demand: finish to start</strong>, <span>about 5 s</span></p></div></li>
+<li><div><button type="button" data-say="Conflict. 1 day too early: must not start before Implementation starts.">Play<span class="sr-only">, D7, On demand: start to start</span></button></div><div><p class="say">Conflict. 1 day too early: must not start before Implementation starts.</p><p class="meta"><strong>On demand: start to start</strong>, <span>about 5 s</span></p></div></li>
+<li><div><button type="button" data-say="Conflict. 3 days too early: must not end before Implementation ends.">Play<span class="sr-only">, D7, On demand: finish to finish</span></button></div><div><p class="say">Conflict. 3 days too early: must not end before Implementation ends.</p><p class="meta"><strong>On demand: finish to finish</strong>, <span>about 5 s</span></p></div></li>
+<li><div><button type="button" data-say="Conflict. 1 day too early: must not end before Launch starts.">Play<span class="sr-only">, D7, On demand: start to finish</span></button></div><div><p class="say">Conflict. 1 day too early: must not end before Launch starts.</p><p class="meta"><strong>On demand: start to finish</strong>, <span>about 5 s</span></p></div></li>
+<li><div><button type="button" data-say="Conflict. 2 days too early: must start at least 3 days after Implementation ends.">Play<span class="sr-only">, D7, On demand: with lag</span></button></div><div><p class="say">Conflict. 2 days too early: must start at least 3 days after Implementation ends.</p><p class="meta"><strong>On demand: with lag</strong>, <span>about 6 s</span></p></div></li>
+<li><div><button type="button" data-say="Conflict. 1 day too early: may start at most 2 days before Implementation ends.">Play<span class="sr-only">, D7, On demand: with lead (negative lag)</span></button></div><div><p class="say">Conflict. 1 day too early: may start at most 2 days before Implementation ends.</p><p class="meta"><strong>On demand: with lead (negative lag)</strong>, <span>about 6 s</span></p></div></li>
+<li><div><button type="button" data-say="Conflict: finish-to-start link from Implementation violated by 2 days.">Play<span class="sr-only">, D7, Jargon version, for comparison</span></button></div><div><p class="say">Conflict: finish-to-start link from Implementation violated by 2 days.</p><p class="meta"><strong>Jargon version, for comparison</strong>, <span>about 4.5 s</span></p></div></li>
+</ul>
+<h3 id="d8">D8. Saving</h3>
+<ul class="variants">
+<li><div><button type="button" data-say="Saved. Duration 8 days, was 5. Ends 20 June.">Play<span class="sr-only">, D8, One field</span></button></div><div><p class="say">Saved. Duration 8 days, was 5. Ends 20 June.</p><p class="meta"><strong>One field</strong>, <span>about 4.5 s</span></p></div></li>
+<li><div><button type="button" data-say="Saved. Start 15 June, was 13 June. Progress 60 percent, was 40.">Play<span class="sr-only">, D8, Two fields</span></button></div><div><p class="say">Saved. Start 15 June, was 13 June. Progress 60 percent, was 40.</p><p class="meta"><strong>Two fields</strong>, <span>about 6 s</span></p></div></li>
+<li><div><button type="button" data-say="Saved, 5 changes: name, start, duration, progress, type.">Play<span class="sr-only">, D8, Five fields</span></button></div><div><p class="say">Saved, 5 changes: name, start, duration, progress, type.</p><p class="meta"><strong>Five fields</strong>, <span>about 4.5 s</span></p></div></li>
+<li><div><button type="button" data-say="Saved, 5 changes. Name Acceptance testing, was Testing. Start 15 June, was 13 June.">Play<span class="sr-only">, D8, Five fields, Detailed level, part 1</span></button></div><div><p class="say">Saved, 5 changes. Name Acceptance testing, was Testing. Start 15 June, was 13 June.</p><p class="meta"><strong>Five fields, Detailed level, part 1</strong>, <span>about 6.5 s</span></p></div></li>
+<li><div><button type="button" data-say="Duration 8 days, was 5. Progress 60 percent, was 40. Type project, was task.">Play<span class="sr-only">, D8, Five fields, Detailed level, part 2</span></button></div><div><p class="say">Duration 8 days, was 5. Progress 60 percent, was 40. Type project, was task.</p><p class="meta"><strong>Five fields, Detailed level, part 2</strong>, <span>about 6.5 s</span></p></div></li>
+<li><div><button type="button" data-say="Saved, no changes.">Play<span class="sr-only">, D8, Nothing changed</span></button></div><div><p class="say">Saved, no changes.</p><p class="meta"><strong>Nothing changed</strong>, <span>about 1.5 s</span></p></div></li>
+<li><div><button type="button" data-say="Saved. Priority high, was normal.">Play<span class="sr-only">, D8, Field that is not a column</span></button></div><div><p class="say">Saved. Priority high, was normal.</p><p class="meta"><strong>Field that is not a column</strong>, <span>about 3 s</span></p></div></li>
+<li><div><button type="button" data-say="Saved. Start 11 June, was 13 June. Conflict. 2 days too early for Implementation.">Play<span class="sr-only">, D8, Save caused a conflict</span></button></div><div><p class="say">Saved. Start 11 June, was 13 June. Conflict. 2 days too early for Implementation.</p><p class="meta"><strong>Save caused a conflict</strong>, <span>about 6.5 s</span></p></div></li>
+<li><div><button type="button" data-say="Not saved. Name is empty.">Play<span class="sr-only">, D8, Save was refused</span></button></div><div><p class="say">Not saved. Name is empty.</p><p class="meta"><strong>Save was refused</strong>, <span>about 2.5 s</span></p></div></li>
+</ul>
+<h3 id="d9">D9. Many key presses in a row</h3>
+<ul class="variants">
+<li><div><button type="button" data-say="Starts Sunday 14 June, ends Thursday 18 June.">Play<span class="sr-only">, D9, Single press</span></button></div><div><p class="say">Starts Sunday 14 June, ends Thursday 18 June.</p><p class="meta"><strong>Single press</strong>, <span>about 3.5 s</span></p></div></li>
+<li><div><button type="button" data-say="2 days later. Starts Monday 15 June, ends Friday 19 June.">Play<span class="sr-only">, D9, Second press, running total</span></button></div><div><p class="say">2 days later. Starts Monday 15 June, ends Friday 19 June.</p><p class="meta"><strong>Second press, running total</strong>, <span>about 5 s</span></p></div></li>
+<li class="chosen"><div><button type="button" data-say="10 days later. Starts Tuesday 23 June, ends Saturday 27 June.">Play<span class="sr-only">, D9, Burst of 10, summary (chosen)</span></button></div><div><p class="say">10 days later. Starts Tuesday 23 June, ends Saturday 27 June.</p><p class="meta"><strong>Burst of 10, summary (chosen)</strong>, <span>about 5.5 s</span></p></div></li>
+<li><div><button type="button" data-say="4 days earlier. Starts Tuesday 9 June, ends Saturday 13 June. Conflict. 4 days too early for Implementation.">Play<span class="sr-only">, D9, Burst that ends in a conflict</span></button></div><div><p class="say">4 days earlier. Starts Tuesday 9 June, ends Saturday 13 June. Conflict. 4 days too early for Implementation.</p><p class="meta"><strong>Burst that ends in a conflict</strong>, <span>about 8 s</span></p></div></li>
+<li><div><button type="button" data-say="14 June.">Play<span class="sr-only">, D9, Per-press tick (setting)</span></button></div><div><p class="say">14 June.</p><p class="meta"><strong>Per-press tick (setting)</strong>, <span>about 1 s</span></p></div></li>
+</ul>
+<h3 id="d10">D10. Going to a predecessor</h3>
+<ul class="variants">
+<li class="chosen"><div><button type="button" data-say="2 of 5. Launch depends on this.">Play<span class="sr-only">, D10, Several (chosen)</span></button></div><div><p class="say">2 of 5. Launch depends on this.</p><p class="meta"><strong>Several (chosen)</strong>, <span>about 3.5 s</span></p></div></li>
+<li><div><button type="button" data-say="3 of 5, start to start. Launch depends on this.">Play<span class="sr-only">, D10, Unusual link type</span></button></div><div><p class="say">3 of 5, start to start. Launch depends on this.</p><p class="meta"><strong>Unusual link type</strong>, <span>about 4.5 s</span></p></div></li>
+<li><div><button type="button" data-say="Testing depends on this.">Play<span class="sr-only">, D10, Only one</span></button></div><div><p class="say">Testing depends on this.</p><p class="meta"><strong>Only one</strong>, <span>about 2 s</span></p></div></li>
+<li><div><button type="button" data-say="2 of 3. This depends on Implementation.">Play<span class="sr-only">, D10, Successor</span></button></div><div><p class="say">2 of 3. This depends on Implementation.</p><p class="meta"><strong>Successor</strong>, <span>about 3.5 s</span></p></div></li>
+<li><div><button type="button" data-say="Back to Launch.">Play<span class="sr-only">, D10, Back to the start (proposed command)</span></button></div><div><p class="say">Back to Launch.</p><p class="meta"><strong>Back to the start (proposed command)</strong>, <span>about 1.5 s</span></p></div></li>
+</ul>
+<h3 id="d11">D11. Errors and refusals</h3>
+<ul class="variants">
+<li><div><button type="button" data-say="Read-only. Not changed.">Play<span class="sr-only">, D11, Read-only</span></button></div><div><p class="say">Read-only. Not changed.</p><p class="meta"><strong>Read-only</strong>, <span>about 2 s</span></p></div></li>
+<li><div><button type="button" data-say="Not changed. A project takes its dates from its subtasks.">Play<span class="sr-only">, D11, Project task</span></button></div><div><p class="say">Not changed. A project takes its dates from its subtasks.</p><p class="meta"><strong>Project task</strong>, <span>about 4.5 s</span></p></div></li>
+<li><div><button type="button" data-say="A milestone has no duration.">Play<span class="sr-only">, D11, Milestone duration</span></button></div><div><p class="say">A milestone has no duration.</p><p class="meta"><strong>Milestone duration</strong>, <span>about 2 s</span></p></div></li>
+<li><div><button type="button" data-say="Already 1 day, the minimum.">Play<span class="sr-only">, D11, Minimum duration</span></button></div><div><p class="say">Already 1 day, the minimum.</p><p class="meta"><strong>Minimum duration</strong>, <span>about 2.5 s</span></p></div></li>
+<li><div><button type="button" data-say="Depends on nothing.">Play<span class="sr-only">, D11, No predecessor</span></button></div><div><p class="say">Depends on nothing.</p><p class="meta"><strong>No predecessor</strong>, <span>about 1.5 s</span></p></div></li>
+<li><div><button type="button" data-say="Nothing depends on this.">Play<span class="sr-only">, D11, No successor</span></button></div><div><p class="say">Nothing depends on this.</p><p class="meta"><strong>No successor</strong>, <span>about 2 s</span></p></div></li>
+<li><div><button type="button" data-say="2 of 5, Budget approval, is filtered out. Focus did not move.">Play<span class="sr-only">, D11, Filtered out</span></button></div><div><p class="say">2 of 5, Budget approval, is filtered out. Focus did not move.</p><p class="meta"><strong>Filtered out</strong>, <span>about 5.5 s</span></p></div></li>
+<li><div><button type="button" data-say="Link not created. It would make a loop: Implementation already depends on Testing.">Play<span class="sr-only">, D11, Link refused: loop</span></button></div><div><p class="say">Link not created. It would make a loop: Implementation already depends on Testing.</p><p class="meta"><strong>Link refused: loop</strong>, <span>about 5.5 s</span></p></div></li>
+<li><div><button type="button" data-say="Link not created. A project cannot be linked to its own subtask.">Play<span class="sr-only">, D11, Link refused: rule</span></button></div><div><p class="say">Link not created. A project cannot be linked to its own subtask.</p><p class="meta"><strong>Link refused: rule</strong>, <span>about 5 s</span></p></div></li>
+</ul>
+<h3 id="d12">D12. Empty, one task, 5000 tasks</h3>
+<ul class="variants">
+<li><div><button type="button" data-say="No tasks.">Play<span class="sr-only">, D12, Empty</span></button></div><div><p class="say">No tasks.</p><p class="meta"><strong>Empty</strong>, <span>about 1 s</span></p></div></li>
+<li><div><button type="button" data-say="No tasks. Press Control Enter to add one.">Play<span class="sr-only">, D12, Empty, with hint</span></button></div><div><p class="say">No tasks. Press Control Enter to add one.</p><p class="meta"><strong>Empty, with hint</strong>, <span>about 3.5 s</span></p></div></li>
+<li><div><button type="button" data-say="1 task. 13 to 17 June.">Play<span class="sr-only">, D12, Summary, one task</span></button></div><div><p class="say">1 task. 13 to 17 June.</p><p class="meta"><strong>Summary, one task</strong>, <span>about 3 s</span></p></div></li>
+<li><div><button type="button" data-say="5,000 tasks, 212 shown. 1 June 2026 to 30 March 2027. 3 conflicts.">Play<span class="sr-only">, D12, Summary, 5000 tasks</span></button></div><div><p class="say">5,000 tasks, 212 shown. 1 June 2026 to 30 March 2027. 3 conflicts.</p><p class="meta"><strong>Summary, 5000 tasks</strong>, <span class="over">about 8.5 s</span></p></div></li>
+<li><div><button type="button" data-say="214 tasks at the same time. 12 in the same project, Backend. Press again for those.">Play<span class="sr-only">, D12, Same time in a large project</span></button></div><div><p class="say">214 tasks at the same time. 12 in the same project, Backend. Press again for those.</p><p class="meta"><strong>Same time in a large project</strong>, <span>about 8 s</span></p></div></li>
+</ul>
+<h3 id="d13">D13. Keyboard help</h3>
+<ul class="variants">
+<li><div><button type="button" data-say="Reading, 1 of 3. Dependencies, Shift D. Same time, Shift O. Ends before, Shift B. Starts after, Shift A.">Play<span class="sr-only">, D13, Group 1 of 3</span></button></div><div><p class="say">Reading, 1 of 3. Dependencies, Shift D. Same time, Shift O. Ends before, Shift B. Starts after, Shift A.</p><p class="meta"><strong>Group 1 of 3</strong>, <span class="over">about 9.5 s</span></p></div></li>
+<li><div><button type="button" data-say="Moving focus, 2 of 3. To what this depends on, Shift P. To what depends on this, Shift S.">Play<span class="sr-only">, D13, Group 2 of 3</span></button></div><div><p class="say">Moving focus, 2 of 3. To what this depends on, Shift P. To what depends on this, Shift S.</p><p class="meta"><strong>Group 2 of 3</strong>, <span class="over">about 8.5 s</span></p></div></li>
+<li><div><button type="button" data-say="Changing, 3 of 3. Earlier, Alt Shift Left. Later, Alt Shift Right. Longer, Alt Shift Up. Shorter, Alt Shift Down.">Play<span class="sr-only">, D13, Group 3 of 3</span></button></div><div><p class="say">Changing, 3 of 3. Earlier, Alt Shift Left. Later, Alt Shift Right. Longer, Alt Shift Up. Shorter, Alt Shift Down.</p><p class="meta"><strong>Group 3 of 3</strong>, <span class="over">about 10 s</span></p></div></li>
+<li><div><button type="button" data-say="Shift D, dependencies. Shift O, same time. Shift B, ends before. Shift A, starts after.">Play<span class="sr-only">, D13, Key first, for comparison</span></button></div><div><p class="say">Shift D, dependencies. Shift O, same time. Shift B, ends before. Shift A, starts after.</p><p class="meta"><strong>Key first, for comparison</strong>, <span>about 7.5 s</span></p></div></li>
+<li><div><button type="button" data-say="Shift D announce dependencies. Shift P go to predecessor, again for the next one. Shift S go to successor, again for the next one. Shift O tasks at the same time. Shift B tasks that end before it starts. Shift A tasks that start after it ends. Alt Shift Left move one day earlier. Alt Shift Right move one day later. Alt Shift Up make longer by one step. Alt Shift Down make shorter by one step.">Play<span class="sr-only">, D13, Everything in one message (what not to do)</span></button></div><div><p class="say">Shift D announce dependencies. Shift P go to predecessor, again for the next one. Shift S go to successor, again for the next one. Shift O tasks at the same time. Shift B tasks that end before it starts. Shift A tasks that start after it ends. Alt Shift Left move one day earlier. Alt Shift Right move one day later. Alt Shift Up make longer by one step. Alt Shift Down make shorter by one step.</p><p class="meta"><strong>Everything in one message (what not to do)</strong>, <span class="over">about 31.5 s</span></p></div></li>
+</ul>
+</section>
+
+<section aria-labelledby="probes">
+	<h2 id="probes">Pronunciation probes</h2>
+	<p>Raw strings, sent exactly as written. Use them to find out how your screen reader and voice pronounce dates, abbreviations, codes and symbols, and whether punctuation produces a pause. Write down what you hear: it differs between screen readers and voices.</p>
+<h3>Dates</h3>
+<ul class="variants">
+<li><div><button type="button" data-say="2026-06-13">Play probe 1</button></div><div><p class="say"><code>2026-06-13</code></p></div></li>
+<li><div><button type="button" data-say="13 Jun">Play probe 2</button></div><div><p class="say"><code>13 Jun</code></p></div></li>
+<li><div><button type="button" data-say="13 June">Play probe 3</button></div><div><p class="say"><code>13 June</code></p></div></li>
+<li><div><button type="button" data-say="Saturday 13 June 2026">Play probe 4</button></div><div><p class="say"><code>Saturday 13 June 2026</code></p></div></li>
+<li><div><button type="button" data-say="06/13/2026">Play probe 5</button></div><div><p class="say"><code>06/13/2026</code></p></div></li>
+<li><div><button type="button" data-say="13.06.2026">Play probe 6</button></div><div><p class="say"><code>13.06.2026</code></p></div></li>
+<li><div><button type="button" data-say="13 to 17 June">Play probe 7</button></div><div><p class="say"><code>13 to 17 June</code></p></div></li>
+<li><div><button type="button" data-say="13–17 June">Play probe 8</button></div><div><p class="say"><code>13–17 June</code></p></div></li>
+<li><div><button type="button" data-say="13 - 17 June">Play probe 9</button></div><div><p class="say"><code>13 - 17 June</code></p></div></li>
+<li><div><button type="button" data-say="28 June to 3 July">Play probe 10</button></div><div><p class="say"><code>28 June to 3 July</code></p></div></li>
+</ul>
+<h3>Durations and numbers</h3>
+<ul class="variants">
+<li><div><button type="button" data-say="5d">Play probe 11</button></div><div><p class="say"><code>5d</code></p></div></li>
+<li><div><button type="button" data-say="5 d">Play probe 12</button></div><div><p class="say"><code>5 d</code></p></div></li>
+<li><div><button type="button" data-say="5 days">Play probe 13</button></div><div><p class="say"><code>5 days</code></p></div></li>
+<li><div><button type="button" data-say="1 day">Play probe 14</button></div><div><p class="say"><code>1 day</code></p></div></li>
+<li><div><button type="button" data-say="0.5 days">Play probe 15</button></div><div><p class="say"><code>0.5 days</code></p></div></li>
+<li><div><button type="button" data-say="40%">Play probe 16</button></div><div><p class="say"><code>40%</code></p></div></li>
+<li><div><button type="button" data-say="40 percent">Play probe 17</button></div><div><p class="say"><code>40 percent</code></p></div></li>
+<li><div><button type="button" data-say="40 percent done">Play probe 18</button></div><div><p class="say"><code>40 percent done</code></p></div></li>
+<li><div><button type="button" data-say="5,000 tasks">Play probe 19</button></div><div><p class="say"><code>5,000 tasks</code></p></div></li>
+<li><div><button type="button" data-say="5000 tasks">Play probe 20</button></div><div><p class="say"><code>5000 tasks</code></p></div></li>
+</ul>
+<h3>Abbreviations and jargon</h3>
+<ul class="variants">
+<li><div><button type="button" data-say="FS">Play probe 21</button></div><div><p class="say"><code>FS</code></p></div></li>
+<li><div><button type="button" data-say="SS">Play probe 22</button></div><div><p class="say"><code>SS</code></p></div></li>
+<li><div><button type="button" data-say="FF">Play probe 23</button></div><div><p class="say"><code>FF</code></p></div></li>
+<li><div><button type="button" data-say="SF">Play probe 24</button></div><div><p class="say"><code>SF</code></p></div></li>
+<li><div><button type="button" data-say="finish to start">Play probe 25</button></div><div><p class="say"><code>finish to start</code></p></div></li>
+<li><div><button type="button" data-say="finish-to-start">Play probe 26</button></div><div><p class="say"><code>finish-to-start</code></p></div></li>
+<li><div><button type="button" data-say="FS+2d">Play probe 27</button></div><div><p class="say"><code>FS+2d</code></p></div></li>
+<li><div><button type="button" data-say="pred.">Play probe 28</button></div><div><p class="say"><code>pred.</code></p></div></li>
+<li><div><button type="button" data-say="WBS 1.2.3">Play probe 29</button></div><div><p class="say"><code>WBS 1.2.3</code></p></div></li>
+</ul>
+<h3>Names</h3>
+<ul class="variants">
+<li><div><button type="button" data-say="PRJ-1423 Fix login">Play probe 30</button></div><div><p class="say"><code>PRJ-1423 Fix login</code></p></div></li>
+<li><div><button type="button" data-say="Fix login, PRJ-1423">Play probe 31</button></div><div><p class="say"><code>Fix login, PRJ-1423</code></p></div></li>
+<li><div><button type="button" data-say="Marketing prep &amp; PR">Play probe 32</button></div><div><p class="say"><code>Marketing prep &amp; PR</code></p></div></li>
+<li><div><button type="button" data-say="🚀 Launch">Play probe 33</button></div><div><p class="say"><code>🚀 Launch</code></p></div></li>
+<li><div><button type="button" data-say="Launch ✅">Play probe 34</button></div><div><p class="say"><code>Launch ✅</code></p></div></li>
+<li><div><button type="button" data-say="R&amp;D / QA sync">Play probe 35</button></div><div><p class="say"><code>R&amp;D / QA sync</code></p></div></li>
+<li><div><button type="button" data-say="Design → Testing">Play probe 36</button></div><div><p class="say"><code>Design → Testing</code></p></div></li>
+</ul>
+<h3>Punctuation as pauses</h3>
+<ul class="variants">
+<li><div><button type="button" data-say="Testing Start date 13 June End date 17 June 5 days">Play probe 37</button></div><div><p class="say"><code>Testing Start date 13 June End date 17 June 5 days</code></p></div></li>
+<li><div><button type="button" data-say="Testing, start date 13 June, end date 17 June, 5 days">Play probe 38</button></div><div><p class="say"><code>Testing, start date 13 June, end date 17 June, 5 days</code></p></div></li>
+<li><div><button type="button" data-say="Testing. Start date 13 June. End date 17 June. 5 days.">Play probe 39</button></div><div><p class="say"><code>Testing. Start date 13 June. End date 17 June. 5 days.</code></p></div></li>
+<li><div><button type="button" data-say="Testing (finish to start), Documentation (start to start)">Play probe 40</button></div><div><p class="say"><code>Testing (finish to start), Documentation (start to start)</code></p></div></li>
+<li><div><button type="button" data-say="Testing. Documentation, start to start.">Play probe 41</button></div><div><p class="say"><code>Testing. Documentation, start to start.</code></p></div></li>
+<li><div><button type="button" data-say="Depends on: Software design.">Play probe 42</button></div><div><p class="say"><code>Depends on: Software design.</code></p></div></li>
+<li><div><button type="button" data-say="Depends on Software design.">Play probe 43</button></div><div><p class="say"><code>Depends on Software design.</code></p></div></li>
+</ul>
+</section>
+
+<section aria-labelledby="logh">
+	<h2 id="logh">Log</h2>
+	<p class="muted">Everything sent to the live regions on this visit, newest first. This list is not a live region.</p>
+	<ol class="log" id="log" reversed></ol>
+</section>
+
+</main>
+</div>
+
+<!-- The two live regions exist in the initial markup and start empty. -->
+<div id="live-polite" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+<div id="live-assertive" class="sr-only" aria-live="assertive" aria-atomic="true"></div>
+
+<script>
+(function () {
+	"use strict";
+
+	var regions = {
+		polite: document.getElementById("live-polite"),
+		assertive: document.getElementById("live-assertive")
+	};
+	var lastEl = document.getElementById("last");
+	var lastModeEl = document.getElementById("lastmode");
+	var logEl = document.getElementById("log");
+	var timer = null;
+	var alternate = false;
+	var lastText = "";
+
+	function mode() {
+		return document.querySelector('input[name="mode"]:checked').value;
+	}
+
+	function clearRegions() {
+		regions.polite.textContent = "";
+		regions.assertive.textContent = "";
+	}
+
+	// Same technique as src/core/live-region.js: clear, wait, then add a new child node.
+	// Every second message gets a trailing no-break space so that identical text is spoken again.
+	function announce(text, delay) {
+		if (!text) { return; }
+		var m = mode();
+		clearTimeout(timer);
+		clearRegions();
+		timer = setTimeout(function () {
+			alternate = !alternate;
+			var item = document.createElement("div");
+			item.textContent = alternate ? text : text + " ";
+			regions[m].appendChild(item);
+			lastText = text;
+			lastEl.textContent = text;
+			lastModeEl.textContent = m;
+			var li = document.createElement("li");
+			li.textContent = "[" + m + "] " + text;
+			logEl.insertBefore(li, logEl.firstChild);
+		}, typeof delay === "number" ? delay : Number(document.getElementById("delay").value));
+	}
+
+	document.addEventListener("click", function (event) {
+		var button = event.target.closest("button[data-say]");
+		if (button) {
+			announce(button.getAttribute("data-say"));
+		}
+	});
+
+	document.getElementById("repeat").addEventListener("click", function () {
+		announce(lastText || "Nothing to repeat.");
+	});
+	document.getElementById("clear").addEventListener("click", function () {
+		clearTimeout(timer);
+		clearRegions();
+	});
+
+	// ---- Simulation: many key presses -------------------------------------
+	var DAY = 24 * 60 * 60 * 1000;
+	var BASE = Date.UTC(2026, 5, 13);
+	var EARLIEST = Date.UTC(2026, 5, 13); // Implementation ends 12 June
+	var LENGTH = 5;
+	var offset = 0;        // days from 13 June
+	var burstCount = 0;    // net days moved in the current burst
+	var burstPresses = 0;
+	var burstTimer = null;
+	var dayFmt = new Intl.DateTimeFormat("en-GB", { weekday: "long", day: "numeric", month: "long", timeZone: "UTC" });
+	var shortFmt = new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "long", timeZone: "UTC" });
+	var longFmt = new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" });
+
+	function startDate() { return new Date(BASE + offset * DAY); }
+	function endDate() { return new Date(BASE + (offset + LENGTH - 1) * DAY); }
+	function days(n) { return n + (n === 1 ? " day" : " days"); }
+	function span() {
+		var s = startDate(), e = endDate();
+		var first = s.getUTCMonth() === e.getUTCMonth() ? String(s.getUTCDate()) : shortFmt.format(s);
+		return first + " to " + shortFmt.format(e);
+	}
+
+	function resultText() {
+		return "Starts " + dayFmt.format(startDate()) + ", ends " + dayFmt.format(endDate()) + ".";
+	}
+	function conflictText() {
+		var early = Math.round((EARLIEST - startDate().getTime()) / DAY);
+		return early > 0 ? " Conflict. " + days(early) + " too early for Implementation." : "";
+	}
+	function summaryText() {
+		if (burstPresses <= 1) { return resultText() + conflictText(); }
+		if (burstCount === 0) {
+			return "Back where it started. " + span() + "." + conflictText();
+		}
+		var distance = days(Math.abs(burstCount)) + (burstCount > 0 ? " later. " : " earlier. ");
+		return distance + resultText() + conflictText();
+	}
+	function showState() {
+		document.getElementById("mv-state").textContent = dayFmt.format(startDate()) + " to " + dayFmt.format(endDate());
+	}
+
+	function press(direction) {
+		offset += direction;
+		burstCount += direction;
+		burstPresses += 1;
+		showState();
+		var strategy = document.querySelector('input[name="burst"]:checked').value;
+		var quiet = Number(document.getElementById("quiet").value);
+		clearTimeout(burstTimer);
+
+		if (strategy === "every") {
+			announce(resultText() + conflictText(), 0);
+			burstCount = 0; burstPresses = 0;
+			return;
+		}
+		if (strategy === "current") {
+			announce("Testing moved to " + longFmt.format(startDate()) + ", ends " + longFmt.format(endDate()) + ".", quiet);
+			burstCount = 0; burstPresses = 0;
+			return;
+		}
+		if (strategy === "tick") {
+			announce(shortFmt.format(startDate()) + ".", 0);
+		} else {
+			clearTimeout(timer);
+		}
+		burstTimer = setTimeout(function () {
+			var text = summaryText();
+			burstCount = 0; burstPresses = 0;
+			announce(text, 0);
+		}, quiet);
+	}
+
+	document.getElementById("mv-earlier").addEventListener("click", function () { press(-1); });
+	document.getElementById("mv-later").addEventListener("click", function () { press(1); });
+	document.getElementById("mv-10").addEventListener("click", function () {
+		var n = 0;
+		(function next() {
+			press(1);
+			n += 1;
+			if (n < 10) { setTimeout(next, 120); }
+		}());
+	});
+	document.getElementById("mv-reset").addEventListener("click", function () {
+		clearTimeout(burstTimer);
+		offset = 0; burstCount = 0; burstPresses = 0;
+		showState();
+		announce("Reset. " + span() + ".", 0);
+	});
+
+	// ---- Simulation: result and row label together -------------------------
+	var grid = document.getElementById("grid");
+	var rowState = { offset: 0, length: 8, run: 0, runTimer: null };
+	var NORMAL = {
+		"row-impl": function () { return "Implementation. 5 to 12 June, 8 days. 100 percent done."; },
+		"row-test": function () { return "Testing. " + rowSpan() + ", 8 days. 40 percent done."; }
+	};
+	function rowStart() { return new Date(BASE + rowState.offset * DAY); }
+	function rowEnd() { return new Date(BASE + (rowState.offset + rowState.length - 1) * DAY); }
+	function rowSpan() {
+		var s = rowStart(), e = rowEnd();
+		return (s.getUTCMonth() === e.getUTCMonth() ? String(s.getUTCDate()) : shortFmt.format(s)) + " to " + shortFmt.format(e);
+	}
+
+	// Replaces the row with a new node, as a re-render does, and optionally focuses it.
+	function renderRow(id, label, focus) {
+		var old = document.getElementById(id);
+		var fresh = old.cloneNode(true);
+		fresh.setAttribute("aria-label", label || NORMAL[id]());
+		if (id === "row-test") { fresh.children[1].textContent = rowSpan(); }
+		if (focus) {
+			grid.querySelectorAll('[role="row"]').forEach(function (r) { r.tabIndex = -1; });
+			fresh.tabIndex = 0;
+		}
+		fresh.dataset.message = label ? "1" : "";
+		old.parentNode.replaceChild(fresh, old);
+		if (focus) { fresh.focus(); }
+		return fresh;
+	}
+
+	function deliver(id, text) {
+		var route = document.querySelector('input[name="route"]:checked').value;
+		// The library returns focus to the row about 1 ms after the form closes.
+		setTimeout(function () {
+			if (route === "live" || !text) {
+				renderRow(id, "", true);
+				announce(text, Number(document.getElementById("fdelay").value));
+				return;
+			}
+			clearTimeout(timer);
+			clearRegions();
+			renderRow(id, route === "before" ? text + " " + NORMAL[id]() : text, true);
+			lastText = text; lastEl.textContent = text; lastModeEl.textContent = "row label";
+			var li = document.createElement("li");
+			li.textContent = "[row label] " + text;
+			logEl.insertBefore(li, logEl.firstChild);
+		}, 1);
+	}
+
+	document.getElementById("save-close").addEventListener("click", function () {
+		deliver("row-test", document.querySelector('input[name="savetext"]:checked').value);
+	});
+	document.getElementById("jump").addEventListener("click", function () {
+		deliver("row-impl", "Testing depends on this.");
+	});
+
+	// When focus leaves a row that carries a result, its normal label comes back.
+	grid.addEventListener("focusout", function (event) {
+		var row = event.target.closest('[role="row"]');
+		if (!row || !row.dataset.message) { return; }
+		setTimeout(function () {
+			var current = document.getElementById(row.id);
+			if (current && current.dataset.message && document.activeElement !== current) {
+				renderRow(row.id, "", false);
+			}
+		}, 0);
+	});
+
+	function rowMove(direction) {
+		rowState.offset += direction;
+		rowState.run += direction;
+		clearTimeout(rowState.runTimer);
+		rowState.runTimer = setTimeout(function () { rowState.run = 0; }, 1000);
+		var kind = document.querySelector('input[name="keytext"]:checked').value;
+		var early = Math.round((EARLIEST - rowStart().getTime()) / DAY);
+		var conflict = early > 0 ? " Conflict. " + days(early) + " too early for Implementation." : "";
+		var plain = "Starts " + dayFmt.format(rowStart()) + ", ends " + dayFmt.format(rowEnd()) + ".";
+		var text;
+		if (kind === "current") {
+			text = "Testing moved to " + longFmt.format(rowStart()) + ", ends " + longFmt.format(rowEnd()) + ".";
+		} else if (kind === "plain" || Math.abs(rowState.run) === 1) {
+			text = plain + conflict;
+		} else if (rowState.run === 0) {
+			text = "Back where it started. " + rowSpan() + "." + conflict;
+		} else {
+			text = days(Math.abs(rowState.run)) + (rowState.run > 0 ? " later. " : " earlier. ") + plain + conflict;
+		}
+		renderRow("row-test", text, true);
+		lastText = text; lastEl.textContent = text; lastModeEl.textContent = "row label";
+	}
+
+	grid.addEventListener("keydown", function (event) {
+		var row = event.target.closest('[role="row"]');
+		if (!row) { return; }
+		if (event.altKey && event.shiftKey && (event.key === "ArrowRight" || event.key === "ArrowLeft")) {
+			if (row.id === "row-test") { rowMove(event.key === "ArrowRight" ? 1 : -1); }
+			event.preventDefault();
+			return;
+		}
+		if (event.key !== "ArrowUp" && event.key !== "ArrowDown") { return; }
+		var target = document.getElementById(event.key === "ArrowUp" ? "row-impl" : "row-test");
+		grid.querySelectorAll('[role="row"]').forEach(function (r) { r.tabIndex = -1; });
+		target.tabIndex = 0;
+		target.focus();
+		event.preventDefault();
+	});
+}());
+</script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!-- title: Try with a screen reader -->
+<h1>How to try with a screen reader</h1>
+<p class="lead">Open one of the demos, move into the chart, and ask it questions.</p>
+
+<div class="note">
+	<p>Only the VoiceOver steps have been tried, by the author. The NVDA and JAWS steps follow how these screen readers usually handle web applications; they have not been tested with this extension yet. If something does not work as described, that is useful to know.</p>
+</div>
+
+<h2>Everywhere</h2>
+<ol>
+	<li>Open the <a href="demo-dhtmlx.html">dhtmlx-gantt demo</a>. Make sure the switch says the extension is on.</li>
+	<li>Move to the chart with <kbd>Tab</kbd>, not with a mouse click. Focus lands on the first task row.</li>
+	<li>Move between tasks with the up and down arrow keys. Each row says the task's name, dates, duration and progress.</li>
+	<li>Press <kbd>Shift</kbd>+<kbd>H</kbd> for the list of keys, and again within five seconds for the next group.</li>
+	<li>Good first questions: on "Launch", <kbd>Shift</kbd>+<kbd>D</kbd> (what it depends on); on "Testing", <kbd>Shift</kbd>+<kbd>O</kbd> (what runs at the same time); anywhere, <kbd>Shift</kbd>+<kbd>V</kbd> (overview).</li>
+</ol>
+
+<h2>VoiceOver on a Mac</h2>
+<ol>
+	<li>Use Safari. Turn VoiceOver on with <kbd>Command</kbd>+<kbd>F5</kbd>.</li>
+	<li>If arrow keys move the VoiceOver cursor instead of the chart's focus, turn Quick Nav off with <kbd>Left Arrow</kbd>+<kbd>Right Arrow</kbd> pressed together.</li>
+	<li>In Safari, <kbd>Tab</kbd> may skip buttons; <kbd>Option</kbd>+<kbd>Tab</kbd> reaches every control.</li>
+	<li>Results of jumps and of the task form are heard first, as part of the row; answers to questions and results of keyboard edits come after the row is read.</li>
+</ol>
+
+<h2>NVDA on Windows (not yet tested)</h2>
+<ol>
+	<li>Use Firefox or Chrome. Move to the chart with <kbd>Tab</kbd>; NVDA should switch to focus mode on its own. If letters are read as browse-mode quick keys instead, press <kbd>NVDA</kbd>+<kbd>Space</kbd> to switch to focus mode.</li>
+	<li>The reading keys (<kbd>Shift</kbd> with a letter) only reach the chart in focus mode.</li>
+</ol>
+
+<h2>JAWS on Windows (not yet tested)</h2>
+<ol>
+	<li>Use Chrome or Edge. Move to the chart with <kbd>Tab</kbd>; JAWS should turn on forms mode. If it does not, press <kbd>Enter</kbd> on the row, or turn the virtual cursor off with <kbd>Insert</kbd>+<kbd>Z</kbd>.</li>
+</ol>
+
+<h2>Step by step</h2>
+<p>The repository has a full list of checks with the exact expected texts (<code>TESTING.md</code>), and a helper page that walks through them one by one and collects your answers into a report (<code>demo/manual-test.html</code>; run <code>npm run demo</code> in the repository first).</p>

@@ -215,6 +215,9 @@ frappe-gantt end dates are the last day of work, so use `endDate: "lastDay"`. Af
 - **Loops are checked by the extension.** This edition has no public loop check for links (`isCircularLink` is a Pro method), so the extension checks the existing links itself before creating one. `gantt.isLinkAllowed` and `onBeforeLinkAdd` are still respected.
 - **Removing a link** works only on the link used by the last jump with Shift+P or Shift+S, and needs a second press, because there is no undo in this edition.
 - **The row label carries a result for a moment.** While a result is in the row label (at most 5 seconds), re-reading the row gives the result followed by the task's own label.
+- **NVDA reads the row again after a keyboard edit.** The library re-renders the focused row after Shift+J, K, I or M; NVDA announces the re-rendered row with its new dates, then the result from the live region, so the dates are heard twice. VoiceOver does not announce that row again. The extension cannot tell which screen reader is running, and putting the result into the row label instead made VoiceOver silent, so this stays as it is for now.
+- **NVDA reads the row again when a result leaves its label.** About 5 seconds after a jump or a form result, the result is removed from the row label and the row is re-rendered; NVDA announces the row again, without the result (seen after a jump and after cancelling the form).
+- **"not selected" and the row's position in NVDA come from the library's markup.** NVDA says "not selected" on every row (the library sets `aria-selected="false"`) and a position such as "4 of 4", which changes for the same row: "Documentation" was heard as "4 of 4", "4 of 5" and "3 of 4". The library sets no `aria-posinset` or `aria-setsize` on rows, so the browser works the position out itself. The extension does not change the library's markup.
 - **The screen reader's own words** follow every row label: VoiceOver adds the role and the table size ("row, tree grid, 6 columns, 12 rows"). They come from the roles the library sets and from the screen reader's verbosity settings; this extension does not change them.
 - **Cell navigation mode** (`keyboard_navigation_cells`): every result, jumps and the task form included, goes through the live region after the cell is read. Column templates are not changed. Set the mode before `gantt.init`; changing it later did not change inline editor key handling in our test.
 - **The first key press after a mouse click on a freshly loaded page** does not reach Gantt's keyboard navigation (Gantt's own arrow keys included). Entering the chart with Tab works.
@@ -227,6 +230,7 @@ Manually, by the author, step by step while the features were built, and in one 
 
 - dhtmlx-gantt 10.0.3 (and frappe-gantt 1.2.2 for the steps of its demo)
 - Safari 26.2 with VoiceOver, macOS Tahoe 26.2
+- NVDA 2026.3.1 with Google Chrome 157.0.8103.79 (64-bit) on Windows, through AssistivLabs (partial check, see below)
 
 **Full pass, 2026-11-19:** all 103 steps of TESTING.md matched, with the helper page, including the steps for cell navigation mode and the Brief and Detailed levels. The report: [docs/manual-test-2026-11-19.md](docs/manual-test-2026-11-19.md). Its limits:
 
@@ -234,7 +238,9 @@ Manually, by the author, step by step while the features were built, and in one 
 - "Matched" means the spoken text matched the expected text; how clear each step was by ear was not rated.
 - VoiceOver in Safari on macOS only.
 
-**Not yet tested** with NVDA or JAWS, on Windows, with keyboard layouts other than English, with braille displays, or by people who use a screen reader every day.
+**NVDA, partial check, 2026-11-19**, on the dhtmlx-gantt demo of the project site, by the author, from NVDA's Speech Viewer log (an earlier session the same day ran in Microsoft Edge, version not recorded). Checked: the row labels; Shift+D, O, B, A, W, V, C, Z, P, S, J, K, I, M, L, T, U (twice), R and H; the task form opened with Enter, with dates and duration changed while it is open, saved, and cancelled with Escape. The texts were as expected, and results of jumps and of the form were heard before the row, as with VoiceOver. Differences are listed under "Limitations". **Not checked with NVDA:** the full TESTING.md; deleting a task in the form; creating a task with Control+Enter; completing a link with the second Shift+L; cell navigation mode; the Brief and Detailed levels; the frappe-gantt demo; Firefox.
+
+**Not yet tested** with JAWS, with keyboard layouts other than English, with braille displays, or by people who use a screen reader every day.
 
 ## Feedback wanted
 

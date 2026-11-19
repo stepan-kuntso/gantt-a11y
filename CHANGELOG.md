@@ -10,6 +10,8 @@ Version 0.1.0 in `package.json`, not released. The texts of the announcements ar
 
 - 2026-11-19: full pass of TESTING.md with VoiceOver in Safari 26.2 on macOS Tahoe 26.2, after the pre-release review: all 103 steps matched ([docs/manual-test-2026-11-19.md](docs/manual-test-2026-11-19.md)). Limits: done by a sighted developer; how clear each step was by ear was not rated; NVDA, JAWS and Windows were not tested. The row-label mechanism stays as it is.
 
+- 2026-11-19: partial check with NVDA 2026.3.1 and Google Chrome 157.0.8103.79 on Windows (AssistivLabs), on the dhtmlx-gantt demo of the project site: the row labels, every key, and the task form (values while open, save, cancel). Texts as expected; results of jumps and of the form heard before the row. NVDA reads the row again after a keyboard edit and when a result leaves the row label, and says "not selected" and a changing position from the library's markup (README, "Limitations"). Not checked with NVDA: the full TESTING.md, deleting and creating tasks in the form, completing a link, cell navigation mode, the Brief and Detailed levels, the frappe-gantt demo, Firefox.
+
 ### Changed after the pre-release review (2026-11-18)
 
 - **Announced is what was stored.** After a keyboard move or duration change, a new link or a removed link, the data is read again and only what was stored is spoken. A change refused in `onBeforeTaskUpdate` (or by the application in another way) gets "Not changed. The change was not accepted." (new string `edit.rejected`). The dhtmlx adapter no longer changes the stored task before `gantt.updateTask`: a refused update left the task changed without a re-render or a save. The task form's result is built again from the stored task when the form closes.

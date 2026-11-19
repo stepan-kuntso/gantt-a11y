@@ -6,7 +6,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Thank you. This project has been checked only by a sighted developer with VoiceOver, so reports from people who use a screen reader every day, and from NVDA or JAWS, help the most. Short answers are fine.
+        Thank you. This project has been checked only by its author, a sighted developer: fully with VoiceOver in Safari on macOS, partly with NVDA in Chrome on Windows, not at all with JAWS or Firefox. Reports from people who use a screen reader every day help the most. Short answers are fine, and the last three questions are optional.
   - type: input
     id: screen-reader
     attributes:
@@ -50,3 +50,24 @@ body:
       description: What you wanted to hear or happen instead. If the answer was right but not useful, say so.
     validations:
       required: true
+  - type: textarea
+    id: dependencies-clear
+    attributes:
+      label: "Optional: was the dependencies answer (Shift+D) clear the first time you heard it?"
+      description: For example, on the task "Launch" in the demo. If not, what was hard to follow?
+    validations:
+      required: false
+  - type: textarea
+    id: row-read-again
+    attributes:
+      label: "Optional: does it bother you that the row is read again a few seconds after a jump?"
+      description: Seen with NVDA. About 5 seconds after a jump (Shift+P, Shift+S, Shift+C, Shift+Z) or after closing the task form, the row is read again without the result. Say whether you heard it with your screen reader, and whether it gets in the way.
+    validations:
+      required: false
+  - type: textarea
+    id: key-conflicts
+    attributes:
+      label: "Optional: do the Shift+letter keys conflict with your habits, other programs or your keyboard layout?"
+      description: Which key, and with what. Every key can be changed by the developer of the page.
+    validations:
+      required: false

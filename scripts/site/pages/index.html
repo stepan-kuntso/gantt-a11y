@@ -3,7 +3,7 @@
 <p class="lead">gantt-a11y adds keyboard commands and spoken answers to Gantt chart components, so that someone who cannot see the chart can ask what a task depends on, what runs at the same time, and what a change broke.</p>
 
 <div class="note">
-	<p><strong>Status.</strong> An open-source extension, tried so far only by its author with VoiceOver on a Mac. <strong>Testing with people who use screen readers every day is still ahead.</strong> Nothing here is a claim of conformance with WCAG or any other standard.</p>
+	<p><strong>Status.</strong> An open-source extension, checked so far only by its author, a sighted developer: fully with VoiceOver in Safari 26.2 on macOS 26.2, partly with NVDA 2026.3.1 in Chrome 157 on Windows; not with JAWS or Firefox. <strong>No feedback yet from people who use a screen reader every day.</strong> Nothing here is a claim of conformance with WCAG or any other standard.</p>
 </div>
 
 <h2>The problem</h2>
@@ -34,9 +34,9 @@
 	<li>It does not make the drawing itself accessible: bars and lines stay pictures. The facts they show are made available as text on demand.</li>
 	<li>It does not replace the library's own keyboard navigation; it adds commands on top of it.</li>
 	<li>It has no dialogs: everything is spoken through the row label or a live region.</li>
-	<li>It has not been tested with NVDA or JAWS, on Windows, with keyboard layouts other than English, or with braille displays.</li>
+	<li>It has not been checked with JAWS, with Firefox, with keyboard layouts other than English or with braille displays, and NVDA only partly.</li>
 	<li>It is not a certification. The <a href="audit.html">automated audit</a> checks keyboard behaviour and what the browser exposes, not what a person can do.</li>
 </ul>
 
 <h2>Try it</h2>
-<p>The two demos have a switch to compare the chart with and without the extension. <a href="screen-readers.html">How to try with a screen reader</a> has the steps for VoiceOver, NVDA and JAWS.</p>
+<p>The two demos have a switch to compare the chart with and without the extension. <a href="screen-readers.html">How to try with a screen reader</a> has the steps for VoiceOver, NVDA and JAWS, and says which of them have been checked.</p>

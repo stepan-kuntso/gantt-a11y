@@ -96,6 +96,12 @@ export function renderMarkdown(report, { previous = null } = {}) {
 	lines.push("");
 	lines.push("> This audit checks keyboard behaviour and what the browser hands to assistive technology, in an automated browser (" + report.browser + "). It is not a test with a screen reader and not a statement about WCAG conformance. See [PROTOCOL.md](../PROTOCOL.md) for what each check does, what each result means and what it does not prove, and its threats to validity.");
 	lines.push("");
+	const baseline = checked.filter((p) => !p.extension && p.url.startsWith("/"));
+	if (baseline.length) {
+		const libraries = baseline.map((p) => `${md(p.library)}${p.version ? " " + md(p.version) : " (version not visible on the page)"}`).join(", ");
+		lines.push(`> **Baseline.** The columns "without the extension" are what the extension is compared with: the same demo pages of this repository, with the same data and gantt-a11y turned off (\`?a11y=off\`), so they show the library's own behaviour: ${libraries}. Measured automatically on ${report.date.slice(0, 10)}; this does not replace a check with a screen reader.`);
+		lines.push("");
+	}
 	lines.push("Results: **pass**; **fail**; **tree only** (present in the accessibility tree, but not on anything keyboard focus reaches and not after a documented command); **no path** (no documented keyboard path); **n/a** (not applicable); **?** (could not determine)." + (prev ? ` † marks a cell that differs from the version 1 run of ${prev.date} (audit/results/${prev.date}.md); the reasons are listed under the table.` : ""));
 	lines.push("");
 	if (checked.length) {

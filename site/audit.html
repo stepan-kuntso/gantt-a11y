@@ -28,6 +28,7 @@
 <p><a href="#results">Latest results</a> · <a href="#protocol">The protocol</a></p>
 <section aria-labelledby="results"><h2 id="results">Latest results (2026-11-16-v2)</h2>
 <blockquote><p>This audit checks keyboard behaviour and what the browser hands to assistive technology, in an automated browser (Chromium 159.0.8154.6). It is not a test with a screen reader and not a statement about WCAG conformance. See <a href="audit.html#protocol">PROTOCOL.md</a> for what each check does, what each result means and what it does not prove, and its threats to validity.</p></blockquote>
+<blockquote><p><strong>Baseline.</strong> The columns &quot;without the extension&quot; are what the extension is compared with: the same demo pages of this repository, with the same data and gantt-a11y turned off (<code>?a11y=off</code>), so they show the library's own behaviour: dhtmlx-gantt 10.0.3, frappe-gantt (version not visible on the page). Measured automatically on 2026-11-16; this does not replace a check with a screen reader.</p></blockquote>
 <p>Results: <strong>pass</strong>; <strong>fail</strong>; <strong>tree only</strong> (present in the accessibility tree, but not on anything keyboard focus reaches and not after a documented command); <strong>no path</strong> (no documented keyboard path); <strong>n/a</strong> (not applicable); <strong>?</strong> (could not determine). † marks a cell that differs from the version 1 run of 2026-11-16 (audit/results/2026-11-16.md); the reasons are listed under the table.</p>
 <div class="table-wrap"><table>
 <thead><tr><th scope="col">Check</th><th scope="col">dhtmlx-gantt demo with gantt-a11y</th><th scope="col">dhtmlx-gantt demo without the extension</th><th scope="col">frappe-gantt demo with gantt-a11y</th><th scope="col">frappe-gantt demo without the extension</th></tr></thead>
@@ -125,7 +126,7 @@
 </section>
 	</main>
 	<footer>
-		<p>gantt-a11y is open source under the MIT licence. Not yet tested with people who use screen readers; no claim of WCAG conformance.</p>
+		<p>gantt-a11y is open source under the MIT licence. Checked by its sighted author with VoiceOver (full pass) and NVDA (partial); no feedback yet from people who use a screen reader every day; no claim of WCAG conformance.</p>
 		<p>dhtmlx-gantt (MIT, XB Software) and frappe-gantt (MIT, Frappe Technologies) are separate projects. This project is not affiliated with or endorsed by XB Software (DHTMLX) or Frappe. <a href="about.html">About this site</a>.</p>
 	</footer>
 </body>

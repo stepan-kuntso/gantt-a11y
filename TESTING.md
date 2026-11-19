@@ -188,9 +188,9 @@ Open `demo/frappe.html`. Tab into the task list on the left and move with Up and
 | 13.8 | On “Marketing”, Shift+L; arrow down twice to “Retrospective”, Shift+L; compare the last | (after the row) "Linked. This depends on Marketing." |
 | 13.9 | On “Testing”, Shift+H | (after the row) "Reading, 1 of 6. Dependencies, Shift D key. Same time, Shift O key. Ends before, Shift B key. Starts after, Shift A key." |
 
-## 14. Orientation (new, not yet heard with a screen reader)
+## 14. Orientation
 
-Shift+V (overview of the chart), Shift+W (where am I), Shift+C (next conflict, moves focus), Shift+Z (back to where the jumps started). The texts were recorded from the extension on 2026-11-16. For 14.3, 14.6 to 14.8, first move "Testing" to start on 11 June and "Code review" to start on 6 June (Shift+J twice on each), or use demo/manual-test.html, which prepares the data.
+Shift+V (overview of the chart), Shift+W (where am I), Shift+C (next conflict, moves focus), Shift+Z (back to where the jumps started). The texts were recorded from the extension on 2026-11-16 and heard with VoiceOver in the full pass of 2026-11-19. For 14.3, 14.6 to 14.8, first move "Testing" to start on 11 June and "Code review" to start on 6 June (Shift+J twice on each), or use demo/manual-test.html, which prepares the data.
 
 | # | Do | Expected |
 |---|---|---|
@@ -216,6 +216,8 @@ For each step: what was actually heard, in what order relative to the row (befor
 
 ## Not yet covered
 
-- NVDA and JAWS on Windows, and keyboard layouts other than English (docs/KEYS.md).
+- A full pass with NVDA: NVDA 2026.3.1 with Chrome 157 had only a partial check (README, "Tested with").
+- JAWS, Firefox, and keyboard layouts other than English (docs/KEYS.md).
+- People who use a screen reader every day: every pass so far was done by the author, a sighted developer.
 - Braille displays.
 - The Brief and Detailed levels beyond the steps in sections 11 and 12.

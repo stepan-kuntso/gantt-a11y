@@ -26,7 +26,7 @@
 <p class="lead">Open one of the demos, move into the chart, and ask it questions.</p>
 
 <div class="note">
-	<p>Only the VoiceOver steps have been tried, by the author. The NVDA and JAWS steps follow how these screen readers usually handle web applications; they have not been tested with this extension yet. If something does not work as described, that is useful to know.</p>
+	<p>What has been checked, all by the author, a sighted developer: the VoiceOver steps with Safari 26.2 on macOS 26.2, in a full pass of 103 steps; the NVDA steps with NVDA 2026.3.1 and Chrome 157 on Windows, in a partial check. The JAWS steps follow how JAWS usually handles web applications; they have not been checked with this extension, and neither has Firefox. No one who uses a screen reader every day has tried it yet. If something does not work as described, that is useful to know.</p>
 </div>
 
 <h2>Everywhere</h2>
@@ -46,10 +46,13 @@
 	<li>Results of jumps and of the task form are heard first, as part of the row; answers to questions and results of keyboard edits come after the row is read.</li>
 </ol>
 
-<h2>NVDA on Windows (not yet tested)</h2>
+<h2>NVDA on Windows (partial check, NVDA 2026.3.1, Chrome 157)</h2>
 <ol>
-	<li>Use Firefox or Chrome. Move to the chart with <kbd>Tab</kbd>; NVDA should switch to focus mode on its own. If letters are read as browse-mode quick keys instead, press <kbd>NVDA</kbd>+<kbd>Space</kbd> to switch to focus mode.</li>
-	<li>The reading keys (<kbd>Shift</kbd> with a letter) only reach the chart in focus mode.</li>
+	<li>Use Chrome (checked with Chrome 157); Firefox not checked.</li>
+	<li>Move to the chart with <kbd>Tab</kbd>. In the check, NVDA switched to focus mode on its own when focus entered the chart.</li>
+	<li>In focus mode the <kbd>Shift</kbd>+letter keys reach the extension. Try <kbd>Shift</kbd>+<kbd>H</kbd>: it reads the list of keys.</li>
+	<li>If the keys do nothing, or NVDA moves through the page instead (browse-mode quick keys), NVDA is in browse mode. Press <kbd>NVDA</kbd>+<kbd>Space</kbd> to switch to focus mode, then try again.</li>
+	<li>Known differences from VoiceOver: after <kbd>Shift</kbd>+<kbd>J</kbd>, <kbd>K</kbd>, <kbd>I</kbd> or <kbd>M</kbd> the new dates are heard twice (first the re-drawn row, then the result); about 5 seconds after a jump or a form result, the row is read again; NVDA says "not selected" and a row position that can change, both from the chart library's own markup.</li>
 </ol>
 
 <h2>JAWS on Windows (not yet tested)</h2>
@@ -62,7 +65,7 @@
 
 	</main>
 	<footer>
-		<p>gantt-a11y is open source under the MIT licence. Not yet tested with people who use screen readers; no claim of WCAG conformance.</p>
+		<p>gantt-a11y is open source under the MIT licence. Checked by its sighted author with VoiceOver (full pass) and NVDA (partial); no feedback yet from people who use a screen reader every day; no claim of WCAG conformance.</p>
 		<p>dhtmlx-gantt (MIT, XB Software) and frappe-gantt (MIT, Frappe Technologies) are separate projects. This project is not affiliated with or endorsed by XB Software (DHTMLX) or Frappe. <a href="about.html">About this site</a>.</p>
 	</footer>
 </body>

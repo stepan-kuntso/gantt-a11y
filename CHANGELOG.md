@@ -4,13 +4,17 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); ver
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-11-20
+
+The first change made after feedback from a screen reader user, and the move to dhtmlx-gantt 10.0.4 for the tests and the demo. The peer dependency stays `^10.0.3`.
+
 ### Added
 
-- **Help hint on the first focus**, the first change made after feedback from a screen reader user. The first time keyboard focus lands on a task after the page has loaded, "Press Shift H for keys." is spoken through the live region 500 ms later, after the row label; once per page load, not at the Brief level, not when help was already asked for or something else was spoken in those 500 ms. Switch: `features.helpHint: false` (Ukrainian: "Довідка з клавіш: Shift H."). Suggested by an NVDA user on the Program-L mailing list (2026-11-20); Chart2Music does the same according to its documentation. Spec: label [U] (user feedback), rule P30, row H2, decision t. Adapters: optional `onTaskFocus(handler)` (docs/ADAPTERS.md), implemented for dhtmlx-gantt and frappe-gantt. TESTING.md step 8.9. Checked with the unit tests and the browser tests in Chromium and WebKit; **not yet checked with a screen reader: neither with VoiceOver nor with NVDA.**
+- **Help hint on the first focus**, the first change made after feedback from a screen reader user. The first time keyboard focus lands on a task after the page has loaded, "Press Shift H for keys." is spoken through the live region 500 ms later, after the row label; once per page load, not at the Brief level, not when help was already asked for or something else was spoken in those 500 ms. Switch: `features.helpHint: false` (Ukrainian: "Довідка з клавіш: Shift H."). Suggested by an NVDA user on the Program-L mailing list (2026-11-20); Chart2Music does the same according to its documentation. Spec: label [U] (user feedback), rule P30, row H2, decision t. Adapters: optional `onTaskFocus(handler)` (docs/ADAPTERS.md), implemented for dhtmlx-gantt and frappe-gantt. TESTING.md step 8.9. Checked with the unit tests and the browser tests in Chromium and WebKit. Checked on the published demo on 2026-11-20 by the author, a sighted developer, with VoiceOver in Safari on macOS and with NVDA 2026.3.1 in Chrome 157 (through AssistivLabs): in both, the hint is heard after the name of the first task and is not repeated on the next row, and the sentence about pressing again is only in the first help group. No exact records of the speech were kept.
 
 ### Changed
 
-- The first group of the spoken help (Shift+H) ends with "Press again within 5 seconds for the next group." when there are more groups, at every level, Brief included (Ukrainian: "Натисніть ще раз протягом 5 секунд, щоб почути наступну групу."). Spec: H1 and D13. Same checks as above; not yet checked with a screen reader.
+- The first group of the spoken help (Shift+H) ends with "Press again within 5 seconds for the next group." when there are more groups, at every level, Brief included (Ukrainian: "Натисніть ще раз протягом 5 секунд, щоб почути наступну групу."). Spec: H1 and D13. Same checks as above, including the manual check with VoiceOver and NVDA.
 - README, the project site's home page, "Try with a screen reader" and the site footer: "One short piece of feedback from an NVDA user (2026-11-20); no study with people who use a screen reader every day yet." instead of "no feedback yet". README, "Tested with": a member of the Program-L mailing list tried the demo with NVDA in Brave and did not notice the row being read again after a jump (versions not given).
 - The comment in `src/core/hints.js` now says what the code does: the two existing hints cannot be turned off. That they are spoken at Brief, and that section 5 of the spec still describes a switch for them, are recorded in the spec's Implementation notes as known, not changed.
 
@@ -87,5 +91,6 @@ The first release, on npm as `gantt-a11y`. Checked by the author, a sighted deve
 - Results of keyboard edits (Shift+J, K, I, M) were not spoken by VoiceOver in Safari: they were put into the label of the row that kept focus, and the re-focus of that row was not announced. They now go to the live region, 500 ms after the row is re-rendered (`features.edit.delay`), and the row keeps its own label; heard with VoiceOver in Safari on macOS 26.2. The same for Shift+C when the next conflict is on the focused task. The results of the task form (saved, created, cancelled) were not heard either: the extension re-rendered the row itself after the form closed. Their text is now put into the row label when Save or Cancel is pressed, before the library re-renders and focuses the row, so it is heard first (heard with VoiceOver in Safari on macOS 26.2). For a new task the library focuses its row while the form is still open, so nothing was heard when it closed; "Created …" now comes through the live region, with the row's text. Discarding a new task (Escape) puts "New task discarded." first in the label of the row focus returns to.
 - Cell navigation mode: a message waiting for the row to be focused was lost when focus landed on a cell of that row.
 
-[Unreleased]: https://github.com/stepan-kuntso/gantt-a11y/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/stepan-kuntso/gantt-a11y/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/stepan-kuntso/gantt-a11y/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/stepan-kuntso/gantt-a11y/releases/tag/v0.1.0

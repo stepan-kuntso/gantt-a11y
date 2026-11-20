@@ -31,8 +31,8 @@ Run 2026-11-20 in Chromium (Playwright) by `scripts/site/check.js`. Automated ru
 - pass: Links and buttons have names: all named
 - pass: Images have alt: 0 without alt
 - pass: Skip link first, visible on focus, moves focus to the content: first Tab stop: “Skip to content” (#main), visible; after Enter focus is on #main
-- pass: Visible focus on every Tab stop (outside the charts): 15 Tab stops checked
-- pass: Text contrast (4.5:1, large text 3:1, outside the charts): 48 text elements, lowest 7.44:1
+- pass: Visible focus on every Tab stop (outside the charts): 17 Tab stops checked
+- pass: Text contrast (4.5:1, large text 3:1, outside the charts): 52 text elements, lowest 7.44:1
 - pass: No requests to other servers: none
 - pass: No script errors: none
 
@@ -79,8 +79,8 @@ Run 2026-11-20 in Chromium (Playwright) by `scripts/site/check.js`. Automated ru
 - pass: Links and buttons have names: all named
 - pass: Images have alt: 0 without alt
 - pass: Skip link first, visible on focus, moves focus to the content: first Tab stop: “Skip to content” (#main), visible; after Enter focus is on #main
-- pass: Visible focus on every Tab stop (outside the charts): 10 Tab stops checked
-- pass: Text contrast (4.5:1, large text 3:1, outside the charts): 69 text elements, lowest 7.44:1
+- pass: Visible focus on every Tab stop (outside the charts): 12 Tab stops checked
+- pass: Text contrast (4.5:1, large text 3:1, outside the charts): 73 text elements, lowest 7.44:1
 - pass: No requests to other servers: none
 - pass: No script errors: none
 

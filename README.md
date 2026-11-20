@@ -260,7 +260,7 @@ This project has been checked by its author, a sighted developer: fully with Voi
 - **people who use a screen reader every day**, with any screen reader: whether the answers are useful, too long, in the wrong order, or missing something you need;
 - **anyone who has tried it with NVDA or JAWS** on Windows: NVDA 2026.3.1 with Chrome 157 has had only a partial check by the author, and JAWS and Firefox have not been checked at all.
 
-Open an issue in this repository with the **Screen reader feedback** template: which screen reader and version, browser, operating system, what you pressed, what you heard, and what you expected. A short note is welcome too.
+Two ways to send it: open an issue in this repository with the [**Screen reader feedback**](https://github.com/stepan-kuntso/gantt-a11y/issues/new?template=screen-reader-feedback.yml) template, or write to [stepankuntso95@gmail.com](mailto:stepankuntso95@gmail.com). Useful details: which screen reader and version, browser, operating system, what you pressed, what you heard, and what you expected. A short note is welcome too.
 
 ## Specification and manual test
 

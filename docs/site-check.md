@@ -1,6 +1,6 @@
 # Automated check of the site
 
-Run 2026-11-19 in Chromium (Playwright) by `scripts/site/check.js`. Automated rules only: they find missing structure and low contrast, not whether the pages are easy to use with a screen reader. The charts' own markup is left out here; the [audit](../audit/README.md) checks it.
+Run 2026-11-20 in Chromium (Playwright) by `scripts/site/check.js`. Automated rules only: they find missing structure and low contrast, not whether the pages are easy to use with a screen reader. The charts' own markup is left out here; the [audit](../audit/README.md) checks it.
 
 | Rule | index.html | demo-dhtmlx.html | demo-frappe.html | screen-readers.html | spec.html | audit.html | about.html |
 |---|---|---|---|---|---|---|---|

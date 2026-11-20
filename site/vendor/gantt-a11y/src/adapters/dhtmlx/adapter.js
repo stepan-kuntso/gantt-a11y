@@ -1,6 +1,6 @@
 /**
  * The dhtmlx-gantt adapter: everything the engine needs (docs/ADAPTERS.md),
- * implemented with the public, typed API of dhtmlx-gantt 10.0.3.
+ * implemented with the public, typed API of dhtmlx-gantt 10.0.4.
  */
 import { createLiveRegion } from "../dom/live-region.js";
 import { createFocusLabels } from "./focus-label.js";

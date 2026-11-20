@@ -53,7 +53,7 @@
 		"demo": "node scripts/demo-server.js"
 	},
 	"peerDependencies": {
-		"dhtmlx-gantt": "^10.0.3",
+		"dhtmlx-gantt": "^10.0.4",
 		"frappe-gantt": "^1.2.2"
 	},
 	"peerDependenciesMeta": {
@@ -66,7 +66,7 @@
 	},
 	"devDependencies": {
 		"@playwright/test": "^1.65.1",
-		"dhtmlx-gantt": "10.0.3",
+		"dhtmlx-gantt": "10.0.4",
 		"frappe-gantt": "1.2.2"
 	}
 }

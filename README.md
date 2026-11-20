@@ -11,7 +11,7 @@ A Gantt chart shows which task waits for which, what overlaps and what a change 
 
 **Try it in two minutes:** open the live demo for [dhtmlx-gantt](https://stepan-kuntso.github.io/gantt-a11y/site/demo-dhtmlx.html) or [frappe-gantt](https://stepan-kuntso.github.io/gantt-a11y/site/demo-frappe.html) on the [project site](https://stepan-kuntso.github.io/gantt-a11y/site/), press Tab to enter the chart and Shift+D on a task. Locally, [examples/minimal.html](examples/minimal.html) is a complete page: run `npm install` and `npm run demo`, then open `http://localhost:8080/examples/minimal.html`.
 
-**Status:** experimental, version 0.1.0, for [DHTMLX Gantt](https://github.com/DHTMLX/gantt) Community Edition 10.0.3 (MIT), with an experimental adapter for frappe-gantt. Checked by the author, a sighted developer: with VoiceOver in Safari 26.2 on macOS Tahoe 26.2, all 103 manual steps matched on 2026-11-19; with NVDA 2026.3.1 in Chrome 157 on Windows, a partial check. Not checked with JAWS or Firefox. No feedback yet from people who use a screen reader every day: see [Tested with](#tested-with) and [Feedback wanted](#feedback-wanted).
+**Status:** experimental, version 0.1.0, for [DHTMLX Gantt](https://github.com/DHTMLX/gantt) Community Edition 10.0.4 (MIT), with an experimental adapter for frappe-gantt. The automated tests run with 10.0.4; the manual checks below were done with 10.0.3. Checked by the author, a sighted developer: with VoiceOver in Safari 26.2 on macOS Tahoe 26.2, all 103 manual steps matched on 2026-11-19; with NVDA 2026.3.1 in Chrome 157 on Windows, a partial check. Not checked with JAWS or Firefox. No feedback yet from people who use a screen reader every day: see [Tested with](#tested-with) and [Feedback wanted](#feedback-wanted).
 
 ## Features
 
@@ -61,7 +61,7 @@ Why Shift and a letter: Gantt's own keys use arrows, Page Up/Down, Space, Enter,
 ## Requirements
 
 - One of the two libraries, installed by your application (both are optional peer dependencies, so npm does not install either):
-  - `dhtmlx-gantt` 10.0.3 or a later 10.x (the tests run with 10.0.3 only), with the `keyboard_navigation` plugin enabled;
+  - `dhtmlx-gantt` 10.0.4 or a later 10.x (the tests run with 10.0.4 only), with the `keyboard_navigation` plugin enabled;
   - or, for the experimental adapter, `frappe-gantt` 1.2.2 or a later 1.x (the tests run with 1.2.2 only).
 - A browser with ES modules and `Intl` (PluralRules, ListFormat, DateTimeFormat).
 
@@ -209,7 +209,7 @@ frappe-gantt end dates are the last day of work, so use `endDate: "lastDay"`. Af
 
 ## How it works
 
-- Only the public, typed API of dhtmlx-gantt 10.0.3 is used.
+- Only the public, typed API of dhtmlx-gantt 10.0.4 is used.
 - Answers go to a visually hidden `aria-live="polite"` region, one per chart, so they are heard after what the screen reader is reading.
 - When a command moves focus to another row (jumps, the next conflict, back, closing the task form), the result is put in front of that row's label for a moment, so it is heard first; it goes when focus leaves the row, at the latest after 5 seconds. With the tooltip plugin or in cell navigation mode the live region is used instead.
 - Keyboard edits keep focus on the row; their results go to the live region, 500 ms after the row is re-rendered.
@@ -235,7 +235,9 @@ frappe-gantt end dates are the last day of work, so use `endDate: "lastDay"`. Af
 
 ## Tested with
 
-Manually, by the author, step by step while the features were built, and in one full pass of [TESTING.md](TESTING.md):
+Automatically: the unit tests and the browser tests in Chromium and WebKit pass with dhtmlx-gantt 10.0.4 and frappe-gantt 1.2.2 (2026-11-20).
+
+Manually, by the author, step by step while the features were built, and in one full pass of [TESTING.md](TESTING.md), with dhtmlx-gantt 10.0.3; not repeated with 10.0.4:
 
 - dhtmlx-gantt 10.0.3 (and frappe-gantt 1.2.2 for the steps of its demo)
 - Safari 26.2 with VoiceOver, macOS Tahoe 26.2

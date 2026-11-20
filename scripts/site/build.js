@@ -138,7 +138,7 @@ const SWITCH_SCRIPT = `
 
 function dhtmlxDemo() {
 	const content = `<h1>Demo: dhtmlx-gantt</h1>
-<p class="lead">dhtmlx-gantt 10.0.3 Community Edition with its keyboard navigation, with and without gantt-a11y.</p>
+<p class="lead">dhtmlx-gantt 10.0.4 Community Edition with its keyboard navigation, with and without gantt-a11y.</p>
 <div class="demo">
 	<section class="demo-chart" aria-labelledby="chart-title">
 		<h2 id="chart-title">The chart</h2>

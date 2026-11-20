@@ -4,6 +4,12 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); ver
 
 ## [Unreleased]
 
+### Changed
+
+- dhtmlx-gantt 10.0.4 instead of 10.0.3: the peer dependency is `^10.0.4`, the tests and the demo on the project site use 10.0.4. With it, the 127 unit tests and the 328 browser tests in Chromium and WebKit pass (2026-11-20). The manual checks with VoiceOver and NVDA were done with 10.0.3 and have not been repeated with 10.0.4.
+- According to the [10.0.4 release notes](https://github.com/DHTMLX/gantt/blob/v10.0.4/whatsnew.md), tasks and links created from the UI now keep the type of the task ids (number or string) in `parent`, `source` and `target`. The adapter compares ids as strings, so nothing in it changed (read in the code; the browser tests that create tasks and links pass).
+- The Duration field of the task form has `aria-valuenow` in 10.0.4. In the accessibility tree of Chromium its value is the current duration, where 10.0.3 gave 0; checked in the DOM in Chromium and WebKit and in Chromium's accessibility tree, not with a screen reader. The values the extension speaks while the form is open ("Duration 6 days. Ends 19 June.") stay: focus is on the + or − button then, not on the field.
+
 ## [0.1.0] - 2026-11-19
 
 The first release, on npm as `gantt-a11y`. Checked by the author, a sighted developer: fully with VoiceOver in Safari 26.2 on macOS 26.2, partly with NVDA 2026.3.1 in Chrome 157 on Windows; not checked with JAWS or Firefox. No feedback yet from people who use a screen reader every day, so the texts of the announcements may still change.

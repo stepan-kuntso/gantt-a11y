@@ -85,6 +85,8 @@ export interface Features {
 	form?: boolean;
 	repeat?: boolean;
 	help?: boolean;
+	/** "Press Shift H for keys." once per page load, on the first focus on a task; not at Brief. */
+	helpHint?: boolean;
 	/** Off by default. */
 	rowLabel?: boolean | { fields?: RowLabelField[] };
 }

@@ -103,9 +103,13 @@ export const defaultStrings = {
 		help: "Help"
 	},
 
-	// Hints follow the fact, can be turned off, and each is spoken at most
-	// three times per session (spec P11, section 5).
+	// Hints follow the fact, and each is spoken at most three times per
+	// session (spec P11; there is no switch for them, see the spec's
+	// Implementation notes). The help hint has its own switch,
+	// features.helpHint, and is spoken once per page load (P30).
 	hints: {
+		// Once, 500 ms after focus first lands on a task, after the row label (P30).
+		help: "Press {key} for keys.",
 		// After a list page; {count} is how many come next.
 		nextPage: "Press again for the next {count}.",
 		// After a jump that had to expand a collapsed parent.
@@ -400,6 +404,9 @@ export const defaultStrings = {
 		// capital letter and a period ("Shift D. Same time") VoiceOver hears an
 		// initial and makes no pause between items.
 		item: "{action}, {key} key.",
+		// End of the first group, when there are more (H1, P30). The key is not
+		// named again: it was just pressed. 5 seconds is the pager's window.
+		next: "Press again within 5 seconds for the next group.",
 		groups: {
 			reading: "Reading",
 			orientation: "Orientation",

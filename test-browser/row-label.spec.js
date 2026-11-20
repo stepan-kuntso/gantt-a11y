@@ -2,7 +2,7 @@
 // put before a task row's label through gantt.templates.tooltip_text, a
 // template the library, its tooltip plugin and the application share.
 import { test, expect } from "@playwright/test";
-import { expectFocusedLabel, focusTask, open } from "./helpers.js";
+import { expectFocusedLabel, focusTask, open, waitOutHelpHint } from "./helpers.js";
 
 /** Page errors and console errors, collected for the whole test. */
 function collectErrors(page) {
@@ -87,6 +87,7 @@ const PLAIN = "Testing. 13 to 18 June, 5 days. 40 percent done.";
 
 test("V2: focus leaves the row for another element and comes back: the normal label, nothing spoken again", async ({ page }) => {
 	await focusTask(page, 7);
+	await waitOutHelpHint(page);
 	await page.keyboard.press("Shift+P");
 	await expectFocusedLabel(page, LANDED);
 	await page.evaluate(() => {
@@ -112,6 +113,7 @@ test("V2: a blur the library turns back into focus on the row: not spoken again,
 	await page.clock.install();
 	await open(page);
 	await focusTask(page, 7);
+	await waitOutHelpHint(page, { clock: true });
 	await page.keyboard.press("Shift+P");
 	await expectFocusedLabel(page, LANDED);
 	await page.evaluate(() => document.activeElement.blur());

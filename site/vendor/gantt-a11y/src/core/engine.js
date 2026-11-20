@@ -80,6 +80,18 @@ const FORM_DELAY_MS = 500;
 // Keyboard edits: wait after the row is re-rendered before speaking, so that the
 // screen reader has finished with the replaced row.
 const EDIT_DELAY_MS = 500;
+// The help hint (P30): wait after focus first lands on a task, so that it is
+// heard after the row label.
+const HELP_HINT_DELAY_MS = 500;
+// The help hint is given once per page load, not once per enable: this module
+// is loaded once per page.
+let helpHintGiven = false;
+
+/** For tests only: forget that the help hint was given on this page. */
+export function resetHelpHint() {
+	helpHintGiven = false;
+}
+
 // Detailed level: further messages of a long save result.
 const FOLLOW_UP_DELAY_MS = 4000;
 
@@ -111,6 +123,9 @@ export function createEngine(adapter, options = {}) {
 	let lastText = "";
 	let speechCache = null;
 	let lastJump = null;
+	// the help hint (P30): pending timer, and whether anything was spoken since focus landed
+	let helpHintTimer = null;
+	let spokenSinceFocus = false;
 
 	// ---- shared helpers ----
 
@@ -139,11 +154,13 @@ export function createEngine(adapter, options = {}) {
 
 	function announce(text, announceOptions) {
 		lastText = text;
+		spokenSinceFocus = true;
 		adapter.announce(text, announceOptions);
 	}
 
 	function announceOnFocus(id, text, labelOptions) {
 		lastText = text;
+		spokenSinceFocus = true;
 		adapter.announceOnFocus(id, text, labelOptions);
 	}
 
@@ -614,10 +631,12 @@ export function createEngine(adapter, options = {}) {
 	};
 
 	commands.repeat = () => {
+		spokenSinceFocus = true;
 		adapter.announce(lastText || strings.meta.nothingToRepeat);
 	};
 
 	commands.help = () => {
+		helpHintGiven = true;
 		const id = adapter.getFocusedTaskId();
 		const result = page("help", id === null ? "" : id, () => helpPages(
 			registry.list().map((entry) => ({ id: entry.id, description: entry.description, spokenKey: spokenKey(entry.key, strings) })),
@@ -858,6 +877,32 @@ export function createEngine(adapter, options = {}) {
 		// A delete that is still there was declined in the confirmation: nothing to say.
 	}
 
+	// ---- the help hint (P30) ----
+
+	/**
+	 * Once per page load, 500 ms after focus first lands on a task: "Press
+	 * Shift H for keys.", through the live region, so after the row label.
+	 * Dropped when anything else was spoken in the meantime (it would replace
+	 * that in the live region) or help was asked for. Not at Brief.
+	 */
+	function onTaskFocus() {
+		if (helpHintGiven || helpHintTimer !== null) {
+			return;
+		}
+		spokenSinceFocus = false;
+		helpHintTimer = setTimeout(() => {
+			helpHintTimer = null;
+			if (helpHintGiven) {
+				return;
+			}
+			helpHintGiven = true;
+			const key = keyName("help");
+			if (!spokenSinceFocus && key) {
+				adapter.announce(fill(strings.hints.help, { key }));
+			}
+		}, HELP_HINT_DELAY_MS);
+	}
+
 	// ---- the row label (optional) ----
 
 	function rowLabel(id) {
@@ -902,6 +947,8 @@ export function createEngine(adapter, options = {}) {
 			cleanups.pop()();
 		}
 		clearTimeout(followUpTimer);
+		clearTimeout(helpHintTimer);
+		helpHintTimer = null;
 		marked = null;
 		pendingRemoval = null;
 	}
@@ -922,6 +969,9 @@ export function createEngine(adapter, options = {}) {
 		}
 		if (featureOn("form") && adapter.onForm) {
 			cleanups.push(adapter.onForm(onFormEvent));
+		}
+		if (featureOn("help") && featureOn("helpHint") && level !== "brief" && adapter.onTaskFocus) {
+			cleanups.push(adapter.onTaskFocus(onTaskFocus));
 		}
 		if (features.rowLabel && adapter.setRowLabel) {
 			adapter.setRowLabel(rowLabel);

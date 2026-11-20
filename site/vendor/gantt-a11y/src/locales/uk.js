@@ -99,6 +99,7 @@ export const uk = {
 	},
 
 	hints: {
+		help: "Довідка з клавіш: {key}.",
 		nextPage: "Натисніть ще раз, щоб почути наступні: {count}.",
 		opened: "Розгорнуто: {name}."
 	},
@@ -337,6 +338,7 @@ export const uk = {
 	help: {
 		group: "{group}, {n} з {total}.",
 		item: "{action}: клавіші {key}.",
+		next: "Натисніть ще раз протягом 5 секунд, щоб почути наступну групу.",
 		groups: {
 			reading: "Читання",
 			orientation: "Орієнтація",

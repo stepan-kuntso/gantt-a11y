@@ -11,7 +11,7 @@ A Gantt chart shows which task waits for which, what overlaps and what a change 
 
 **Try it in two minutes:** open the live demo for [dhtmlx-gantt](https://stepan-kuntso.github.io/gantt-a11y/site/demo-dhtmlx.html) or [frappe-gantt](https://stepan-kuntso.github.io/gantt-a11y/site/demo-frappe.html) on the [project site](https://stepan-kuntso.github.io/gantt-a11y/site/), press Tab to enter the chart and Shift+D on a task. Locally, [examples/minimal.html](examples/minimal.html) is a complete page: run `npm install` and `npm run demo`, then open `http://localhost:8080/examples/minimal.html`.
 
-**Status:** experimental, version 0.1.0, for [DHTMLX Gantt](https://github.com/DHTMLX/gantt) Community Edition 10.0.4 (MIT), with an experimental adapter for frappe-gantt. The automated tests run with 10.0.4; the manual checks below were done with 10.0.3. Checked by the author, a sighted developer: with VoiceOver in Safari 26.2 on macOS Tahoe 26.2, all 103 manual steps matched on 2026-11-19; with NVDA 2026.3.1 in Chrome 157 on Windows, a partial check. Not checked with JAWS or Firefox. No feedback yet from people who use a screen reader every day: see [Tested with](#tested-with) and [Feedback wanted](#feedback-wanted).
+**Status:** experimental, version 0.1.0, for [DHTMLX Gantt](https://github.com/DHTMLX/gantt) Community Edition 10.0.4 (MIT), with an experimental adapter for frappe-gantt. The automated tests run with 10.0.4; the manual checks below were done with 10.0.3. Checked by the author, a sighted developer: with VoiceOver in Safari 26.2 on macOS Tahoe 26.2, all 103 manual steps matched on 2026-11-19; with NVDA 2026.3.1 in Chrome 157 on Windows, a partial check. Not checked with JAWS or Firefox. One short piece of feedback from an NVDA user (2026-11-20); no study with people who use a screen reader every day yet. See [Tested with](#tested-with) and [Feedback wanted](#feedback-wanted).
 
 ## Features
 
@@ -163,6 +163,7 @@ enableGanttA11y(gantt, {
 		form: true,             // results of the task form, its dates while open
 		repeat: true,
 		help: true,
+		helpHint: true,         // "Press Shift H for keys." once, on the first focus; not at Brief
 		rowLabel: false         // off by default; true or { fields: ["name", "dates", "progress"] }
 	},
 	endDate: "gantt"            // "gantt" | "lastDay", see "Deviations from the specification"
@@ -170,6 +171,8 @@ enableGanttA11y(gantt, {
 ```
 
 The verbosity level also decides how many names are read before "press again" (3, 5 at Detailed), whether the year is always said (Detailed) and whether weekdays are said in edit results (not at Brief).
+
+**Help hint** (`features.helpHint`). On by default. The first time keyboard focus lands on a task after the page has loaded, "Press Shift H for keys." is spoken through the live region 500 ms later, so after the row label; once per page load, also when the extension is enabled again. It is not spoken at the Brief level, with `help: false`, when help was already asked for, or when something else was spoken within those 500 ms. The first group of the spoken help ends with "Press again within 5 seconds for the next group." at every level. Checked only with the automated tests; not yet checked with a screen reader: neither with VoiceOver nor **with NVDA**. Reason: suggested by an NVDA user (Program-L mailing list, 2026-11-20); Chart2Music, according to its [documentation](https://github.com/julianna-langston/chart2music), tells the user on focus that interaction is available, and its [docs](https://chart2music.com/docs/) say the H key opens help.
 
 **Row label** (`features.rowLabel`). Off by default, because the library builds each row's accessible name from `gantt.templates.tooltip_text`, which the tooltip plugin also shows to sighted users: with the plugin on, they would see the longer label in tooltips. When on, the template is replaced for as long as the extension is enabled. Fields, in the order given: `"name"`, `"parent"` (added by default at the Detailed level), `"dates"` (span and duration, or the special forms for milestones, projects and unscheduled tasks), `"progress"`, `"links"` (dependency counts, off by default). The level of nesting is not spoken: the library's `aria-level` carries it.
 
@@ -251,11 +254,13 @@ Manually, by the author, step by step while the features were built, and in one 
 
 **NVDA, partial check, 2026-11-19**, on the dhtmlx-gantt demo of the project site, by the author, from NVDA's Speech Viewer log (an earlier session the same day ran in Microsoft Edge, version not recorded). Checked: the row labels; Shift+D, O, B, A, W, V, C, Z, P, S, J, K, I, M, L, T, U (twice), R and H; the task form opened with Enter, with dates and duration changed while it is open, saved, and cancelled with Escape. The texts were as expected, and results of jumps and of the form were heard before the row, as with VoiceOver. Differences are listed under "Limitations". **Not checked with NVDA:** the full TESTING.md; deleting a task in the form; creating a task with Control+Enter; completing a link with the second Shift+L; cell navigation mode; the Brief and Detailed levels; the frappe-gantt demo; Firefox.
 
-**Not yet tested** with JAWS, with keyboard layouts other than English, with braille displays, or by people who use a screen reader every day.
+**Feedback from a screen reader user, 2026-11-20:** a member of the Program-L mailing list tried the demo with NVDA in the Brave browser and did not notice the row being read again after a jump. Versions of NVDA and Brave were not given.
+
+**Not yet tested** with JAWS, with keyboard layouts other than English, or with braille displays. One short piece of feedback from an NVDA user (2026-11-20); no study with people who use a screen reader every day yet.
 
 ## Feedback wanted
 
-This project has been checked by its author, a sighted developer: fully with VoiceOver in Safari on a Mac, partly with NVDA in Chrome on Windows. No one who uses a screen reader every day has tried it yet. The most valuable feedback comes from:
+This project has been checked by its author, a sighted developer: fully with VoiceOver in Safari on a Mac, partly with NVDA in Chrome on Windows. One short piece of feedback from an NVDA user (2026-11-20); no study with people who use a screen reader every day yet. The most valuable feedback comes from:
 
 - **people who use a screen reader every day**, with any screen reader: whether the answers are useful, too long, in the wrong order, or missing something you need;
 - **anyone who has tried it with NVDA or JAWS** on Windows: NVDA 2026.3.1 with Chrome 157 has had only a partial check by the author, and JAWS and Firefox have not been checked at all.

@@ -180,7 +180,7 @@ export const steps = [
 	step({ id: "8.2", section: "Repeat and help", focus: T.testing, do: "Shift+R (nothing pressed before on this page)", actions: ["Shift+R"],
 		expect: { channel: "live", text: "Nothing to repeat." } }),
 	step({ id: "8.3", section: "Repeat and help", focus: T.testing, do: "Shift+H", actions: ["Shift+H"],
-		expect: { channel: "live", text: "Reading, 1 of 6. Dependencies, Shift D key. Same time, Shift O key. Ends before, Shift B key. Starts after, Shift A key." } }),
+		expect: { channel: "live", text: "Reading, 1 of 6. Dependencies, Shift D key. Same time, Shift O key. Ends before, Shift B key. Starts after, Shift A key. Press again within 5 seconds for the next group." } }),
 	step({ id: "8.4", section: "Repeat and help", focus: T.testing, do: "Shift+H twice, within 5 seconds; compare the second", actions: ["Shift+H", { wait: 400 }, "Shift+H"],
 		expect: { channel: "live", text: "Orientation, 2 of 6. Where am I, Shift W key. Overview of the chart, Shift V key." } }),
 	step({ id: "8.5", section: "Repeat and help", focus: T.testing, do: "Shift+H three times, within 5 seconds; compare the third", actions: ["Shift+H", { wait: 400 }, "Shift+H", { wait: 400 }, "Shift+H"],
@@ -191,6 +191,8 @@ export const steps = [
 		expect: { channel: "live", text: "Links, 5 of 6. Make a link, Shift L key. Link type, Shift T key. Remove link, Shift U key." } }),
 	step({ id: "8.8", cannotCheck: "the pause after each “key”", section: "Repeat and help", focus: T.testing, do: "Shift+H six times, within 5 seconds; compare the sixth. There should be a clear pause after each “key”", actions: ["Shift+H", { wait: 400 }, "Shift+H", { wait: 400 }, "Shift+H", { wait: 400 }, "Shift+H", { wait: 400 }, "Shift+H", { wait: 400 }, "Shift+H"],
 		expect: { channel: "live", text: "Other, 6 of 6. Repeat last, Shift R key. Help, Shift H key." } }),
+	step({ id: "8.9", section: "Repeat and help", focus: T.testing, helpHint: true, do: "Wait a second after focus first lands on “Testing” (after a reload)", actions: [{ wait: 1000 }],
+		expect: { channel: "live", text: "Press Shift H for keys." } }),
 
 	// 9. Turning it off
 	step({ id: "9.1", section: "Turning it off", priority: 3, setup: [{ disable: true }], focus: T.impl, do: "gantt-a11y is disabled. Arrow down to “Testing”", actions: ["ArrowDown"],
@@ -248,7 +250,7 @@ export const steps = [
 	step({ id: "13.8", section: "frappe-gantt demo", page: FRAPPE, source: "recorded", focus: "marketing", do: "Shift+L; arrow down twice to “Retrospective”, Shift+L; compare the last", actions: ["Shift+L", { wait: 300 }, "ArrowDown", "ArrowDown", { wait: 300 }, "Shift+L"],
 		expect: { channel: "live", task: "retro", role: "option", text: "Linked. This depends on Marketing." } }),
 	step({ id: "13.9", section: "frappe-gantt demo", page: FRAPPE, source: "recorded", focus: "test", do: "Shift+H", actions: ["Shift+H"],
-		expect: { channel: "live", task: "test", role: "option", text: "Reading, 1 of 6. Dependencies, Shift D key. Same time, Shift O key. Ends before, Shift B key. Starts after, Shift A key." } }),
+		expect: { channel: "live", task: "test", role: "option", text: "Reading, 1 of 6. Dependencies, Shift D key. Same time, Shift O key. Ends before, Shift B key. Starts after, Shift A key. Press again within 5 seconds for the next group." } }),
 
 	// 14. Orientation (new in this version: not yet heard with a screen reader)
 	step({ id: "14.1", isNew: true, section: "Orientation", source: "recorded", focus: T.testing, do: "Shift+V", actions: ["Shift+V"],

@@ -15,6 +15,25 @@ test("row labels (features.rowLabel)", async ({ page }) => {
 	await expectFocusedLabel(page, "Website redesign. Project, 1 to 23 June, 10 tasks. 0 percent done.");
 });
 
+test("the first focus on a task: the row label, then once \"Press Shift H for keys.\"", async ({ page }) => {
+	await focusTask(page, 4);
+	await expectFocusedLabel(page, "Testing. 13 to 18 June, 5 days. 40 percent done.");
+	await expectLive(page, "Press Shift H for keys.");
+	await page.evaluate(() => { document.querySelector("[data-gantt-a11y-live]").textContent = ""; });
+	await focusTask(page, 5);
+	await focusTask(page, 4);
+	await page.waitForTimeout(800);
+	await expectLive(page, "");
+});
+
+test("no hint when a key is pressed within 500 ms of the first focus", async ({ page }) => {
+	await focusTask(page, 4);
+	await page.keyboard.press("Shift+R");
+	await expectLive(page, "Nothing to repeat.");
+	await page.waitForTimeout(800);
+	await expectLive(page, "Nothing to repeat.");
+});
+
 test("Shift+D: dependencies, a second page, then from the start", async ({ page }) => {
 	await focusTask(page, 4);
 	await page.keyboard.press("Shift+D");
@@ -218,7 +237,7 @@ test("Shift+R repeats; Shift+H speaks the keys in groups", async ({ page }) => {
 	await expectLive(page, "Depends on: Implementation. Required by: Launch.");
 
 	await page.keyboard.press("Shift+H");
-	await expectLive(page, "Reading, 1 of 6. Dependencies, Shift D key. Same time, Shift O key. Ends before, Shift B key. Starts after, Shift A key.");
+	await expectLive(page, "Reading, 1 of 6. Dependencies, Shift D key. Same time, Shift O key. Ends before, Shift B key. Starts after, Shift A key. Press again within 5 seconds for the next group.");
 	await page.keyboard.press("Shift+H");
 	await expectLive(page, "Orientation, 2 of 6. Where am I, Shift W key. Overview of the chart, Shift V key.");
 	await page.keyboard.press("Shift+H");

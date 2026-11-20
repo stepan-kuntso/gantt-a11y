@@ -61,6 +61,8 @@ export function helpPages(commands, speech, strings) {
 			total: speech.number(chunks.length)
 		});
 		const items = chunk.items.map((item) => fill(strings.help.item, { action: item.description, key: item.spokenKey }));
-		return { text: [head, ...items].join(" "), nextCount: index + 1 < chunks.length ? 1 : 0 };
+		// the first group says how to go on (P30), at every level: help is asked for
+		const next = index === 0 && chunks.length > 1 ? [strings.help.next] : [];
+		return { text: [head, ...items, ...next].join(" "), nextCount: index + 1 < chunks.length ? 1 : 0 };
 	});
 }

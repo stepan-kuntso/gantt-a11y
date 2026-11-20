@@ -4,7 +4,15 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); ver
 
 ## [Unreleased]
 
+### Added
+
+- **Help hint on the first focus**, the first change made after feedback from a screen reader user. The first time keyboard focus lands on a task after the page has loaded, "Press Shift H for keys." is spoken through the live region 500 ms later, after the row label; once per page load, not at the Brief level, not when help was already asked for or something else was spoken in those 500 ms. Switch: `features.helpHint: false` (Ukrainian: "Довідка з клавіш: Shift H."). Suggested by an NVDA user on the Program-L mailing list (2026-11-20); Chart2Music does the same according to its documentation. Spec: label [U] (user feedback), rule P30, row H2, decision t. Adapters: optional `onTaskFocus(handler)` (docs/ADAPTERS.md), implemented for dhtmlx-gantt and frappe-gantt. TESTING.md step 8.9. Checked with the unit tests and the browser tests in Chromium and WebKit; **not yet checked with a screen reader: neither with VoiceOver nor with NVDA.**
+
 ### Changed
+
+- The first group of the spoken help (Shift+H) ends with "Press again within 5 seconds for the next group." when there are more groups, at every level, Brief included (Ukrainian: "Натисніть ще раз протягом 5 секунд, щоб почути наступну групу."). Spec: H1 and D13. Same checks as above; not yet checked with a screen reader.
+- README, the project site's home page, "Try with a screen reader" and the site footer: "One short piece of feedback from an NVDA user (2026-11-20); no study with people who use a screen reader every day yet." instead of "no feedback yet". README, "Tested with": a member of the Program-L mailing list tried the demo with NVDA in Brave and did not notice the row being read again after a jump (versions not given).
+- The comment in `src/core/hints.js` now says what the code does: the two existing hints cannot be turned off. That they are spoken at Brief, and that section 5 of the spec still describes a switch for them, are recorded in the spec's Implementation notes as known, not changed.
 
 - The tests and the demo on the project site use dhtmlx-gantt 10.0.4 instead of 10.0.3. The peer dependency stays `^10.0.3`: the code of the extension did not change, and its tests passed with 10.0.3 until this change. With 10.0.4, the 127 unit tests and the 328 browser tests in Chromium and WebKit pass (2026-11-20). The manual checks with VoiceOver and NVDA were done with 10.0.3 and have not been repeated with 10.0.4.
 - According to the [10.0.4 release notes](https://github.com/DHTMLX/gantt/blob/v10.0.4/whatsnew.md), tasks and links created from the UI now keep the type of the task ids (number or string) in `parent`, `source` and `target`. The adapter compares ids as strings, so nothing in it changed (read in the code; the browser tests that create tasks and links pass).

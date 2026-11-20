@@ -244,6 +244,20 @@ export function createDhtmlxAdapter(gantt, { lang } = {}) {
 		cancelOnFocus(id) {
 			focusLabels.cancel(id);
 		},
+		/**
+		 * Calls `handler(id)` whenever keyboard focus lands on a task's row,
+		 * bar or cell; the task is found with the public gantt.locate().
+		 */
+		onTaskFocus(handler) {
+			const onFocusIn = (event) => {
+				const id = gantt.locate(event);
+				if (id !== null && id !== undefined && gantt.isTaskExists(id)) {
+					handler(id);
+				}
+			};
+			document.addEventListener("focusin", onFocusIn, true);
+			return () => document.removeEventListener("focusin", onFocusIn, true);
+		},
 
 		// ---- keys ----
 		keys: {

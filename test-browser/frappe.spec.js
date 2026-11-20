@@ -35,6 +35,11 @@ test("the task list: roles, labels, arrows", async ({ page }) => {
 	await expect(page.locator('[role="option"][aria-selected="true"]')).toHaveAttribute("data-task-id", "retro");
 });
 
+test("the first focus on a task gives \"Press Shift H for keys.\" once", async ({ page }) => {
+	await focusTask(page, "test");
+	await expectLive(page, "Press Shift H for keys.");
+});
+
 test("dependencies with a second page, time questions", async ({ page }) => {
 	await focusTask(page, "test");
 	await page.keyboard.press("Shift+D");
@@ -130,7 +135,7 @@ test("repeat, help and disable()", async ({ page }) => {
 	await page.keyboard.press("Shift+R");
 	await expectLive(page, "Nothing to repeat.");
 	await page.keyboard.press("Shift+H");
-	await expectLive(page, "Reading, 1 of 6. Dependencies, Shift D key. Same time, Shift O key. Ends before, Shift B key. Starts after, Shift A key.");
+	await expectLive(page, "Reading, 1 of 6. Dependencies, Shift D key. Same time, Shift O key. Ends before, Shift B key. Starts after, Shift A key. Press again within 5 seconds for the next group.");
 
 	await page.click("#toggle");
 	await expect(page.locator("[data-gantt-a11y-live]")).toHaveCount(0);

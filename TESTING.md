@@ -13,6 +13,7 @@ Notes for all sections:
 
 - After our text the screen reader adds its own description of the element, for example "row, tree grid, 6 columns, 12 rows" in VoiceOver. That part comes from the roles the library sets and from the screen reader's verbosity settings, not from this extension.
 - "Row label" means the text the screen reader reads when focus lands on a row. Where a result is marked **(row label)**, it should be heard first, before anything else about the row. Where it is marked **(after the row)**, it comes from the live region and is heard after the screen reader has finished with the row.
+- After each reload, the first time focus lands on a task, "Press Shift H for keys." is heard after the row, once (not at the Brief level, and not when a key was pressed within half a second). It is not repeated in the expected texts below; step 8.9 checks it.
 - Hints ("Press again for the next 2.", "Go to the task that depends on it and press Shift L.") are spoken at most three times per session; after that the same step is heard without the hint.
 
 ## 1. Row labels
@@ -122,12 +123,13 @@ All results here come from the live region, after the row. The row may be read a
 |---|---|---|
 | 8.1 | Right after 7.11, Shift+R | "Link removed. Testing no longer depends on this." |
 | 8.2 | After a reload, before anything else, Shift+R | "Nothing to repeat." |
-| 8.3 | Shift+H | "Reading, 1 of 6. Dependencies, Shift D key. Same time, Shift O key. Ends before, Shift B key. Starts after, Shift A key." |
+| 8.3 | Shift+H | "Reading, 1 of 6. Dependencies, Shift D key. Same time, Shift O key. Ends before, Shift B key. Starts after, Shift A key. Press again within 5 seconds for the next group." |
 | 8.4 | Shift+H twice, within 5 seconds; compare the second | "Orientation, 2 of 6. Where am I, Shift W key. Overview of the chart, Shift V key." |
 | 8.5 | Shift+H three times, within 5 seconds; compare the third | "Moving focus, 3 of 6. To what this depends on, Shift P key. To what depends on this, Shift S key. Next conflict, Shift C key. Back to where the jumps started, Shift Z key." |
 | 8.6 | Shift+H four times, within 5 seconds; compare the fourth | "Changing, 4 of 6. Earlier, Shift J key. Later, Shift K key. Longer, Shift I key. Shorter, Shift M key." |
 | 8.7 | Shift+H five times, within 5 seconds; compare the fifth | "Links, 5 of 6. Make a link, Shift L key. Link type, Shift T key. Remove link, Shift U key." |
 | 8.8 | Shift+H six times, within 5 seconds; compare the sixth. There should be a clear pause after each “key” | "Other, 6 of 6. Repeat last, Shift R key. Help, Shift H key." |
+| 8.9 | After a reload, Tab into the chart and wait a second; then arrow down and up | After the first row: "Press Shift H for keys."; nothing more after the arrows |
 
 ## 9. Turning it off
 
@@ -186,7 +188,7 @@ Open `demo/frappe.html`. Tab into the task list on the left and move with Up and
 | 13.6 | On “Testing”, Shift+K | (after the row) "Starts Sunday 14 June, ends Thursday 18 June. Conflict. Launch is now 1 day too early." |
 | 13.7 | On “Budget approval”, Shift+K | (after the row) "Read-only. Not changed." |
 | 13.8 | On “Marketing”, Shift+L; arrow down twice to “Retrospective”, Shift+L; compare the last | (after the row) "Linked. This depends on Marketing." |
-| 13.9 | On “Testing”, Shift+H | (after the row) "Reading, 1 of 6. Dependencies, Shift D key. Same time, Shift O key. Ends before, Shift B key. Starts after, Shift A key." |
+| 13.9 | On “Testing”, Shift+H | (after the row) "Reading, 1 of 6. Dependencies, Shift D key. Same time, Shift O key. Ends before, Shift B key. Starts after, Shift A key. Press again within 5 seconds for the next group." |
 
 ## 14. Orientation
 

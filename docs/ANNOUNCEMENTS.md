@@ -6,11 +6,12 @@ Status: design proposal, 16 November 2026. Nothing in this document is implement
 
 This document specifies what the extension says through its live region, in what order, how long it may take, and why. A companion page, [`listen.html`](listen.html), puts every text below into a live region so the variants can be compared by ear.
 
-**Read this first.** The author of the extension, who also wrote this document, does not use a screen reader daily. The document therefore separates three kinds of statement, and every rule and every catalogue row carries one of these labels:
+**Read this first.** The author of the extension, who also wrote this document, does not use a screen reader daily. The document therefore separates three kinds of statement, and every rule and every catalogue row carries one of these labels (a fourth, [U], was added on 20 November 2026):
 
 - **[S] Source**: a published source says this; the reference number follows.
 - **[P] Established practice**: no single authoritative source was found, but the practice is visible in shipping products or documentation, which is named.
 - **[A] Assumption**: the author's reasoning. It has to be tested with screen reader users before it is treated as a rule. Section 8 says how.
+- **[U] User feedback**: a person who uses a screen reader said this; where and when are given, the name is not. One person's view is not a study: it is a reason to change something, not proof that it is right for everyone. (Added 20 November 2026.)
 
 Where no reliable source was found, the text says "not found" instead of reconstructing behaviour from memory.
 
@@ -171,6 +172,7 @@ Design consequences for the texts:
 | P27 | **The first 40 characters must carry the result.** In "Conflict. 2 days too early for Implementation." the result, "Conflict. 2 days too early", takes the first 26 characters; the whole sentence (46 characters) needs a second 40-cell line only for the task name. "Warning: Testing now starts before…" does not get to the point. (Corrected 20 November 2026: the example was described as fitting one 40-cell line.) | [A] |
 | P28 | **Punctuation is text.** Braille shows it. Do not add characters to force pauses in speech (doubled periods, stray commas). | [A] |
 | P29 | **Test with a braille display, not only with the on-screen braille viewers**, which do not reproduce a display user's experience [14][11]. | [S] |
+| P30 | **Say once how to get help.** The first time focus lands on a task after the page has loaded, after the row label: "Press Shift H for keys." Once per page load, not at the Brief level, and it can be switched off. The first group of the spoken help ends with how to hear the next group. An NVDA user suggested both on the Program-L mailing list on 20 November 2026 [38]. Chart2Music does the same according to its documentation: when the user navigates to the chart, a description tells them that interaction is available, and the H key opens help with a list of keyboard commands [37]. (Added 20 November 2026.) | [U] [P] |
 
 ### 2.5 Translation
 
@@ -262,7 +264,8 @@ All rows are for the Standard verbosity level (section 5). Hints are not part of
 | S1 | Chart is empty | `No tasks.` | (same) | n/a (description of the grid) | 1 s | [A] | Belongs in the grid's accessible description, read on entry. |
 | S2 | Summary of the chart (proposed command) | `{count} tasks, {shown} shown. {start} to {end}. {conflicts} conflicts.` | “5,000 tasks, 212 shown. 1 June 2026 to 30 March 2027. 3 conflicts.” | polite | 8.5 s | [A] | The overview a sighted user gets from the scroll bar and the time scale [28]. |
 | | **Help** | | | | | | |
-| H1 | Keyboard help, first of three groups (quick form) | `{group}, {n} of {total}. {action}, {key}. {action}, {key}. {action}, {key}. {action}, {key}.` | “Reading, 1 of 3. Dependencies, Shift D. Same time, Shift O. Ends before, Shift B. Starts after, Shift A.” | polite | 9.5 s | [A] | At most four keys per group; action before key. The full list is a dialog. See D13. |
+| H1 | Keyboard help, first of three groups (quick form) | `{group}, {n} of {total}. {action}, {key}. {action}, {key}. {action}, {key}. {action}, {key}.` | “Reading, 1 of 3. Dependencies, Shift D. Same time, Shift O. Ends before, Shift B. Starts after, Shift A.” | polite | 9.5 s | [A] | At most four keys per group; action before key. The full list is a dialog. See D13. Changed on 20 November 2026 ([U] [P], P30): when there is more than one group, the first ends with `Press again within 5 seconds for the next group.`, at every level, Brief included, because help is asked for; the key is not named again because it was just pressed. |
+| H2 | Help hint, the first time focus lands on a task after the page has loaded | `Press {key} for keys.` | “Press Shift H for keys.” | polite, 500 ms after focus | 2 s | [U] [P] | Added 20 November 2026, see P30. After the row label, not before it: the row's own name comes first (P1). Once per page load; not at Brief; can be switched off. |
 | | **Meta** | | | | | | |
 | M1 | Repeat the last announcement (proposed command) | `(the last announcement again)` | “Saved. Duration 8 days, was 5. Ends 20 June.” | polite | 4.5 s | [A] | Live-region speech cannot be replayed by the screen reader [11]. |
 | M2 | Nothing to repeat | `Nothing to repeat.` | (same) | polite | 1.5 s | [A] | No silence. |
@@ -669,6 +672,7 @@ Ten key bindings in one message take about half a minute (31.5 s), cannot be rep
 - **Key names as words separated by spaces** ("Shift D"), not "shift+d": the plus sign may be spoken.
 - **Mnemonic first letters** (D, O, B, A, P, S) are already in use; the help text should use the word that carries the letter where possible.
 - The group label and position come first so that a second press is recognisably the next page.
+- **The first group says how to go on** (added 20 November 2026, [U] [P], P30): “… Starts after, Shift A. Press again within 5 seconds for the next group.” Only the first group, and only when there is a next one.
 
 ---
 
@@ -809,13 +813,18 @@ Only sources that were opened and read for this document in November 2026. Where
 - [35a] MDN Web Docs. *Intl.PluralRules.* https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/PluralRules
 - [35b] Unicode CLDR. *Language Plural Rules* (linked from [35a]; not opened). https://www.unicode.org/cldr/charts/43/supplemental/language_plural_rules.html
 
+**Added 20 November 2026**
+
+- [37] Chart2Music documentation: https://chart2music.com/docs/ ("Press the H key to get help, including a list of keyboard commands") and the README, https://github.com/julianna-langston/chart2music ("telling the user that there is interaction available"). Read on 20 November 2026. The exact text of the description and an option to turn it off were not found in the pages read; the API reference was not read.
+- [38] A message from an NVDA user to the Program-L mailing list, 20 November 2026, passed on to the author. Not linked; the name is not given here.
+
 Numbers [27] and [30] are intentionally unused: two sources considered during research were dropped because they were seen only through third-party summaries.
 
 ---
 
 ## Implementation notes
 
-Added 16 November 2026, after this document was turned into code. Everything above is unchanged, apart from corrections of 20 November 2026: "Read this first" now names one author, and three notes are marked with that date (file paths, P27, R1); this section records where the implementation decides something the document leaves open, or deliberately departs from it. The decisions were made by the project owner.
+Added 16 November 2026, after this document was turned into code. Everything above is unchanged, apart from corrections of 20 November 2026: "Read this first" now names one author, and three notes are marked with that date (file paths, P27, R1); and additions of 20 November 2026 after user feedback, each marked with that date: the label [U], rule P30, the change to H1, row H2, a point in D13 and references [37] and [38]; this section records where the implementation decides something the document leaves open, or deliberately departs from it. The decisions were made by the project owner.
 
 File paths in the sections above refer to the code as it stood on 16 November 2026. The code now has an engine in `src/core/` and an adapter in `src/adapters/dhtmlx/` (see [ADAPTERS.md](ADAPTERS.md)): `src/strings.js` is `src/core/strings.js`, `src/features/form.js` became part of `src/core/engine.js` and `src/adapters/dhtmlx/adapter.js`, and `src/core/focus-label.js` is `src/adapters/dhtmlx/focus-label.js`.
 
@@ -845,7 +854,13 @@ File paths in the sections above refer to the code as it stood on 16 November 20
 | q | 2.3 and D9: the row-label route for keyboard edits | Since 2026-11-18 keyboard edits (and Shift+C when the conflict is on the focused task) use the live region, after the row is re-rendered; the row label is left as the task's own label. Focus stays on the same row, and VoiceOver in Safari did not announce the re-focus of that row, so the result in the label was not heard (found by the project owner with VoiceOver). The result is now heard after the row instead of before it, 500 ms after the re-render (fixed; the option `features.edit.delay` was removed on 2026-11-18): an immediate live region update was not heard either, most likely because the screen reader was still handling the replaced row. With the 500 ms wait the result is heard (confirmed by the project owner with VoiceOver in Safari, macOS 26.2, 2026-11-18). The form results (saved, created, cancelled) keep the row-label route, but the label is set when Save or Cancel is pressed, before the library re-renders the row and focuses it; the extension no longer re-renders the row itself after the form closes, which had moved focus too early and replaced the focused row (VoiceOver silent). Tried in between on 2026-11-18: the live region, which the project owner heard after the row, the wrong order. With the label set at Save, "Saved, no changes." is heard first (confirmed by the project owner with VoiceOver in Safari, macOS 26.2, saving with Enter and with Space). Two earlier checks had run older JavaScript modules kept by Safari's cache; the demo server now forbids caching and the demo's event log (?debug=1) says which version runs. Jumps, back and the next conflict on another task keep the row-label route too, because focus moves to another row. |
 | r | Cell navigation mode (2.3) | From 2026-11-18 (morning) the row-label route also worked on cells, by wrapping the focused column's template; removed the same day after the pre-release review: it was a second replacement of a shared template on top of the first. In cell mode every result, jumps and the task form included, now goes through the live region and is heard after the cell. |
 | s | 2.3, the result in the row's label | Changed on 2026-11-18 after the pre-release review. The result is always followed by the row's own label, so the row never loses the task's name ("Cancelled. Nothing changed." alone did). It is removed when focus leaves the row (to another element, to nothing, or to another window) and at the latest 5 seconds after focus landed; it is never spoken twice (the 600 ms fallback could repeat a result that had been heard). With the tooltip plugin, which shows the same template to sighted users, results go to the live region instead. After a keyboard edit or a link change the data is read again and what was stored is spoken; a change refused by the application gets "Not changed. The change was not accepted." (new text). |
+| t | P30, H1, H2: the help hint (2026-11-20) | "Press Shift H for keys." goes through the live region, 500 ms after focus first lands on a task, so that it is heard after the row label; the row-label route would put it before the label. It is dropped when anything else was spoken within those 500 ms (it would replace that text in the live region) and once help has been asked for. Once per page load: the flag lives in the engine module, so enabling the extension again on the same page does not repeat it. The adapter reports focus through the optional `onTaskFocus` (ADAPTERS.md). Switch: `features.helpHint: false`; also off with `features.help: false` and at Brief. The first help group ends with "Press again within 5 seconds for the next group." at every level. Checked with the automated tests (unit and browser, Chromium and WebKit); **not yet checked with a screen reader, neither VoiceOver nor NVDA.** |
 | j | D13, spoken help items | Each item ends with the word "key": "Dependencies, Shift D key." Found by the project owner with VoiceOver: after a single capital letter and a period ("Shift D. Same time") VoiceOver heard an initial and made no pause between items. |
+
+### Known, not changed yet (recorded 2026-11-20)
+
+- **Hints have no switch.** Section 5 says hints are "a separate on/off switch, on by default"; "Not implemented" below says the option was removed on 2026-11-18. The code follows the latter: the two hints ("Press again for the next {count}.", "Opened {name}.") are always on, at most three times each per session. Only the help hint (P30) has a switch, `features.helpHint`.
+- **Hints at the Brief level.** The two hints above are also spoken at Brief. Section 5 does not say whether they should be; the help hint (P30) is not spoken at Brief.
 
 ### Not implemented
 

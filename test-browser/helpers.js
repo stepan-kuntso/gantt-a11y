@@ -58,3 +58,19 @@ export async function taskData(page, id, ganttName = "gantt") {
 export async function endBurst(page) {
 	await page.waitForTimeout(1200);
 }
+
+/**
+ * The first focus on a task after a page load gives "Press Shift H for keys."
+ * 500 ms later (spec P30). For tests about something else: wait for it, then
+ * empty the live region so that what follows starts from silence.
+ * @param {{clock?: boolean}} [options]  clock: the test installed page.clock
+ */
+export async function waitOutHelpHint(page, { clock = false } = {}) {
+	if (clock) {
+		await page.clock.runFor(600);
+	}
+	await expectLive(page, "Press Shift H for keys.");
+	await page.evaluate(() => {
+		document.querySelectorAll("[data-gantt-a11y-live]").forEach((region) => { region.textContent = ""; });
+	});
+}

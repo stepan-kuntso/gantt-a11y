@@ -286,6 +286,11 @@ for (const item of steps) {
 		const notes = [];
 		await page.goto("/" + stepUrl(item));
 		await prepareStep(page, item.id);
+		if (!item.helpHint) {
+			// the first focus on this page gives "Press Shift H for keys." 500 ms later
+			// (step 8.9 checks it); let it pass before recording the step
+			await page.waitForTimeout(700);
+		}
 		const before = await page.evaluate((id) => window.gantt && window.gantt.isTaskExists && window.gantt.isTaskExists(id) ? +window.gantt.getTask(id).start_date : null, item.expect.unchanged);
 		await page.evaluate(installRecorder);
 

@@ -27,6 +27,7 @@ export function createMemoryAdapter({ tasks, links, focused = null, durationUnit
 	const keys = {};
 	let formListener = null;
 	let rowLabel = null;
+	const focusListeners = new Set();
 
 	// an index by id, as a library has one (a linear search would make large
 	// charts slow in the tests, not in the engine)
@@ -48,6 +49,7 @@ export function createMemoryAdapter({ tasks, links, focused = null, durationUnit
 			}
 		}
 		state.focused = id;
+		focusListeners.forEach((listener) => listener(id));
 	}
 
 	/** What the row is called: a waiting message, then its own label (the row label feature, or the name). */
@@ -115,6 +117,10 @@ export function createMemoryAdapter({ tasks, links, focused = null, durationUnit
 		announceOnFocus(id, text) {
 			spoken.push({ via: "row", id, text });
 			messages.set(String(id), text);
+		},
+		onTaskFocus(listener) {
+			focusListeners.add(listener);
+			return () => focusListeners.delete(listener);
 		},
 		cancelOnFocus(id) {
 			spoken.push({ via: "cancel", id });

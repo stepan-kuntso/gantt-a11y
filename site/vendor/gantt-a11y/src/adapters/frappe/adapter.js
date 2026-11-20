@@ -83,6 +83,7 @@ export function createFrappeAdapter({ gantt, tasks, listContainer, listLabel, re
 	let rowLabelProvider = null;
 	const pending = new Map(); // task id -> {text, landed, timer, lifeTimer}
 	let activeId = null;
+	const focusListeners = new Set(); // onTaskFocus handlers
 
 	const findRaw = (id) => tasks.find((t) => String(t.id) === String(id)) || null;
 
@@ -247,6 +248,7 @@ export function createFrappeAdapter({ gantt, tasks, listContainer, listLabel, re
 			if (pending.has(id)) {
 				land(id, pending.get(id));
 			}
+			focusListeners.forEach((handler) => handler(id));
 		}
 	}
 
@@ -336,6 +338,11 @@ export function createFrappeAdapter({ gantt, tasks, listContainer, listLabel, re
 			return { moved: true };
 		},
 		announce: (text, options) => liveRegion.announce(text, options),
+		/** Calls `handler(id)` whenever focus lands on a task's option. */
+		onTaskFocus(handler) {
+			focusListeners.add(handler);
+			return () => focusListeners.delete(handler);
+		},
 		// The message is always followed by the option's own label (the task
 		// name). Options are not re-rendered, so `refresh` needs no work here.
 		announceOnFocus(id, text, { fallback = true } = {}) {

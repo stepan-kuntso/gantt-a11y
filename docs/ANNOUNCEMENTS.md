@@ -2,9 +2,11 @@
 
 Status: design proposal, 16 November 2026. Nothing in this document is implemented by being written here; `src/strings.js` is unchanged. "Today" and "the current text" refer to the working tree as it stood that evening, including `src/core/focus-label.js`, which appeared while this document was being written.
 
+**File paths in sections 1 to 8** (`src/strings.js`, `src/features/form.js`, `form.js`, `src/core/focus-label.js`, `live-region.js`, `strings.js`) name the code as it stood on 16 November 2026 and are left as written. The current files are `src/core/strings.js`, `src/core/engine.js` with `src/adapters/dhtmlx/adapter.js`, `src/adapters/dhtmlx/focus-label.js` and `src/adapters/dom/live-region.js`; see "Implementation notes" at the end. (Note added 20 November 2026.)
+
 This document specifies what the extension says through its live region, in what order, how long it may take, and why. A companion page, [`listen.html`](listen.html), puts every text below into a live region so the variants can be compared by ear.
 
-**Read this first.** Neither the author of the extension nor the author of this document uses a screen reader daily. The document therefore separates three kinds of statement, and every rule and every catalogue row carries one of these labels:
+**Read this first.** The author of the extension, who also wrote this document, does not use a screen reader daily. The document therefore separates three kinds of statement, and every rule and every catalogue row carries one of these labels:
 
 - **[S] Source**: a published source says this; the reference number follows.
 - **[P] Established practice**: no single authoritative source was found, but the practice is visible in shipping products or documentation, which is named.
@@ -166,7 +168,7 @@ Design consequences for the texts:
 |---|---|---|
 | P25 | **Assume the announcement is a short-lived flash message on a braille display, or absent.** Screen readers show such messages for a few seconds, user-configurable [15][22]; NVDA showed no live regions in braille at all until 2023 [14]; in emulator tests VoiceOver's braille output lost content for polite regions [13]. | [S] |
 | P26 | **Nothing may exist only in an announcement.** Every fact must also be reachable on demand in a form the user can read at their own pace: the row label, a command that can be repeated, or a dialog. | [A] |
-| P27 | **The first 40 characters must carry the result.** "Conflict. 2 days too early for Implementation." fits one 40-cell line; "Warning: Testing now starts before…" does not get to the point. | [A] |
+| P27 | **The first 40 characters must carry the result.** In "Conflict. 2 days too early for Implementation." the result, "Conflict. 2 days too early", takes the first 26 characters; the whole sentence (46 characters) needs a second 40-cell line only for the task name. "Warning: Testing now starts before…" does not get to the point. (Corrected 20 November 2026: the example was described as fitting one 40-cell line.) | [A] |
 | P28 | **Punctuation is text.** Braille shows it. Do not add characters to force pauses in speech (doubled periods, stray commas). | [A] |
 | P29 | **Test with a braille display, not only with the on-screen braille viewers**, which do not reproduce a display user's experience [14][11]. | [S] |
 
@@ -212,7 +214,7 @@ All rows are for the Standard verbosity level (section 5). Hints are not part of
 | # | Situation | Template | Example | Live | Time | Label | Rationale |
 |---|---|---|---|---|---|---|---|
 | | **Reading on demand** | | | | | | |
-| R1 | Task row label (accessible name of the row, not a live region) | `{name}. {start} to {end}, {duration}. {progress} percent done.` | “Testing. 13 to 17 June, 5 days. 40 percent done.” | n/a (focus) | 5 s | [A] | Name first; self-labelling range and unit. See Alternatives. |
+| R1 | Task row label (accessible name of the row, not a live region) | `{name}. {start} to {end}, {duration}. {progress} percent done.` | “Testing. 13 to 17 June, 5 days. 40 percent done.” | n/a (focus) | 5 s | [A] | Name first; self-labelling range and unit. See Alternatives. The example speaks the last day of work (P16); by default the implementation speaks the end date as the library stores it, “Testing. 13 to 18 June, 5 days. 40 percent done.” (Implementation notes, deliberate deviation; note added 20 November 2026.) |
 | R2 | Dependencies: none | `No dependencies.` | (same) | polite | 1 s | [S] | A negative answer is still an answer; never silence [5]. |
 | R3 | Dependencies: one in a direction | `Depends on: {name}. Required by: {name}.` | “Depends on: Software design. Required by: Testing.” | polite | 3.5 s | [A] | Colon keeps the name in its dictionary form for translation. Default link type not spoken [17]. |
 | R4 | Dependencies: 2 or 3 in a direction, one with a non-default type | `Depends on: {name}. Required by {count}. {name}. {name}, {type}. {name}, {type}.` | “Depends on: Software design. Required by 3. Testing. Documentation, start to start. Code review, finish to finish.” | polite | 8.5 s | [A] | Count before list [29a]. One sentence per item when any item carries a type. |
@@ -813,7 +815,7 @@ Numbers [27] and [30] are intentionally unused: two sources considered during re
 
 ## Implementation notes
 
-Added 16 November 2026, after this document was turned into code. Everything above is unchanged; this section records where the implementation decides something the document leaves open, or deliberately departs from it. The decisions were made by the project owner.
+Added 16 November 2026, after this document was turned into code. Everything above is unchanged, apart from corrections of 20 November 2026: "Read this first" now names one author, and three notes are marked with that date (file paths, P27, R1); this section records where the implementation decides something the document leaves open, or deliberately departs from it. The decisions were made by the project owner.
 
 File paths in the sections above refer to the code as it stood on 16 November 2026. The code now has an engine in `src/core/` and an adapter in `src/adapters/dhtmlx/` (see [ADAPTERS.md](ADAPTERS.md)): `src/strings.js` is `src/core/strings.js`, `src/features/form.js` became part of `src/core/engine.js` and `src/adapters/dhtmlx/adapter.js`, and `src/core/focus-label.js` is `src/adapters/dhtmlx/focus-label.js`.
 

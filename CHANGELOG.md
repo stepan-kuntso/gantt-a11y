@@ -10,6 +10,10 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); ver
 - According to the [10.0.4 release notes](https://github.com/DHTMLX/gantt/blob/v10.0.4/whatsnew.md), tasks and links created from the UI now keep the type of the task ids (number or string) in `parent`, `source` and `target`. The adapter compares ids as strings, so nothing in it changed (read in the code; the browser tests that create tasks and links pass).
 - The Duration field of the task form has `aria-valuenow` in 10.0.4. In the accessibility tree of Chromium its value is the current duration, where 10.0.3 gave 0; checked in the DOM in Chromium and WebKit and in Chromium's accessibility tree, not with a screen reader. The values the extension speaks while the form is open ("Duration 6 days. Ends 19 June.") stay: focus is on the + or − button then, not on the field.
 
+### Fixed
+
+- Corrections of 20 November 2026 in the specification, [docs/ANNOUNCEMENTS.md](docs/ANNOUNCEMENTS.md); nothing in the behaviour of the extension changed. "Read this first" names one author, who wrote both the extension and the document. P27: the example "Conflict. 2 days too early for Implementation." is 46 characters and was described as fitting one 40-cell line; the result itself takes the first 26. R1: a note that the example speaks the last day of work, while by default the extension speaks the end date as the library stores it ("13 to 18 June"). A note under "Status" lists the file paths in sections 1 to 8 that name the code of 16 November and the current files; the paths themselves are left as written. The project site's copy (`site/spec.html`) was rebuilt with `npm run site`.
+
 ## [0.1.0] - 2026-11-19
 
 The first release, on npm as `gantt-a11y`. Checked by the author, a sighted developer: fully with VoiceOver in Safari 26.2 on macOS 26.2, partly with NVDA 2026.3.1 in Chrome 157 on Windows; not checked with JAWS or Firefox. No feedback yet from people who use a screen reader every day, so the texts of the announcements may still change.

@@ -61,7 +61,7 @@ Why Shift and a letter: Gantt's own keys use arrows, Page Up/Down, Space, Enter,
 ## Requirements
 
 - One of the two libraries, installed by your application (both are optional peer dependencies, so npm does not install either):
-  - `dhtmlx-gantt` 10.0.4 or a later 10.x (the tests run with 10.0.4 only), with the `keyboard_navigation` plugin enabled;
+  - `dhtmlx-gantt` 10.0.3 or a later 10.x, with the `keyboard_navigation` plugin enabled. The tests pass with 10.0.4, the version they run with now; until 2026-11-19 they ran with 10.0.3, on the same code of the extension. In 10.0.3 screen readers announce 0 for the duration fields of the task form instead of their value, according to the library's release notes (Chromium's accessibility tree also gives 0); this is fixed in the library itself from 10.0.4 ([release notes](https://github.com/DHTMLX/gantt/blob/v10.0.4/whatsnew.md));
   - or, for the experimental adapter, `frappe-gantt` 1.2.2 or a later 1.x (the tests run with 1.2.2 only).
 - A browser with ES modules and `Intl` (PluralRules, ListFormat, DateTimeFormat).
 
